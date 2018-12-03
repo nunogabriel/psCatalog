@@ -1,0 +1,115 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-order-det-hst-heading" jhiTranslate="psCatalogApp.orderDetHst.home.createOrEditLabel">Create or edit a Order Det Hst</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!orderDetHst.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="orderDetHst.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.orderId" for="field_orderId">Order Id</label>
+                    <input type="number" class="form-control" name="orderId" id="field_orderId"
+                        [(ngModel)]="orderDetHst.orderId" required/>
+                    <div [hidden]="!(editForm.controls.orderId?.dirty && editForm.controls.orderId?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.orderId?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.orderId?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.productId" for="field_productId">Product Id</label>
+                    <input type="number" class="form-control" name="productId" id="field_productId"
+                        [(ngModel)]="orderDetHst.productId" required/>
+                    <div [hidden]="!(editForm.controls.productId?.dirty && editForm.controls.productId?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productId?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.productId?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.orderQuantity" for="field_orderQuantity">Order Quantity</label>
+                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity"
+                        [(ngModel)]="orderDetHst.orderQuantity" required/>
+                    <div [hidden]="!(editForm.controls.orderQuantity?.dirty && editForm.controls.orderQuantity?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.orderQuantity?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.orderQuantity?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.unitPrice" for="field_unitPrice">Unit Price</label>
+                    <input type="number" class="form-control" name="unitPrice" id="field_unitPrice"
+                        [(ngModel)]="orderDetHst.unitPrice" required/>
+                    <div [hidden]="!(editForm.controls.unitPrice?.dirty && editForm.controls.unitPrice?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.unitPrice?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.unitPrice?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="orderDetHst.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="orderDetHst.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDetHst.orderDet" for="field_orderDet">Order Det</label>
+                    <select class="form-control" id="field_orderDet" name="orderDet" [(ngModel)]="orderDetHst.orderDetId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="orderDetOption.id" *ngFor="let orderDetOption of orderdets; trackBy: trackOrderDetById">{{orderDetOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

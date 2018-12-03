@@ -1,0 +1,162 @@
+/* Products and Services Catalog jh file */
+entity Suppliers {
+	supplierName String required,
+	supplierNif String required,
+	supplierEmail String required,
+	supplierPhone String required,
+	supplierBeginDate Instant required,
+	supplierEndDate Instant,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity Customers {
+	customerName String required,
+	customerEmail String required,
+	customerNif String,
+	customerPhone String,
+	customerGender GenderEnum,
+	customerBeginDate Instant required,
+	customerEndDate Instant,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity Products {
+	productName String required,
+	productDescription String,
+	productPrice Long required,
+	productStartDate Instant required,
+	productEndDate Instant,
+	productType ProductTypeEnum required,
+	productImg ImageBlob,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity Promotions {
+	newProductPrice Long required,
+	promotionStartDate Instant required,
+	promotionExpiryDate Instant,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity Addresses {
+	addressReference String required,
+	addressName String required,
+	streetAddress String required,
+	city String required,
+	state String required,
+	zipCode String required,
+	phoneNumber String,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity Countries {
+	countryName String required
+}
+
+entity Orders {
+	orderReference String required,
+	orderDate Instant required,
+	deliveryDate Instant,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity OrdersHst {
+	orderReference String required,
+	customerId Integer required,
+	orderStatusCode Integer required,
+	orderDate Instant required,
+	billingAddress Integer required,
+	deliveryAddress Integer required,
+	deliveryDate Instant,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity OrderStatus {
+	orderStatusDescription String required
+}
+
+entity OrderDet {
+	orderQuantity Integer required,
+	unitPrice Long required,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+entity OrderDetHst {
+	orderId Integer required,
+	productId Integer required,
+	orderQuantity Integer required,
+	unitPrice Long required,
+	createdBy String,
+	createdDate Instant,
+	lastModifiedBy String,
+	lastModifiedDate Instant
+}
+
+enum GenderEnum {
+    MASCULINO, FEMININO
+}
+
+enum ProductTypeEnum {
+    PRODUTO, SERVICO
+}
+
+////////////////////////////////////
+relationship ManyToMany {
+	Customers{products(productName)} to Products{customers(customerName)}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	OrderStatus{orders(orderReference)} to Orders {orderStatus(orderStatusDescription) required},
+	Addresses{orders(orderReference)} to Orders {address(addressReference) required},
+	Customers{orders(orderReference)} to Orders {customer(customerName) required},
+	Customers{addresses(addressReference)} to Addresses {customer(customerName)},
+	Suppliers{addresses(addressReference)} to Addresses {supplier(supplierName)},
+	Orders{orderDet} to OrderDet {order(orderReference) required},
+	Products{orderDet} to OrderDet {product(productName) required},
+	Suppliers{products(productName)} to Products {supplier(supplierName)},
+	Countries{addresses(addressReference)} to Addresses {country(countryName) required}
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	OrderDetHst{orderDet} to OrderDet,
+	OrdersHst{orders(orderReference)} to Orders,
+	Promotions{products(productName)} to Products
+}
+
+// Set pagination options
+paginate * with pagination
+
+// Set search options
+search * with elasticsearch
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl

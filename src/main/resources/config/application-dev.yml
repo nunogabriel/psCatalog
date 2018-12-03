@@ -36,9 +36,9 @@ spring:
             indent-output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/psCatalog
-        username: psCatalog
-        password:
+        url: jdbc:postgresql://localhost:5433/psCatalog
+        username: postgres
+        password: welcome1
         hikari:
             auto-commit: false
     jpa:
@@ -57,6 +57,8 @@ spring:
             properties:
                 path:
                     home: target/elasticsearch
+        jest:
+            uri: http://192.168.99.100:9200                     
     liquibase:
         contexts: dev
     mail:

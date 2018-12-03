@@ -1,0 +1,30 @@
+{
+    "name": "OrderStatus",
+    "fields": [
+        {
+            "fieldName": "orderStatusDescription",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "orders",
+            "otherEntityName": "orders",
+            "otherEntityRelationshipName": "orderStatus"
+        }
+    ],
+    "changelogDate": "20181203151045",
+    "entityTableName": "order_status",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "searchEngine": "elasticsearch"
+}

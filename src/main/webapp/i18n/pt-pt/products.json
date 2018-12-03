@@ -1,0 +1,35 @@
+{
+    "psCatalogApp": {
+        "products": {
+            "home": {
+                "title": "Products",
+                "createLabel": "Criar um(a) novo(a) Products",
+                "createOrEditLabel": "Criar ou editar um(a) Products",
+                "search": "Search for Products"
+            },
+            "created": "A new Products is created with identifier {{ param }}",
+            "updated": "A Products is updated with identifier {{ param }}",
+            "deleted": "A Products is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Products {{ id }}?"
+            },
+            "detail": {
+                "title": "Products"
+            },
+            "productName": "Product Name",
+            "productDescription": "Product Description",
+            "productPrice": "Product Price",
+            "productStartDate": "Product Start Date",
+            "productEndDate": "Product End Date",
+            "productType": "Product Type",
+            "productImg": "Product Img",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orderDet": "Order Det",
+            "supplier": "Supplier",
+            "customers": "Customers"
+        }
+    }
+}

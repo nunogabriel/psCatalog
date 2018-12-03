@@ -38,6 +38,28 @@ public class CacheConfiguration {
             cm.createCache(com.cgi.pscatalog.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(com.cgi.pscatalog.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(com.cgi.pscatalog.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Suppliers.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Suppliers.class.getName() + ".addresses", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Suppliers.class.getName() + ".products", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Customers.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Customers.class.getName() + ".orders", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Customers.class.getName() + ".addresses", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Customers.class.getName() + ".products", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Products.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Products.class.getName() + ".orderDets", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Products.class.getName() + ".customers", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Promotions.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Addresses.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Addresses.class.getName() + ".orders", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Countries.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Countries.class.getName() + ".addresses", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Orders.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.Orders.class.getName() + ".orderDets", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.OrdersHst.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.OrderStatus.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.OrderStatus.class.getName() + ".orders", jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.OrderDet.class.getName(), jcacheConfiguration);
+            cm.createCache(com.cgi.pscatalog.domain.OrderDetHst.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

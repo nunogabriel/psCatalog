@@ -1,0 +1,23 @@
+{
+    "psCatalogApp": {
+        "countries": {
+            "home": {
+                "title": "Countries",
+                "createLabel": "Criar um(a) novo(a) Countries",
+                "createOrEditLabel": "Criar ou editar um(a) Countries",
+                "search": "Search for Countries"
+            },
+            "created": "A new Countries is created with identifier {{ param }}",
+            "updated": "A Countries is updated with identifier {{ param }}",
+            "deleted": "A Countries is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Countries {{ id }}?"
+            },
+            "detail": {
+                "title": "Countries"
+            },
+            "countryName": "Country Name",
+            "addresses": "Addresses"
+        }
+    }
+}

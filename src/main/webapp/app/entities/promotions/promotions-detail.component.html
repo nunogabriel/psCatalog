@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="promotions">
+            <h2><span jhiTranslate="psCatalogApp.promotions.detail.title">Promotions</span> {{promotions.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.promotions.newProductPrice">New Product Price</span></dt>
+                <dd>
+                    <span>{{promotions.newProductPrice}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.promotionStartDate">Promotion Start Date</span></dt>
+                <dd>
+                    <span>{{promotions.promotionStartDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.promotionExpiryDate">Promotion Expiry Date</span></dt>
+                <dd>
+                    <span>{{promotions.promotionExpiryDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{promotions.createdBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{promotions.createdDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{promotions.lastModifiedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{promotions.lastModifiedDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.promotions.products">Products</span></dt>
+                <dd>
+                    <div *ngIf="promotions.productsId">
+                        <a [routerLink]="['/products', promotions.productsId, 'view']">{{promotions.productsProductName}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/promotions', promotions.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

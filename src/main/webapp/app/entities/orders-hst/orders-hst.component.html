@@ -1,0 +1,103 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="psCatalogApp.ordersHst.home.title">Orders Hsts</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-orders-hst" [routerLink]="['/orders-hst/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.ordersHst.home.createLabel">
+            Create new Orders Hst
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.ordersHst.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="ordersHsts">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orderReference"><span jhiTranslate="psCatalogApp.ordersHst.orderReference">Order Reference</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerId"><span jhiTranslate="psCatalogApp.ordersHst.customerId">Customer Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orderStatusCode"><span jhiTranslate="psCatalogApp.ordersHst.orderStatusCode">Order Status Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orderDate"><span jhiTranslate="psCatalogApp.ordersHst.orderDate">Order Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="billingAddress"><span jhiTranslate="psCatalogApp.ordersHst.billingAddress">Billing Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deliveryAddress"><span jhiTranslate="psCatalogApp.ordersHst.deliveryAddress">Delivery Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deliveryDate"><span jhiTranslate="psCatalogApp.ordersHst.deliveryDate">Delivery Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.ordersHst.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.ordersHst.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="ordersOrderReference"><span jhiTranslate="psCatalogApp.ordersHst.orders">Orders</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let ordersHst of ordersHsts ;trackBy: trackId">
+                <td><a [routerLink]="['/orders-hst', ordersHst.id, 'view' ]">{{ordersHst.id}}</a></td>
+                <td>{{ordersHst.orderReference}}</td>
+                <td>{{ordersHst.customerId}}</td>
+                <td>{{ordersHst.orderStatusCode}}</td>
+                <td>{{ordersHst.orderDate | date:'medium'}}</td>
+                <td>{{ordersHst.billingAddress}}</td>
+                <td>{{ordersHst.deliveryAddress}}</td>
+                <td>{{ordersHst.deliveryDate | date:'medium'}}</td>
+                <td>{{ordersHst.createdBy}}</td>
+                <td>{{ordersHst.createdDate | date:'medium'}}</td>
+                <td>{{ordersHst.lastModifiedBy}}</td>
+                <td>{{ordersHst.lastModifiedDate | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="ordersHst.ordersId">
+                        <a [routerLink]="['../orders', ordersHst.ordersId , 'view' ]" >{{ordersHst.ordersOrderReference}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/orders-hst', ordersHst.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/orders-hst', ordersHst.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'orders-hst/'+ ordersHst.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="ordersHsts && ordersHsts.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

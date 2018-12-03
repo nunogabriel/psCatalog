@@ -1,0 +1,73 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="customers">
+            <h2><span jhiTranslate="psCatalogApp.customers.detail.title">Customers</span> {{customers.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.customers.customerName">Customer Name</span></dt>
+                <dd>
+                    <span>{{customers.customerName}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerEmail">Customer Email</span></dt>
+                <dd>
+                    <span>{{customers.customerEmail}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerNif">Customer Nif</span></dt>
+                <dd>
+                    <span>{{customers.customerNif}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerPhone">Customer Phone</span></dt>
+                <dd>
+                    <span>{{customers.customerPhone}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerGender">Customer Gender</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'psCatalogApp.GenderEnum.' + customers.customerGender}}">{{customers.customerGender}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerBeginDate">Customer Begin Date</span></dt>
+                <dd>
+                    <span>{{customers.customerBeginDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.customerEndDate">Customer End Date</span></dt>
+                <dd>
+                    <span>{{customers.customerEndDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{customers.createdBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{customers.createdDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{customers.lastModifiedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{customers.lastModifiedDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customers.products">Products</span></dt>
+                <dd>
+                    <span *ngFor="let products of customers.products; let last = last">
+                        <a [routerLink]="['/products', products?.id, 'view' ]">{{products.productName}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/customers', customers.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+{
+    "psCatalogApp": {
+        "ProductTypeEnum": {
+            "null": "",
+            "PRODUTO": "PRODUTO",
+            "SERVICO": "SERVICO"
+        }
+    }
+}

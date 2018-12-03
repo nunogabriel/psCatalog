@@ -1,0 +1,94 @@
+{
+    "name": "Products",
+    "fields": [
+        {
+            "fieldName": "productName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "productDescription",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "productPrice",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "productStartDate",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "productEndDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "productType",
+            "fieldType": "ProductTypeEnum",
+            "fieldValues": "PRODUTO,SERVICO",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "productImg",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "createdBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastModifiedDate",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "orderDet",
+            "otherEntityName": "orderDet",
+            "otherEntityRelationshipName": "product"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "supplier",
+            "otherEntityName": "suppliers",
+            "otherEntityField": "supplierName"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "relationshipName": "customers",
+            "otherEntityName": "customers",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "products"
+        }
+    ],
+    "changelogDate": "20181203151039",
+    "entityTableName": "products",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "searchEngine": "elasticsearch"
+}

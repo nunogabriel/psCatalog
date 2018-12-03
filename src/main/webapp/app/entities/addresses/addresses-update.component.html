@@ -1,0 +1,146 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-addresses-heading" jhiTranslate="psCatalogApp.addresses.home.createOrEditLabel">Create or edit a Addresses</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!addresses.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="addresses.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.addressReference" for="field_addressReference">Address Reference</label>
+                    <input type="text" class="form-control" name="addressReference" id="field_addressReference"
+                        [(ngModel)]="addresses.addressReference" required/>
+                    <div [hidden]="!(editForm.controls.addressReference?.dirty && editForm.controls.addressReference?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressReference?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.addressName" for="field_addressName">Address Name</label>
+                    <input type="text" class="form-control" name="addressName" id="field_addressName"
+                        [(ngModel)]="addresses.addressName" required/>
+                    <div [hidden]="!(editForm.controls.addressName?.dirty && editForm.controls.addressName?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressName?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.streetAddress" for="field_streetAddress">Street Address</label>
+                    <input type="text" class="form-control" name="streetAddress" id="field_streetAddress"
+                        [(ngModel)]="addresses.streetAddress" required/>
+                    <div [hidden]="!(editForm.controls.streetAddress?.dirty && editForm.controls.streetAddress?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.streetAddress?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.city" for="field_city">City</label>
+                    <input type="text" class="form-control" name="city" id="field_city"
+                        [(ngModel)]="addresses.city" required/>
+                    <div [hidden]="!(editForm.controls.city?.dirty && editForm.controls.city?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.city?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.state" for="field_state">State</label>
+                    <input type="text" class="form-control" name="state" id="field_state"
+                        [(ngModel)]="addresses.state" required/>
+                    <div [hidden]="!(editForm.controls.state?.dirty && editForm.controls.state?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.state?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.zipCode" for="field_zipCode">Zip Code</label>
+                    <input type="text" class="form-control" name="zipCode" id="field_zipCode"
+                        [(ngModel)]="addresses.zipCode" required/>
+                    <div [hidden]="!(editForm.controls.zipCode?.dirty && editForm.controls.zipCode?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.zipCode?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.phoneNumber" for="field_phoneNumber">Phone Number</label>
+                    <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                        [(ngModel)]="addresses.phoneNumber" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="addresses.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="addresses.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.customer" for="field_customer">Customer</label>
+                    <select class="form-control" id="field_customer" name="customer" [(ngModel)]="addresses.customerId" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="customersOption.id" *ngFor="let customersOption of customers; trackBy: trackCustomersById">{{customersOption.customerName}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.supplier" for="field_supplier">Supplier</label>
+                    <select class="form-control" id="field_supplier" name="supplier" [(ngModel)]="addresses.supplierId" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="suppliersOption.id" *ngFor="let suppliersOption of suppliers; trackBy: trackSuppliersById">{{suppliersOption.supplierName}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.country" for="field_country">Country</label>
+                    <select class="form-control" id="field_country" name="country" [(ngModel)]="addresses.countryId"  required>
+                        <option *ngIf="!editForm.value.country" [ngValue]="null" selected></option>
+                        <option [ngValue]="countriesOption.id" *ngFor="let countriesOption of countries; trackBy: trackCountriesById">{{countriesOption.countryName}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.country?.dirty && editForm.controls.country?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.country?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

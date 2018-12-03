@@ -1,0 +1,35 @@
+{
+    "psCatalogApp": {
+        "customers": {
+            "home": {
+                "title": "Customers",
+                "createLabel": "Criar um(a) novo(a) Customers",
+                "createOrEditLabel": "Criar ou editar um(a) Customers",
+                "search": "Search for Customers"
+            },
+            "created": "A new Customers is created with identifier {{ param }}",
+            "updated": "A Customers is updated with identifier {{ param }}",
+            "deleted": "A Customers is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Customers {{ id }}?"
+            },
+            "detail": {
+                "title": "Customers"
+            },
+            "customerName": "Customer Name",
+            "customerEmail": "Customer Email",
+            "customerNif": "Customer Nif",
+            "customerPhone": "Customer Phone",
+            "customerGender": "Customer Gender",
+            "customerBeginDate": "Customer Begin Date",
+            "customerEndDate": "Customer End Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orders": "Orders",
+            "addresses": "Addresses",
+            "products": "Products"
+        }
+    }
+}

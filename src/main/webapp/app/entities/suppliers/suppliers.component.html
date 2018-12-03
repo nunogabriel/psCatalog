@@ -1,0 +1,95 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="psCatalogApp.suppliers.home.title">Suppliers</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-suppliers" [routerLink]="['/suppliers/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.suppliers.home.createLabel">
+            Create new Suppliers
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.suppliers.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="suppliers">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierName"><span jhiTranslate="psCatalogApp.suppliers.supplierName">Supplier Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierNif"><span jhiTranslate="psCatalogApp.suppliers.supplierNif">Supplier Nif</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierEmail"><span jhiTranslate="psCatalogApp.suppliers.supplierEmail">Supplier Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierPhone"><span jhiTranslate="psCatalogApp.suppliers.supplierPhone">Supplier Phone</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierBeginDate"><span jhiTranslate="psCatalogApp.suppliers.supplierBeginDate">Supplier Begin Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierEndDate"><span jhiTranslate="psCatalogApp.suppliers.supplierEndDate">Supplier End Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.suppliers.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.suppliers.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.suppliers.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.suppliers.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let suppliers of suppliers ;trackBy: trackId">
+                <td><a [routerLink]="['/suppliers', suppliers.id, 'view' ]">{{suppliers.id}}</a></td>
+                <td>{{suppliers.supplierName}}</td>
+                <td>{{suppliers.supplierNif}}</td>
+                <td>{{suppliers.supplierEmail}}</td>
+                <td>{{suppliers.supplierPhone}}</td>
+                <td>{{suppliers.supplierBeginDate | date:'medium'}}</td>
+                <td>{{suppliers.supplierEndDate | date:'medium'}}</td>
+                <td>{{suppliers.createdBy}}</td>
+                <td>{{suppliers.createdDate | date:'medium'}}</td>
+                <td>{{suppliers.lastModifiedBy}}</td>
+                <td>{{suppliers.lastModifiedDate | date:'medium'}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/suppliers', suppliers.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/suppliers', suppliers.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'suppliers/'+ suppliers.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="suppliers && suppliers.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

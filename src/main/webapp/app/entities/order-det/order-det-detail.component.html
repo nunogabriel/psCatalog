@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="orderDet">
+            <h2><span jhiTranslate="psCatalogApp.orderDet.detail.title">Order Det</span> {{orderDet.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.orderDet.orderQuantity">Order Quantity</span></dt>
+                <dd>
+                    <span>{{orderDet.orderQuantity}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.unitPrice">Unit Price</span></dt>
+                <dd>
+                    <span>{{orderDet.unitPrice}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{orderDet.createdBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{orderDet.createdDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{orderDet.lastModifiedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{orderDet.lastModifiedDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.order">Order</span></dt>
+                <dd>
+                    <div *ngIf="orderDet.orderId">
+                        <a [routerLink]="['/orders', orderDet.orderId, 'view']">{{orderDet.orderOrderReference}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orderDet.product">Product</span></dt>
+                <dd>
+                    <div *ngIf="orderDet.productId">
+                        <a [routerLink]="['/products', orderDet.productId, 'view']">{{orderDet.productProductName}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/order-det', orderDet.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

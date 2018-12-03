@@ -1,0 +1,30 @@
+{
+    "psCatalogApp": {
+        "orderDetHst": {
+            "home": {
+                "title": "Order Det Hsts",
+                "createLabel": "Create a new Order Det Hst",
+                "createOrEditLabel": "Create or edit a Order Det Hst",
+                "search": "Search for Order Det Hst"
+            },
+            "created": "A new Order Det Hst is created with identifier {{ param }}",
+            "updated": "A Order Det Hst is updated with identifier {{ param }}",
+            "deleted": "A Order Det Hst is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Order Det Hst {{ id }}?"
+            },
+            "detail": {
+                "title": "Order Det Hst"
+            },
+            "orderId": "Order Id",
+            "productId": "Product Id",
+            "orderQuantity": "Order Quantity",
+            "unitPrice": "Unit Price",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orderDet": "Order Det"
+        }
+    }
+}

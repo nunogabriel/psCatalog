@@ -1,0 +1,116 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-suppliers-heading" jhiTranslate="psCatalogApp.suppliers.home.createOrEditLabel">Create or edit a Suppliers</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!suppliers.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="suppliers.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierName" for="field_supplierName">Supplier Name</label>
+                    <input type="text" class="form-control" name="supplierName" id="field_supplierName"
+                        [(ngModel)]="suppliers.supplierName" required/>
+                    <div [hidden]="!(editForm.controls.supplierName?.dirty && editForm.controls.supplierName?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.supplierName?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierNif" for="field_supplierNif">Supplier Nif</label>
+                    <input type="text" class="form-control" name="supplierNif" id="field_supplierNif"
+                        [(ngModel)]="suppliers.supplierNif" required/>
+                    <div [hidden]="!(editForm.controls.supplierNif?.dirty && editForm.controls.supplierNif?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.supplierNif?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierEmail" for="field_supplierEmail">Supplier Email</label>
+                    <input type="text" class="form-control" name="supplierEmail" id="field_supplierEmail"
+                        [(ngModel)]="suppliers.supplierEmail" required/>
+                    <div [hidden]="!(editForm.controls.supplierEmail?.dirty && editForm.controls.supplierEmail?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.supplierEmail?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierPhone" for="field_supplierPhone">Supplier Phone</label>
+                    <input type="text" class="form-control" name="supplierPhone" id="field_supplierPhone"
+                        [(ngModel)]="suppliers.supplierPhone" required/>
+                    <div [hidden]="!(editForm.controls.supplierPhone?.dirty && editForm.controls.supplierPhone?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.supplierPhone?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierBeginDate" for="field_supplierBeginDate">Supplier Begin Date</label>
+                    <div class="d-flex">
+                        <input id="field_supplierBeginDate" type="datetime-local" class="form-control" name="supplierBeginDate" [(ngModel)]="supplierBeginDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.supplierBeginDate?.dirty && editForm.controls.supplierBeginDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.supplierBeginDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.supplierBeginDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.supplierEndDate" for="field_supplierEndDate">Supplier End Date</label>
+                    <div class="d-flex">
+                        <input id="field_supplierEndDate" type="datetime-local" class="form-control" name="supplierEndDate" [(ngModel)]="supplierEndDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="suppliers.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="suppliers.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.suppliers.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

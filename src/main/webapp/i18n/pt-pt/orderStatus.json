@@ -1,0 +1,23 @@
+{
+    "psCatalogApp": {
+        "orderStatus": {
+            "home": {
+                "title": "Order Statuses",
+                "createLabel": "Criar um(a) novo(a) Order Status",
+                "createOrEditLabel": "Criar ou editar um(a) Order Status",
+                "search": "Search for Order Status"
+            },
+            "created": "A new Order Status is created with identifier {{ param }}",
+            "updated": "A Order Status is updated with identifier {{ param }}",
+            "deleted": "A Order Status is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Order Status {{ id }}?"
+            },
+            "detail": {
+                "title": "Order Status"
+            },
+            "orderStatusDescription": "Order Status Description",
+            "orders": "Orders"
+        }
+    }
+}

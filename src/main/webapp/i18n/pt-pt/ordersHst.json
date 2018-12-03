@@ -1,0 +1,33 @@
+{
+    "psCatalogApp": {
+        "ordersHst": {
+            "home": {
+                "title": "Orders Hsts",
+                "createLabel": "Criar um(a) novo(a) Orders Hst",
+                "createOrEditLabel": "Criar ou editar um(a) Orders Hst",
+                "search": "Search for Orders Hst"
+            },
+            "created": "A new Orders Hst is created with identifier {{ param }}",
+            "updated": "A Orders Hst is updated with identifier {{ param }}",
+            "deleted": "A Orders Hst is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Orders Hst {{ id }}?"
+            },
+            "detail": {
+                "title": "Orders Hst"
+            },
+            "orderReference": "Order Reference",
+            "customerId": "Customer Id",
+            "orderStatusCode": "Order Status Code",
+            "orderDate": "Order Date",
+            "billingAddress": "Billing Address",
+            "deliveryAddress": "Delivery Address",
+            "deliveryDate": "Delivery Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orders": "Orders"
+        }
+    }
+}

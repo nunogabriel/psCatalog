@@ -1,0 +1,32 @@
+{
+    "psCatalogApp": {
+        "orders": {
+            "home": {
+                "title": "Orders",
+                "createLabel": "Criar um(a) novo(a) Orders",
+                "createOrEditLabel": "Criar ou editar um(a) Orders",
+                "search": "Search for Orders"
+            },
+            "created": "A new Orders is created with identifier {{ param }}",
+            "updated": "A Orders is updated with identifier {{ param }}",
+            "deleted": "A Orders is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) Orders {{ id }}?"
+            },
+            "detail": {
+                "title": "Orders"
+            },
+            "orderReference": "Order Reference",
+            "orderDate": "Order Date",
+            "deliveryDate": "Delivery Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orderDet": "Order Det",
+            "orderStatus": "Order Status",
+            "address": "Address",
+            "customer": "Customer"
+        }
+    }
+}

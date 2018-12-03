@@ -1,0 +1,108 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="psCatalogApp.products.home.title">Products</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-products" [routerLink]="['/products/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.products.home.createLabel">
+            Create new Products
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.products.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="products">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.products.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.products.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.products.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productStartDate"><span jhiTranslate="psCatalogApp.products.productStartDate">Product Start Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productEndDate"><span jhiTranslate="psCatalogApp.products.productEndDate">Product End Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.products.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.products.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.products.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.products.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.products.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.products.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="supplierSupplierName"><span jhiTranslate="psCatalogApp.products.supplier">Supplier</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let products of products ;trackBy: trackId">
+                <td><a [routerLink]="['/products', products.id, 'view' ]">{{products.id}}</a></td>
+                <td>{{products.productName}}</td>
+                <td>{{products.productDescription}}</td>
+                <td>{{products.productPrice}}</td>
+                <td>{{products.productStartDate | date:'medium'}}</td>
+                <td>{{products.productEndDate | date:'medium'}}</td>
+                <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + products.productType}}">{{products.productType}}</td>
+                <td>
+                    <a *ngIf="products.productImg" (click)="openFile(products.productImgContentType, products.productImg)">
+                        <img [src]="'data:' + products.productImgContentType + ';base64,' + products.productImg" style="max-height: 30px;" alt="products image"/>
+                    </a>
+                    <span *ngIf="products.productImg">{{products.productImgContentType}}, {{byteSize(products.productImg)}}</span>
+                </td>
+                <td>{{products.createdBy}}</td>
+                <td>{{products.createdDate | date:'medium'}}</td>
+                <td>{{products.lastModifiedBy}}</td>
+                <td>{{products.lastModifiedDate | date:'medium'}}</td>
+                <td>
+                    <div *ngIf="products.supplierId">
+                        <a [routerLink]="['../suppliers', products.supplierId , 'view' ]" >{{products.supplierSupplierName}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/products', products.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/products', products.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'products/'+ products.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="products && products.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

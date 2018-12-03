@@ -1,0 +1,30 @@
+{
+    "name": "Countries",
+    "fields": [
+        {
+            "fieldName": "countryName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "addresses",
+            "otherEntityName": "addresses",
+            "otherEntityRelationshipName": "country"
+        }
+    ],
+    "changelogDate": "20181203151042",
+    "entityTableName": "countries",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "searchEngine": "elasticsearch"
+}

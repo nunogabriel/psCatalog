@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="orders">
+            <h2><span jhiTranslate="psCatalogApp.orders.detail.title">Orders</span> {{orders.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.orders.orderReference">Order Reference</span></dt>
+                <dd>
+                    <span>{{orders.orderReference}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.orderDate">Order Date</span></dt>
+                <dd>
+                    <span>{{orders.orderDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.deliveryDate">Delivery Date</span></dt>
+                <dd>
+                    <span>{{orders.deliveryDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.createdBy">Created By</span></dt>
+                <dd>
+                    <span>{{orders.createdBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.createdDate">Created Date</span></dt>
+                <dd>
+                    <span>{{orders.createdDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.lastModifiedBy">Last Modified By</span></dt>
+                <dd>
+                    <span>{{orders.lastModifiedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.lastModifiedDate">Last Modified Date</span></dt>
+                <dd>
+                    <span>{{orders.lastModifiedDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.orderStatus">Order Status</span></dt>
+                <dd>
+                    <div *ngIf="orders.orderStatusId">
+                        <a [routerLink]="['/order-status', orders.orderStatusId, 'view']">{{orders.orderStatusOrderStatusDescription}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.address">Address</span></dt>
+                <dd>
+                    <div *ngIf="orders.addressId">
+                        <a [routerLink]="['/addresses', orders.addressId, 'view']">{{orders.addressAddressReference}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.customer">Customer</span></dt>
+                <dd>
+                    <div *ngIf="orders.customerId">
+                        <a [routerLink]="['/customers', orders.customerId, 'view']">{{orders.customerCustomerName}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/orders', orders.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

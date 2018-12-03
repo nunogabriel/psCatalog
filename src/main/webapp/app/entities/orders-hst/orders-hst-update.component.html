@@ -1,0 +1,150 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-orders-hst-heading" jhiTranslate="psCatalogApp.ordersHst.home.createOrEditLabel">Create or edit a Orders Hst</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!ordersHst.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="ordersHst.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.orderReference" for="field_orderReference">Order Reference</label>
+                    <input type="text" class="form-control" name="orderReference" id="field_orderReference"
+                        [(ngModel)]="ordersHst.orderReference" required/>
+                    <div [hidden]="!(editForm.controls.orderReference?.dirty && editForm.controls.orderReference?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.orderReference?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.customerId" for="field_customerId">Customer Id</label>
+                    <input type="number" class="form-control" name="customerId" id="field_customerId"
+                        [(ngModel)]="ordersHst.customerId" required/>
+                    <div [hidden]="!(editForm.controls.customerId?.dirty && editForm.controls.customerId?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerId?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.customerId?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.orderStatusCode" for="field_orderStatusCode">Order Status Code</label>
+                    <input type="number" class="form-control" name="orderStatusCode" id="field_orderStatusCode"
+                        [(ngModel)]="ordersHst.orderStatusCode" required/>
+                    <div [hidden]="!(editForm.controls.orderStatusCode?.dirty && editForm.controls.orderStatusCode?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.orderStatusCode?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.orderStatusCode?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.orderDate" for="field_orderDate">Order Date</label>
+                    <div class="d-flex">
+                        <input id="field_orderDate" type="datetime-local" class="form-control" name="orderDate" [(ngModel)]="orderDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.orderDate?.dirty && editForm.controls.orderDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.orderDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.orderDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.billingAddress" for="field_billingAddress">Billing Address</label>
+                    <input type="number" class="form-control" name="billingAddress" id="field_billingAddress"
+                        [(ngModel)]="ordersHst.billingAddress" required/>
+                    <div [hidden]="!(editForm.controls.billingAddress?.dirty && editForm.controls.billingAddress?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.billingAddress?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.billingAddress?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.deliveryAddress" for="field_deliveryAddress">Delivery Address</label>
+                    <input type="number" class="form-control" name="deliveryAddress" id="field_deliveryAddress"
+                        [(ngModel)]="ordersHst.deliveryAddress" required/>
+                    <div [hidden]="!(editForm.controls.deliveryAddress?.dirty && editForm.controls.deliveryAddress?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.deliveryAddress?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.deliveryAddress?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.deliveryDate" for="field_deliveryDate">Delivery Date</label>
+                    <div class="d-flex">
+                        <input id="field_deliveryDate" type="datetime-local" class="form-control" name="deliveryDate" [(ngModel)]="deliveryDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="ordersHst.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="ordersHst.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.ordersHst.orders" for="field_orders">Orders</label>
+                    <select class="form-control" id="field_orders" name="orders" [(ngModel)]="ordersHst.ordersId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="ordersOption.id" *ngFor="let ordersOption of orders; trackBy: trackOrdersById">{{ordersOption.orderReference}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

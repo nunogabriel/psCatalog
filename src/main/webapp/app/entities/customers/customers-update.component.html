@@ -1,0 +1,117 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-customers-heading" jhiTranslate="psCatalogApp.customers.home.createOrEditLabel">Create or edit a Customers</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!customers.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="customers.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerName" for="field_customerName">Customer Name</label>
+                    <input type="text" class="form-control" name="customerName" id="field_customerName"
+                        [(ngModel)]="customers.customerName" required/>
+                    <div [hidden]="!(editForm.controls.customerName?.dirty && editForm.controls.customerName?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerName?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerEmail" for="field_customerEmail">Customer Email</label>
+                    <input type="text" class="form-control" name="customerEmail" id="field_customerEmail"
+                        [(ngModel)]="customers.customerEmail" required/>
+                    <div [hidden]="!(editForm.controls.customerEmail?.dirty && editForm.controls.customerEmail?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerEmail?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerNif" for="field_customerNif">Customer Nif</label>
+                    <input type="text" class="form-control" name="customerNif" id="field_customerNif"
+                        [(ngModel)]="customers.customerNif" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerPhone" for="field_customerPhone">Customer Phone</label>
+                    <input type="text" class="form-control" name="customerPhone" id="field_customerPhone"
+                        [(ngModel)]="customers.customerPhone" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerGender" for="field_customerGender">Customer Gender</label>
+                    <select class="form-control" name="customerGender" [(ngModel)]="customers.customerGender" id="field_customerGender" >
+                        <option value="MASCULINO">{{'psCatalogApp.GenderEnum.MASCULINO' | translate}}</option>
+                        <option value="FEMININO">{{'psCatalogApp.GenderEnum.FEMININO' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerBeginDate" for="field_customerBeginDate">Customer Begin Date</label>
+                    <div class="d-flex">
+                        <input id="field_customerBeginDate" type="datetime-local" class="form-control" name="customerBeginDate" [(ngModel)]="customerBeginDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.customerBeginDate?.dirty && editForm.controls.customerBeginDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerBeginDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.customerBeginDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerEndDate" for="field_customerEndDate">Customer End Date</label>
+                    <div class="d-flex">
+                        <input id="field_customerEndDate" type="datetime-local" class="form-control" name="customerEndDate" [(ngModel)]="customerEndDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="customers.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="customers.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label jhiTranslate="psCatalogApp.customers.products" for="field_products">Products</label>
+                    <select class="form-control" id="field_products" multiple name="products" [(ngModel)]="customers.products">
+                        <option [ngValue]="getSelected(customers.products, productsOption)" *ngFor="let productsOption of products; trackBy: trackProductsById">{{productsOption.productName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

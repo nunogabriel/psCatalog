@@ -1,0 +1,94 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-promotions-heading" jhiTranslate="psCatalogApp.promotions.home.createOrEditLabel">Create or edit a Promotions</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!promotions.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="promotions.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.newProductPrice" for="field_newProductPrice">New Product Price</label>
+                    <input type="number" class="form-control" name="newProductPrice" id="field_newProductPrice"
+                        [(ngModel)]="promotions.newProductPrice" required/>
+                    <div [hidden]="!(editForm.controls.newProductPrice?.dirty && editForm.controls.newProductPrice?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.newProductPrice?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.newProductPrice?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.promotionStartDate" for="field_promotionStartDate">Promotion Start Date</label>
+                    <div class="d-flex">
+                        <input id="field_promotionStartDate" type="datetime-local" class="form-control" name="promotionStartDate" [(ngModel)]="promotionStartDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.promotionStartDate?.dirty && editForm.controls.promotionStartDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.promotionStartDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.promotionStartDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.promotionExpiryDate" for="field_promotionExpiryDate">Promotion Expiry Date</label>
+                    <div class="d-flex">
+                        <input id="field_promotionExpiryDate" type="datetime-local" class="form-control" name="promotionExpiryDate" [(ngModel)]="promotionExpiryDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="promotions.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="promotions.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.promotions.products" for="field_products">Products</label>
+                    <select class="form-control" id="field_products" name="products" [(ngModel)]="promotions.productsId">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="productsOption.id" *ngFor="let productsOption of products; trackBy: trackProductsById">{{productsOption.productName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

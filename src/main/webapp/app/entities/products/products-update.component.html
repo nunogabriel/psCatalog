@@ -1,0 +1,140 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-products-heading" jhiTranslate="psCatalogApp.products.home.createOrEditLabel">Create or edit a Products</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!products.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="products.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productName" for="field_productName">Product Name</label>
+                    <input type="text" class="form-control" name="productName" id="field_productName"
+                        [(ngModel)]="products.productName" required/>
+                    <div [hidden]="!(editForm.controls.productName?.dirty && editForm.controls.productName?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productName?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productDescription" for="field_productDescription">Product Description</label>
+                    <input type="text" class="form-control" name="productDescription" id="field_productDescription"
+                        [(ngModel)]="products.productDescription" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productPrice" for="field_productPrice">Product Price</label>
+                    <input type="number" class="form-control" name="productPrice" id="field_productPrice"
+                        [(ngModel)]="products.productPrice" required/>
+                    <div [hidden]="!(editForm.controls.productPrice?.dirty && editForm.controls.productPrice?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productPrice?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.productPrice?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productStartDate" for="field_productStartDate">Product Start Date</label>
+                    <div class="d-flex">
+                        <input id="field_productStartDate" type="datetime-local" class="form-control" name="productStartDate" [(ngModel)]="productStartDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.productStartDate?.dirty && editForm.controls.productStartDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productStartDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.productStartDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productEndDate" for="field_productEndDate">Product End Date</label>
+                    <div class="d-flex">
+                        <input id="field_productEndDate" type="datetime-local" class="form-control" name="productEndDate" [(ngModel)]="productEndDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productType" for="field_productType">Product Type</label>
+                    <select class="form-control" name="productType" [(ngModel)]="products.productType" id="field_productType"  required>
+                        <option value="PRODUTO">{{'psCatalogApp.ProductTypeEnum.PRODUTO' | translate}}</option>
+                        <option value="SERVICO">{{'psCatalogApp.ProductTypeEnum.SERVICO' | translate}}</option>
+                    </select>
+                    <div [hidden]="!(editForm.controls.productType?.dirty && editForm.controls.productType?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productType?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productImg" for="field_productImg">Product Img</label>
+                    <div>
+                        <img [src]="'data:' + products.productImgContentType + ';base64,' + products.productImg" style="max-height: 100px;" *ngIf="products.productImg" alt="products image"/>
+                        <div *ngIf="products.productImg" class="form-text text-danger clearfix">
+                            <span class="pull-left">{{products.productImgContentType}}, {{byteSize(products.productImg)}}</span>
+                            <button type="button" (click)="clearInputImage('productImg', 'productImgContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_productImg" (change)="setFileData($event, products, 'productImg', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="productImg" id="field_productImg"
+                        [(ngModel)]="products.productImg" />
+                    <input type="hidden" class="form-control" name="productImgContentType" id="field_productImgContentType"
+                        [(ngModel)]="products.productImgContentType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.createdBy" for="field_createdBy">Created By</label>
+                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
+                        [(ngModel)]="products.createdBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.createdDate" for="field_createdDate">Created Date</label>
+                    <div class="d-flex">
+                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
+                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
+                        [(ngModel)]="products.lastModifiedBy" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
+                    <div class="d-flex">
+                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.supplier" for="field_supplier">Supplier</label>
+                    <select class="form-control" id="field_supplier" name="supplier" [(ngModel)]="products.supplierId" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="suppliersOption.id" *ngFor="let suppliersOption of suppliers; trackBy: trackSuppliersById">{{suppliersOption.supplierName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

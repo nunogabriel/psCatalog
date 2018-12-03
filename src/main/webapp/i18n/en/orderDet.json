@@ -1,0 +1,29 @@
+{
+    "psCatalogApp": {
+        "orderDet": {
+            "home": {
+                "title": "Order Dets",
+                "createLabel": "Create a new Order Det",
+                "createOrEditLabel": "Create or edit a Order Det",
+                "search": "Search for Order Det"
+            },
+            "created": "A new Order Det is created with identifier {{ param }}",
+            "updated": "A Order Det is updated with identifier {{ param }}",
+            "deleted": "A Order Det is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Order Det {{ id }}?"
+            },
+            "detail": {
+                "title": "Order Det"
+            },
+            "orderQuantity": "Order Quantity",
+            "unitPrice": "Unit Price",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "order": "Order",
+            "product": "Product"
+        }
+    }
+}

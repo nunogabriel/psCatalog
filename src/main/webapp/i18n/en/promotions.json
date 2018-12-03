@@ -1,0 +1,29 @@
+{
+    "psCatalogApp": {
+        "promotions": {
+            "home": {
+                "title": "Promotions",
+                "createLabel": "Create a new Promotions",
+                "createOrEditLabel": "Create or edit a Promotions",
+                "search": "Search for Promotions"
+            },
+            "created": "A new Promotions is created with identifier {{ param }}",
+            "updated": "A Promotions is updated with identifier {{ param }}",
+            "deleted": "A Promotions is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Promotions {{ id }}?"
+            },
+            "detail": {
+                "title": "Promotions"
+            },
+            "newProductPrice": "New Product Price",
+            "promotionStartDate": "Promotion Start Date",
+            "promotionExpiryDate": "Promotion Expiry Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "products": "Products"
+        }
+    }
+}
