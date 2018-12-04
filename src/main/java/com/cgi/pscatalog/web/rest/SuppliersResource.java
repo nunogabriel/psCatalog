@@ -2,6 +2,7 @@ package com.cgi.pscatalog.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.SuppliersService;
 import com.cgi.pscatalog.service.dto.SuppliersDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
@@ -61,10 +63,16 @@ public class SuppliersResource {
     @Timed
     public ResponseEntity<SuppliersDTO> createSuppliers(@Valid @RequestBody SuppliersDTO suppliersDTO) throws URISyntaxException {
         log.debug("REST request to save Suppliers : {}", suppliersDTO);
+        
         if (suppliersDTO.getId() != null) {
             throw new BadRequestAlertException("A new suppliers cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        suppliersDTO.setCreatedBy(SecurityUtils.getCurrentUserLogin().toString());
+        suppliersDTO.setCreatedDate(Instant.now());
+        
         SuppliersDTO result = suppliersService.save(suppliersDTO);
+        
         return ResponseEntity.created(new URI("/api/suppliers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -83,10 +91,16 @@ public class SuppliersResource {
     @Timed
     public ResponseEntity<SuppliersDTO> updateSuppliers(@Valid @RequestBody SuppliersDTO suppliersDTO) throws URISyntaxException {
         log.debug("REST request to update Suppliers : {}", suppliersDTO);
+        
         if (suppliersDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        suppliersDTO.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().toString());
+        suppliersDTO.setLastModifiedDate(Instant.now());
+        
         SuppliersDTO result = suppliersService.save(suppliersDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, suppliersDTO.getId().toString()))
             .body(result);
