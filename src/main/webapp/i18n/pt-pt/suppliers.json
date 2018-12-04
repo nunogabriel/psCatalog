@@ -2,32 +2,32 @@
     "psCatalogApp": {
         "suppliers": {
             "home": {
-                "title": "Suppliers",
-                "createLabel": "Criar um(a) novo(a) Suppliers",
-                "createOrEditLabel": "Criar ou editar um(a) Suppliers",
-                "search": "Search for Suppliers"
+                "title": "Fornecedores",
+                "createLabel": "Criar um novo Fornecedor",
+                "createOrEditLabel": "Criar ou editar um Fornecedor",
+                "search": "Pesquisa de Fornecedores"
             },
-            "created": "A new Suppliers is created with identifier {{ param }}",
-            "updated": "A Suppliers is updated with identifier {{ param }}",
-            "deleted": "A Suppliers is deleted with identifier {{ param }}",
+            "created": "Um novo Fornecedor foi criado com o identificador {{ param }}",
+            "updated": "Fornecedor atualizado com o identificador {{ param }}",
+            "deleted": "Fornecedor eliminado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Suppliers {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o Fornecedor {{ id }}?"
             },
             "detail": {
-                "title": "Suppliers"
+                "title": "Fornecedores"
             },
-            "supplierName": "Supplier Name",
-            "supplierNif": "Supplier Nif",
-            "supplierEmail": "Supplier Email",
-            "supplierPhone": "Supplier Phone",
-            "supplierBeginDate": "Supplier Begin Date",
-            "supplierEndDate": "Supplier End Date",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "addresses": "Addresses",
-            "products": "Products"
+            "supplierName": "Nome",
+            "supplierNif": "NIF",
+            "supplierEmail": "Email",
+            "supplierPhone": "Telefone",
+            "supplierBeginDate": "Data Início",
+            "supplierEndDate": "Data Fim",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "addresses": "Moradas",
+            "products": "Produtos"
         }
     }
 }

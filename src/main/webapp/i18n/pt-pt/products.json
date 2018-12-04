@@ -2,34 +2,34 @@
     "psCatalogApp": {
         "products": {
             "home": {
-                "title": "Products",
-                "createLabel": "Criar um(a) novo(a) Products",
-                "createOrEditLabel": "Criar ou editar um(a) Products",
-                "search": "Search for Products"
+                "title": "Produtos",
+                "createLabel": "Criar um novo Produto",
+                "createOrEditLabel": "Criar ou editar um Produto",
+                "search": "Pesquisa de Produtos"
             },
-            "created": "A new Products is created with identifier {{ param }}",
-            "updated": "A Products is updated with identifier {{ param }}",
-            "deleted": "A Products is deleted with identifier {{ param }}",
+            "created": "Um novo Produto foi criado com o identificador {{ param }}",
+            "updated": "Produto atualizado com o identificador {{ param }}",
+            "deleted": "Produto eliminado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Products {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o Produto {{ id }}?"
             },
             "detail": {
-                "title": "Products"
+                "title": "Produtos"
             },
-            "productName": "Product Name",
-            "productDescription": "Product Description",
-            "productPrice": "Product Price",
-            "productStartDate": "Product Start Date",
-            "productEndDate": "Product End Date",
-            "productType": "Product Type",
-            "productImg": "Product Img",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "orderDet": "Order Det",
-            "supplier": "Supplier",
-            "customers": "Customers"
+            "productName": "Nome",
+            "productDescription": "Descrição",
+            "productPrice": "Preço",
+            "productStartDate": "Data Início",
+            "productEndDate": "Data Fim",
+            "productType": "Tipo Produto",
+            "productImg": "Imagem",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "orderDet": "Detalhe da Encomenda",
+            "supplier": "Fornecedor",
+            "customers": "Clientes"
         }
     }
 }
