@@ -29,14 +29,14 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="countryName"><span jhiTranslate="psCatalogApp.countries.countryName">Country Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let countries of countries ;trackBy: trackId">
-                <td><a [routerLink]="['/countries', countries.id, 'view' ]">{{countries.id}}</a></td>
+<!--                 <td><a [routerLink]="['/countries', countries.id, 'view' ]">{{countries.id}}</a></td> -->
                 <td>{{countries.countryName}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">

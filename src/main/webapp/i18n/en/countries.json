@@ -3,20 +3,20 @@
         "countries": {
             "home": {
                 "title": "Countries",
-                "createLabel": "Create a new Countries",
-                "createOrEditLabel": "Create or edit a Countries",
+                "createLabel": "Create a new Country",
+                "createOrEditLabel": "Create or edit a Country",
                 "search": "Search for Countries"
             },
-            "created": "A new Countries is created with identifier {{ param }}",
-            "updated": "A Countries is updated with identifier {{ param }}",
-            "deleted": "A Countries is deleted with identifier {{ param }}",
+            "created": "A new Country is created with identifier {{ param }}",
+            "updated": "The Country with identifier {{ param }} was updated",
+            "deleted": "The Country with identifier {{ param }} was deleted",
             "delete": {
-                "question": "Are you sure you want to delete Countries {{ id }}?"
+                "question": "Are you sure you want to delete Country {{ id }}?"
             },
             "detail": {
                 "title": "Countries"
             },
-            "countryName": "Country Name",
+            "countryName": "Name",
             "addresses": "Addresses"
         }
     }

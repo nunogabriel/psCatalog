@@ -68,7 +68,7 @@ public class SuppliersResource {
             throw new BadRequestAlertException("A new suppliers cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        suppliersDTO.setCreatedBy(SecurityUtils.getCurrentUserLogin().toString());
+        suppliersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         suppliersDTO.setCreatedDate(Instant.now());
         
         SuppliersDTO result = suppliersService.save(suppliersDTO);
@@ -96,7 +96,7 @@ public class SuppliersResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         
-        suppliersDTO.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().toString());
+        suppliersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         suppliersDTO.setLastModifiedDate(Instant.now());
         
         SuppliersDTO result = suppliersService.save(suppliersDTO);

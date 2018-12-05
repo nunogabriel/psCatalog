@@ -2,8 +2,8 @@
     "psCatalogApp": {
         "GenderEnum": {
             "null": "",
-            "MASCULINO": "MASCULINO",
-            "FEMININO": "FEMININO"
+            "MASCULINO": "MALE",
+            "FEMININO": "FEMALE"
         }
     }
 }

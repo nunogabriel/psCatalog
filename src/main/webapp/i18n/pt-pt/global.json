@@ -7,18 +7,18 @@
             "home": "Início",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
-                "main": "Entidades",
-                "suppliers": "Suppliers",
-                "customers": "Customers",
-                "products": "Products",
-                "promotions": "Promotions",
-                "addresses": "Addresses",
-                "countries": "Countries",
-                "orders": "Orders",
-                "ordersHst": "Orders Hst",
-                "orderStatus": "Order Status",
-                "orderDet": "Order Det",
-                "orderDetHst": "Order Det Hst",
+                "main": "Back Office",
+                "suppliers": "Fornecedores",
+                "customers": "Clientes",
+                "products": "Produtos",
+                "promotions": "Promoções",
+                "addresses": "Moradas",
+                "countries": "Países",
+                "orders": "Encomendas",
+                "ordersHst": "Histórico das Encomendas",
+                "orderStatus": "Estados da Encomenda",
+                "orderDet": "Detalhe das Encomendas",
+                "orderDetHst": "Histórico do Detalhe das Encomendas",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -32,8 +32,8 @@
             },
             "admin": {
                 "main": "Administração",
-                "userManagement": "User management",
-                "tracker": "Atividade dos utilizadores",
+                "userManagement": "Gestão de Utilizadores",
+                "tracker": "Atividade dos Utilizadores",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
                 "configuration": "Configuração",
@@ -48,11 +48,11 @@
         "form": {
             "username": "Nome de utilizador",
             "username.placeholder": "O seu nome de utilizador",
-            "currentpassword": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword": "Palavra-passe atual",
+            "currentpassword.placeholder": "Palavra-passe atual",
             "newpassword": "Nova palavra-passe",
             "newpassword.placeholder": "Nova palavra-passe",
-            "confirmpassword": "Confirmação de nova palavra-passe",
+            "confirmpassword": "Confirmação da nova palavra-passe",
             "confirmpassword.placeholder": "Confirme a nova palavra-passe",
             "email": "Email",
             "email.placeholder": "O seu email"
@@ -97,7 +97,7 @@
             "id": "Código"
         },
         "ribbon": {
-            "dev": "Development"
+            "dev": "Desenvolvimento"
         },
         "item-count": "Mostrando {{first}} - {{second}} de {{total}} resultados."
     },
@@ -109,7 +109,7 @@
             "cancel": "Cancelar",
             "delete": "Eliminar",
             "edit": "Editar",
-            "open": "Open",
+            "open": "Abrir",
             "save": "Guardar",
             "view": "Visualizar"
         },
@@ -134,15 +134,15 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
-        "server.not.reachable": "Server not reachable",
-        "url.not.found": "Not found",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "internalServerError": "Erro interno no servidor",
+        "server.not.reachable": "Não foi possível invocar Servidor",
+        "url.not.found": "Não encontrado",
+        "NotNull": "Campo {{fieldName}} não pode ser vazio!",
+        "Size": "Campo {{fieldName}} não cumpre requisitos de tamanho min/max!",
+        "userexists": "Login já se econtra em utilização!",
+        "emailexists": "Email já se econtra em utilização!",
+        "idexists": "Um(a) novo(a) {{entityName}} não pode já ter um ID",
+        "idnull": "ID Inválido"
     },
     "footer": "Este é o seu rodapé"
 }

@@ -2,28 +2,28 @@
     "psCatalogApp": {
         "promotions": {
             "home": {
-                "title": "Promotions",
-                "createLabel": "Criar um(a) novo(a) Promotions",
-                "createOrEditLabel": "Criar ou editar um(a) Promotions",
-                "search": "Search for Promotions"
+                "title": "Promoções",
+                "createLabel": "Criar uma nova Promoção",
+                "createOrEditLabel": "Criar ou editar uma Promoção",
+                "search": "Pesquisa de Promoções"
             },
-            "created": "A new Promotions is created with identifier {{ param }}",
-            "updated": "A Promotions is updated with identifier {{ param }}",
-            "deleted": "A Promotions is deleted with identifier {{ param }}",
+            "created": "Uma nova Promoção foi criada com o identificador {{ param }}",
+            "updated": "Promoção atualizada com o identificador {{ param }}",
+            "deleted": "Promoção eliminada com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Promotions {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar a Promoção {{ id }}?"
             },
             "detail": {
-                "title": "Promotions"
+                "title": "Promoções"
             },
-            "newProductPrice": "New Product Price",
-            "promotionStartDate": "Promotion Start Date",
-            "promotionExpiryDate": "Promotion Expiry Date",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "products": "Products"
+            "newProductPrice": "Novo Preço do Produto",
+            "promotionStartDate": "Data Início",
+            "promotionExpiryDate": "Data Fim",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "products": "Produtos"
         }
     }
 }

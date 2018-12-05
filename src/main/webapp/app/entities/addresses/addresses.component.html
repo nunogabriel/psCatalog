@@ -29,7 +29,7 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="addressReference"><span jhiTranslate="psCatalogApp.addresses.addressReference">Address Reference</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="addressName"><span jhiTranslate="psCatalogApp.addresses.addressName">Address Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="streetAddress"><span jhiTranslate="psCatalogApp.addresses.streetAddress">Street Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -37,10 +37,10 @@
             <th jhiSortBy="state"><span jhiTranslate="psCatalogApp.addresses.state">State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="zipCode"><span jhiTranslate="psCatalogApp.addresses.zipCode">Zip Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="phoneNumber"><span jhiTranslate="psCatalogApp.addresses.phoneNumber">Phone Number</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.addresses.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.addresses.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.addresses.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.addresses.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.addresses.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.addresses.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.addresses.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.addresses.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="customerCustomerName"><span jhiTranslate="psCatalogApp.addresses.customer">Customer</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="supplierSupplierName"><span jhiTranslate="psCatalogApp.addresses.supplier">Supplier</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="countryCountryName"><span jhiTranslate="psCatalogApp.addresses.country">Country</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -49,7 +49,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let addresses of addresses ;trackBy: trackId">
-                <td><a [routerLink]="['/addresses', addresses.id, 'view' ]">{{addresses.id}}</a></td>
+<!--                 <td><a [routerLink]="['/addresses', addresses.id, 'view' ]">{{addresses.id}}</a></td> -->
                 <td>{{addresses.addressReference}}</td>
                 <td>{{addresses.addressName}}</td>
                 <td>{{addresses.streetAddress}}</td>
@@ -57,10 +57,10 @@
                 <td>{{addresses.state}}</td>
                 <td>{{addresses.zipCode}}</td>
                 <td>{{addresses.phoneNumber}}</td>
-                <td>{{addresses.createdBy}}</td>
-                <td>{{addresses.createdDate | date:'medium'}}</td>
-                <td>{{addresses.lastModifiedBy}}</td>
-                <td>{{addresses.lastModifiedDate | date:'medium'}}</td>
+<!--                 <td>{{addresses.createdBy}}</td> -->
+<!--                 <td>{{addresses.createdDate | date:'medium'}}</td> -->
+<!--                 <td>{{addresses.lastModifiedBy}}</td> -->
+<!--                 <td>{{addresses.lastModifiedDate | date:'medium'}}</td> -->
                 <td>
                     <div *ngIf="addresses.customerId">
                         <a [routerLink]="['../customers', addresses.customerId , 'view' ]" >{{addresses.customerCustomerName}}</a>

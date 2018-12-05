@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="promotions">
-            <h2><span jhiTranslate="psCatalogApp.promotions.detail.title">Promotions</span> {{promotions.id}}</h2>
-            <hr>
+<!--             <h2><span jhiTranslate="psCatalogApp.promotions.detail.title">Promotions</span> {{promotions.id}}</h2> -->
+<!--             <hr> -->
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="psCatalogApp.promotions.newProductPrice">New Product Price</span></dt>
@@ -17,22 +17,22 @@
                 <dd>
                     <span>{{promotions.promotionExpiryDate}}</span>
                 </dd>
-                <dt><span jhiTranslate="psCatalogApp.promotions.createdBy">Created By</span></dt>
-                <dd>
-                    <span>{{promotions.createdBy}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.promotions.createdDate">Created Date</span></dt>
-                <dd>
-                    <span>{{promotions.createdDate}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedBy">Last Modified By</span></dt>
-                <dd>
-                    <span>{{promotions.lastModifiedBy}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedDate">Last Modified Date</span></dt>
-                <dd>
-                    <span>{{promotions.lastModifiedDate}}</span>
-                </dd>
+<!--                 <dt><span jhiTranslate="psCatalogApp.promotions.createdBy">Created By</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{promotions.createdBy}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.promotions.createdDate">Created Date</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{promotions.createdDate}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedBy">Last Modified By</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{promotions.lastModifiedBy}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.promotions.lastModifiedDate">Last Modified Date</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{promotions.lastModifiedDate}}</span> -->
+<!--                 </dd> -->
                 <dt><span jhiTranslate="psCatalogApp.promotions.products">Products</span></dt>
                 <dd>
                     <div *ngIf="promotions.productsId">

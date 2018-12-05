@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.ProductsService;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Products.
@@ -54,10 +52,16 @@ public class ProductsResource {
     @Timed
     public ResponseEntity<ProductsDTO> createProducts(@Valid @RequestBody ProductsDTO productsDTO) throws URISyntaxException {
         log.debug("REST request to save Products : {}", productsDTO);
+        
         if (productsDTO.getId() != null) {
             throw new BadRequestAlertException("A new products cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        productsDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        productsDTO.setCreatedDate(Instant.now());
+        
         ProductsDTO result = productsService.save(productsDTO);
+        
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,10 +80,16 @@ public class ProductsResource {
     @Timed
     public ResponseEntity<ProductsDTO> updateProducts(@Valid @RequestBody ProductsDTO productsDTO) throws URISyntaxException {
         log.debug("REST request to update Products : {}", productsDTO);
+        
         if (productsDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        productsDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        productsDTO.setLastModifiedDate(Instant.now());
+        
         ProductsDTO result = productsService.save(productsDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, productsDTO.getId().toString()))
             .body(result);

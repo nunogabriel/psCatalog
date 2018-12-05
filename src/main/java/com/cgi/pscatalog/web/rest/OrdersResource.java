@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Orders.
@@ -54,10 +52,16 @@ public class OrdersResource {
     @Timed
     public ResponseEntity<OrdersDTO> createOrders(@Valid @RequestBody OrdersDTO ordersDTO) throws URISyntaxException {
         log.debug("REST request to save Orders : {}", ordersDTO);
+        
         if (ordersDTO.getId() != null) {
             throw new BadRequestAlertException("A new orders cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        ordersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        ordersDTO.setCreatedDate(Instant.now());
+        
         OrdersDTO result = ordersService.save(ordersDTO);
+        
         return ResponseEntity.created(new URI("/api/orders/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,10 +80,16 @@ public class OrdersResource {
     @Timed
     public ResponseEntity<OrdersDTO> updateOrders(@Valid @RequestBody OrdersDTO ordersDTO) throws URISyntaxException {
         log.debug("REST request to update Orders : {}", ordersDTO);
+        
         if (ordersDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        ordersDTO.setLastModifiedDate(Instant.now());
+        
         OrdersDTO result = ordersService.save(ordersDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ordersDTO.getId().toString()))
             .body(result);

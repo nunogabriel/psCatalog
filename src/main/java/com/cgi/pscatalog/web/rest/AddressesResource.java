@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.AddressesService;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Addresses.
@@ -54,10 +52,16 @@ public class AddressesResource {
     @Timed
     public ResponseEntity<AddressesDTO> createAddresses(@Valid @RequestBody AddressesDTO addressesDTO) throws URISyntaxException {
         log.debug("REST request to save Addresses : {}", addressesDTO);
+        
         if (addressesDTO.getId() != null) {
             throw new BadRequestAlertException("A new addresses cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        addressesDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        addressesDTO.setCreatedDate(Instant.now());
+        
         AddressesDTO result = addressesService.save(addressesDTO);
+        
         return ResponseEntity.created(new URI("/api/addresses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,10 +80,16 @@ public class AddressesResource {
     @Timed
     public ResponseEntity<AddressesDTO> updateAddresses(@Valid @RequestBody AddressesDTO addressesDTO) throws URISyntaxException {
         log.debug("REST request to update Addresses : {}", addressesDTO);
+        
         if (addressesDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        addressesDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        addressesDTO.setLastModifiedDate(Instant.now());
+        
         AddressesDTO result = addressesService.save(addressesDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, addressesDTO.getId().toString()))
             .body(result);

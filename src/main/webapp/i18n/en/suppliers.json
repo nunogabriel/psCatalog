@@ -3,25 +3,25 @@
         "suppliers": {
             "home": {
                 "title": "Suppliers",
-                "createLabel": "Create a new Suppliers",
-                "createOrEditLabel": "Create or edit a Suppliers",
+                "createLabel": "Create a new Supplier",
+                "createOrEditLabel": "Create or edit a Supplier",
                 "search": "Search for Suppliers"
             },
-            "created": "A new Suppliers is created with identifier {{ param }}",
-            "updated": "A Suppliers is updated with identifier {{ param }}",
-            "deleted": "A Suppliers is deleted with identifier {{ param }}",
+            "created": "A new Supplier is created with identifier {{ param }}",
+            "updated": "The Supplier with identifier {{ param }} was updated",
+            "deleted": "The Supplier with identifier {{ param }} was deleted",
             "delete": {
-                "question": "Are you sure you want to delete Suppliers {{ id }}?"
+                "question": "Are you sure you want to delete Supplier {{ id }}?"
             },
             "detail": {
                 "title": "Suppliers"
             },
-            "supplierName": "Supplier Name",
-            "supplierNif": "Supplier Nif",
-            "supplierEmail": "Supplier Email",
-            "supplierPhone": "Supplier Phone",
-            "supplierBeginDate": "Supplier Begin Date",
-            "supplierEndDate": "Supplier End Date",
+            "supplierName": "Name",
+            "supplierNif": "VAT",
+            "supplierEmail": "Email",
+            "supplierPhone": "Phone",
+            "supplierBeginDate": "Begin Date",
+            "supplierEndDate": "End Date",
             "createdBy": "Created By",
             "createdDate": "Created Date",
             "lastModifiedBy": "Last Modified By",

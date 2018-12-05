@@ -4,11 +4,11 @@
         "refresh.button": "Atualizar",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Detalhes",
+            "properties": "Propriedades",
+            "name": "Nome",
+            "value": "Valor",
+            "error": "Erro"
         },
         "indicator": {
             "diskSpace": "Espaço em disco",

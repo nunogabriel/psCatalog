@@ -7,7 +7,7 @@
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
-                "main": "Entities",
+                "main": "Back Office",
                 "suppliers": "Suppliers",
                 "customers": "Customers",
                 "products": "Products",
@@ -15,10 +15,10 @@
                 "addresses": "Addresses",
                 "countries": "Countries",
                 "orders": "Orders",
-                "ordersHst": "Orders Hst",
+                "ordersHst": "Orders History",
                 "orderStatus": "Order Status",
-                "orderDet": "Order Det",
-                "orderDetHst": "Order Det Hst",
+                "orderDet": "Order Detail",
+                "orderDetHst": "Order Detail History",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

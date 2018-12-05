@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Customers.
@@ -54,10 +52,16 @@ public class CustomersResource {
     @Timed
     public ResponseEntity<CustomersDTO> createCustomers(@Valid @RequestBody CustomersDTO customersDTO) throws URISyntaxException {
         log.debug("REST request to save Customers : {}", customersDTO);
+        
         if (customersDTO.getId() != null) {
             throw new BadRequestAlertException("A new customers cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        customersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        customersDTO.setCreatedDate(Instant.now());
+        
         CustomersDTO result = customersService.save(customersDTO);
+        
         return ResponseEntity.created(new URI("/api/customers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,10 +80,16 @@ public class CustomersResource {
     @Timed
     public ResponseEntity<CustomersDTO> updateCustomers(@Valid @RequestBody CustomersDTO customersDTO) throws URISyntaxException {
         log.debug("REST request to update Customers : {}", customersDTO);
+        
         if (customersDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        customersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        customersDTO.setLastModifiedDate(Instant.now());
+        
         CustomersDTO result = customersService.save(customersDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, customersDTO.getId().toString()))
             .body(result);

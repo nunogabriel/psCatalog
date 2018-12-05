@@ -29,7 +29,7 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="customerName"><span jhiTranslate="psCatalogApp.customers.customerName">Customer Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerEmail"><span jhiTranslate="psCatalogApp.customers.customerEmail">Customer Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerNif"><span jhiTranslate="psCatalogApp.customers.customerNif">Customer Nif</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -37,16 +37,16 @@
             <th jhiSortBy="customerGender"><span jhiTranslate="psCatalogApp.customers.customerGender">Customer Gender</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerBeginDate"><span jhiTranslate="psCatalogApp.customers.customerBeginDate">Customer Begin Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerEndDate"><span jhiTranslate="psCatalogApp.customers.customerEndDate">Customer End Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.customers.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.customers.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.customers.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.customers.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.customers.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.customers.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.customers.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.customers.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let customers of customers ;trackBy: trackId">
-                <td><a [routerLink]="['/customers', customers.id, 'view' ]">{{customers.id}}</a></td>
+<!--                 <td><a [routerLink]="['/customers', customers.id, 'view' ]">{{customers.id}}</a></td> -->
                 <td>{{customers.customerName}}</td>
                 <td>{{customers.customerEmail}}</td>
                 <td>{{customers.customerNif}}</td>
@@ -54,10 +54,10 @@
                 <td jhiTranslate="{{'psCatalogApp.GenderEnum.' + customers.customerGender}}">{{customers.customerGender}}</td>
                 <td>{{customers.customerBeginDate | date:'medium'}}</td>
                 <td>{{customers.customerEndDate | date:'medium'}}</td>
-                <td>{{customers.createdBy}}</td>
-                <td>{{customers.createdDate | date:'medium'}}</td>
-                <td>{{customers.lastModifiedBy}}</td>
-                <td>{{customers.lastModifiedDate | date:'medium'}}</td>
+<!--                 <td>{{customers.createdBy}}</td> -->
+<!--                 <td>{{customers.createdDate | date:'medium'}}</td> -->
+<!--                 <td>{{customers.lastModifiedBy}}</td> -->
+<!--                 <td>{{customers.lastModifiedDate | date:'medium'}}</td> -->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

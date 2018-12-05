@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.PromotionsService;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -19,12 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Promotions.
@@ -54,10 +52,16 @@ public class PromotionsResource {
     @Timed
     public ResponseEntity<PromotionsDTO> createPromotions(@Valid @RequestBody PromotionsDTO promotionsDTO) throws URISyntaxException {
         log.debug("REST request to save Promotions : {}", promotionsDTO);
+        
         if (promotionsDTO.getId() != null) {
             throw new BadRequestAlertException("A new promotions cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        
+        promotionsDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        promotionsDTO.setCreatedDate(Instant.now());
+        
         PromotionsDTO result = promotionsService.save(promotionsDTO);
+        
         return ResponseEntity.created(new URI("/api/promotions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,10 +80,16 @@ public class PromotionsResource {
     @Timed
     public ResponseEntity<PromotionsDTO> updatePromotions(@Valid @RequestBody PromotionsDTO promotionsDTO) throws URISyntaxException {
         log.debug("REST request to update Promotions : {}", promotionsDTO);
+        
         if (promotionsDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        promotionsDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+        promotionsDTO.setLastModifiedDate(Instant.now());
+        
         PromotionsDTO result = promotionsService.save(promotionsDTO);
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, promotionsDTO.getId().toString()))
             .body(result);

@@ -2,22 +2,22 @@
     "psCatalogApp": {
         "countries": {
             "home": {
-                "title": "Countries",
-                "createLabel": "Criar um(a) novo(a) Countries",
-                "createOrEditLabel": "Criar ou editar um(a) Countries",
-                "search": "Search for Countries"
+                "title": "Países",
+                "createLabel": "Criar um novo País",
+                "createOrEditLabel": "Criar ou editar um País",
+                "search": "Pesquisa de Países"
             },
-            "created": "A new Countries is created with identifier {{ param }}",
-            "updated": "A Countries is updated with identifier {{ param }}",
-            "deleted": "A Countries is deleted with identifier {{ param }}",
+            "created": "Um novo País foi criado com o identificador {{ param }}",
+            "updated": "País atualizado com o identificador {{ param }}",
+            "deleted": "País eliminado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Countries {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o País {{ id }}?"
             },
             "detail": {
-                "title": "Countries"
+                "title": "Países"
             },
-            "countryName": "Country Name",
-            "addresses": "Addresses"
+            "countryName": "Nome",
+            "addresses": "Moradas"
         }
     }
 }

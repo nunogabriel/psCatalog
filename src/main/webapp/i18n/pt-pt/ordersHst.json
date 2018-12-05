@@ -2,32 +2,32 @@
     "psCatalogApp": {
         "ordersHst": {
             "home": {
-                "title": "Orders Hsts",
-                "createLabel": "Criar um(a) novo(a) Orders Hst",
-                "createOrEditLabel": "Criar ou editar um(a) Orders Hst",
-                "search": "Search for Orders Hst"
+                "title": "Histórico das Encomendas",
+                "createLabel": "Criar um novo Histórico da Encomenda",
+                "createOrEditLabel": "Criar ou editar um Histórico da Encomenda",
+                "search": "Pesquisa do Histórico das Encomendas"
             },
-            "created": "A new Orders Hst is created with identifier {{ param }}",
-            "updated": "A Orders Hst is updated with identifier {{ param }}",
-            "deleted": "A Orders Hst is deleted with identifier {{ param }}",
+            "created": "Um novo Histórico da Encomenda foi criada com o identificador {{ param }}",
+            "updated": "Encomenda atualizada com o identificador {{ param }}",
+            "deleted": "Encomenda eliminada com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Orders Hst {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o Encomenda {{ id }}?"
             },
             "detail": {
-                "title": "Orders Hst"
+                "title": "Histórico das Encomendas"
             },
-            "orderReference": "Order Reference",
-            "customerId": "Customer Id",
-            "orderStatusCode": "Order Status Code",
-            "orderDate": "Order Date",
-            "billingAddress": "Billing Address",
-            "deliveryAddress": "Delivery Address",
-            "deliveryDate": "Delivery Date",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "orders": "Orders"
+            "orderReference": "Referência",
+            "customerId": "Cliente",
+            "orderStatusCode": "Estado",
+            "orderDate": "Data",
+            "billingAddress": "Morada Faturação",
+            "deliveryAddress": "Morada Entrega",
+            "deliveryDate": "Data Entrega",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "orders": "Encomendas"
         }
     }
 }

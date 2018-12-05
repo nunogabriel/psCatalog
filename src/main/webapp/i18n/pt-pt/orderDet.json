@@ -2,28 +2,28 @@
     "psCatalogApp": {
         "orderDet": {
             "home": {
-                "title": "Order Dets",
-                "createLabel": "Criar um(a) novo(a) Order Det",
-                "createOrEditLabel": "Criar ou editar um(a) Order Det",
-                "search": "Search for Order Det"
+                "title": "Detalhe das Encomendas",
+                "createLabel": "Criar um novo Detalhe da Encomenda",
+                "createOrEditLabel": "Criar ou editar um Detalhe da Encomenda",
+                "search": "Pesquisa de Detalhe das Encomendas"
             },
-            "created": "A new Order Det is created with identifier {{ param }}",
-            "updated": "A Order Det is updated with identifier {{ param }}",
-            "deleted": "A Order Det is deleted with identifier {{ param }}",
+            "created": "Um novo Detalhe da Encomenda foi criado com o identificador {{ param }}",
+            "updated": "Detalhe da Encomenda atualizado com o identificador {{ param }}",
+            "deleted": "Detalhe da Encomenda eliminado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Order Det {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o Detalhe da Encomenda {{ id }}?"
             },
             "detail": {
-                "title": "Order Det"
+                "title": "Detalhe das Encomendas"
             },
-            "orderQuantity": "Order Quantity",
-            "unitPrice": "Unit Price",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "order": "Order",
-            "product": "Product"
+            "orderQuantity": "Quantidade",
+            "unitPrice": "Preço Unitário",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "order": "Encomenda",
+            "product": "Produto"
         }
     }
 }

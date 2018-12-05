@@ -2,34 +2,34 @@
     "psCatalogApp": {
         "customers": {
             "home": {
-                "title": "Customers",
-                "createLabel": "Criar um(a) novo(a) Customers",
-                "createOrEditLabel": "Criar ou editar um(a) Customers",
-                "search": "Search for Customers"
+                "title": "Clientes",
+                "createLabel": "Criar um novo Cliente",
+                "createOrEditLabel": "Criar ou editar um Cliente",
+                "search": "Pesquisa de Clientes"
             },
-            "created": "A new Customers is created with identifier {{ param }}",
-            "updated": "A Customers is updated with identifier {{ param }}",
-            "deleted": "A Customers is deleted with identifier {{ param }}",
+            "created": "Um novo Cliente foi criado com o identificador {{ param }}",
+            "updated": "Cliente atualizado com o identificador {{ param }}",
+            "deleted": "Cliente eliminado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem a certeza que pretende eliminar o(a) Customers {{ id }}?"
+                "question": "Tem a certeza que pretende eliminar o Cliente {{ id }}?"
             },
             "detail": {
-                "title": "Customers"
+                "title": "Clientes"
             },
-            "customerName": "Customer Name",
-            "customerEmail": "Customer Email",
-            "customerNif": "Customer Nif",
-            "customerPhone": "Customer Phone",
-            "customerGender": "Customer Gender",
-            "customerBeginDate": "Customer Begin Date",
-            "customerEndDate": "Customer End Date",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "orders": "Orders",
-            "addresses": "Addresses",
-            "products": "Products"
+            "customerName": "Nome",
+            "customerEmail": "Email",
+            "customerNif": "NIF",
+            "customerPhone": "Telefone",
+            "customerGender": "Sexo",
+            "customerBeginDate": "Data Início",
+            "customerEndDate": "Data Fim",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "orders": "Encomendas",
+            "addresses": "Moradas",
+            "products": "Produtos"
         }
     }
 }

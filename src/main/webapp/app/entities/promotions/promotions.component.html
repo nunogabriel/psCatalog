@@ -29,28 +29,28 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="newProductPrice"><span jhiTranslate="psCatalogApp.promotions.newProductPrice">New Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="promotionStartDate"><span jhiTranslate="psCatalogApp.promotions.promotionStartDate">Promotion Start Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="promotionExpiryDate"><span jhiTranslate="psCatalogApp.promotions.promotionExpiryDate">Promotion Expiry Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.promotions.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.promotions.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.promotions.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.promotions.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.promotions.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.promotions.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.promotions.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.promotions.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="productsProductName"><span jhiTranslate="psCatalogApp.promotions.products">Products</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let promotions of promotions ;trackBy: trackId">
-                <td><a [routerLink]="['/promotions', promotions.id, 'view' ]">{{promotions.id}}</a></td>
+<!--                 <td><a [routerLink]="['/promotions', promotions.id, 'view' ]">{{promotions.id}}</a></td> -->
                 <td>{{promotions.newProductPrice}}</td>
                 <td>{{promotions.promotionStartDate | date:'medium'}}</td>
                 <td>{{promotions.promotionExpiryDate | date:'medium'}}</td>
-                <td>{{promotions.createdBy}}</td>
-                <td>{{promotions.createdDate | date:'medium'}}</td>
-                <td>{{promotions.lastModifiedBy}}</td>
-                <td>{{promotions.lastModifiedDate | date:'medium'}}</td>
+<!--                 <td>{{promotions.createdBy}}</td> -->
+<!--                 <td>{{promotions.createdDate | date:'medium'}}</td> -->
+<!--                 <td>{{promotions.lastModifiedBy}}</td> -->
+<!--                 <td>{{promotions.lastModifiedDate | date:'medium'}}</td> -->
                 <td>
                     <div *ngIf="promotions.productsId">
                         <a [routerLink]="['../products', promotions.productsId , 'view' ]" >{{promotions.productsProductName}}</a>

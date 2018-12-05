@@ -4,11 +4,11 @@
             <h2 id="jhi-order-det-heading" jhiTranslate="psCatalogApp.orderDet.home.createOrEditLabel">Create or edit a Order Det</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!orderDet.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="orderDet.id" readonly />
-                </div>
+<!--                 <div class="form-group" [hidden]="!orderDet.id"> -->
+<!--                     <label for="id" jhiTranslate="global.field.id">ID</label> -->
+<!--                     <input type="text" class="form-control" id="id" name="id" -->
+<!--                         [(ngModel)]="orderDet.id" readonly /> -->
+<!--                 </div> -->
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.orderQuantity" for="field_orderQuantity">Order Quantity</label>
                     <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity"
@@ -39,30 +39,30 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.createdBy" for="field_createdBy">Created By</label>
-                    <input type="text" class="form-control" name="createdBy" id="field_createdBy"
-                        [(ngModel)]="orderDet.createdBy" />
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.createdDate" for="field_createdDate">Created Date</label>
-                    <div class="d-flex">
-                        <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate"
-                        />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label>
-                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy"
-                        [(ngModel)]="orderDet.lastModifiedBy" />
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label>
-                    <div class="d-flex">
-                        <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate"
-                        />
-                    </div>
-                </div>
+<!--                 <div class="form-group"> -->
+<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.createdBy" for="field_createdBy">Created By</label> -->
+<!--                     <input type="text" class="form-control" name="createdBy" id="field_createdBy" -->
+<!--                         [(ngModel)]="orderDet.createdBy" /> -->
+<!--                 </div> -->
+<!--                 <div class="form-group"> -->
+<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.createdDate" for="field_createdDate">Created Date</label> -->
+<!--                     <div class="d-flex"> -->
+<!--                         <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate" -->
+<!--                         /> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--                 <div class="form-group"> -->
+<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label> -->
+<!--                     <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy" -->
+<!--                         [(ngModel)]="orderDet.lastModifiedBy" /> -->
+<!--                 </div> -->
+<!--                 <div class="form-group"> -->
+<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label> -->
+<!--                     <div class="d-flex"> -->
+<!--                         <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate" -->
+<!--                         /> -->
+<!--                     </div> -->
+<!--                 </div> -->
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.order" for="field_order">Order</label>

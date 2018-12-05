@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="ordersHst">
-            <h2><span jhiTranslate="psCatalogApp.ordersHst.detail.title">Orders Hst</span> {{ordersHst.id}}</h2>
-            <hr>
+<!--             <h2><span jhiTranslate="psCatalogApp.ordersHst.detail.title">Orders Hst</span> {{ordersHst.id}}</h2> -->
+<!--             <hr> -->
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="psCatalogApp.ordersHst.orderReference">Order Reference</span></dt>
@@ -33,22 +33,22 @@
                 <dd>
                     <span>{{ordersHst.deliveryDate}}</span>
                 </dd>
-                <dt><span jhiTranslate="psCatalogApp.ordersHst.createdBy">Created By</span></dt>
-                <dd>
-                    <span>{{ordersHst.createdBy}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.ordersHst.createdDate">Created Date</span></dt>
-                <dd>
-                    <span>{{ordersHst.createdDate}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy">Last Modified By</span></dt>
-                <dd>
-                    <span>{{ordersHst.lastModifiedBy}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate">Last Modified Date</span></dt>
-                <dd>
-                    <span>{{ordersHst.lastModifiedDate}}</span>
-                </dd>
+<!--                 <dt><span jhiTranslate="psCatalogApp.ordersHst.createdBy">Created By</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{ordersHst.createdBy}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.ordersHst.createdDate">Created Date</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{ordersHst.createdDate}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy">Last Modified By</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{ordersHst.lastModifiedBy}}</span> -->
+<!--                 </dd> -->
+<!--                 <dt><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate">Last Modified Date</span></dt> -->
+<!--                 <dd> -->
+<!--                     <span>{{ordersHst.lastModifiedDate}}</span> -->
+<!--                 </dd> -->
                 <dt><span jhiTranslate="psCatalogApp.ordersHst.orders">Orders</span></dt>
                 <dd>
                     <div *ngIf="ordersHst.ordersId">

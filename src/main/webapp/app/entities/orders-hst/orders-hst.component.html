@@ -29,7 +29,7 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="orderReference"><span jhiTranslate="psCatalogApp.ordersHst.orderReference">Order Reference</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerId"><span jhiTranslate="psCatalogApp.ordersHst.customerId">Customer Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="orderStatusCode"><span jhiTranslate="psCatalogApp.ordersHst.orderStatusCode">Order Status Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -37,17 +37,17 @@
             <th jhiSortBy="billingAddress"><span jhiTranslate="psCatalogApp.ordersHst.billingAddress">Billing Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deliveryAddress"><span jhiTranslate="psCatalogApp.ordersHst.deliveryAddress">Delivery Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deliveryDate"><span jhiTranslate="psCatalogApp.ordersHst.deliveryDate">Delivery Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.ordersHst.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.ordersHst.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.ordersHst.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.ordersHst.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.ordersHst.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="ordersOrderReference"><span jhiTranslate="psCatalogApp.ordersHst.orders">Orders</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let ordersHst of ordersHsts ;trackBy: trackId">
-                <td><a [routerLink]="['/orders-hst', ordersHst.id, 'view' ]">{{ordersHst.id}}</a></td>
+<!--                 <td><a [routerLink]="['/orders-hst', ordersHst.id, 'view' ]">{{ordersHst.id}}</a></td> -->
                 <td>{{ordersHst.orderReference}}</td>
                 <td>{{ordersHst.customerId}}</td>
                 <td>{{ordersHst.orderStatusCode}}</td>
@@ -55,10 +55,10 @@
                 <td>{{ordersHst.billingAddress}}</td>
                 <td>{{ordersHst.deliveryAddress}}</td>
                 <td>{{ordersHst.deliveryDate | date:'medium'}}</td>
-                <td>{{ordersHst.createdBy}}</td>
-                <td>{{ordersHst.createdDate | date:'medium'}}</td>
-                <td>{{ordersHst.lastModifiedBy}}</td>
-                <td>{{ordersHst.lastModifiedDate | date:'medium'}}</td>
+<!--                 <td>{{ordersHst.createdBy}}</td> -->
+<!--                 <td>{{ordersHst.createdDate | date:'medium'}}</td> -->
+<!--                 <td>{{ordersHst.lastModifiedBy}}</td> -->
+<!--                 <td>{{ordersHst.lastModifiedDate | date:'medium'}}</td> -->
                 <td>
                     <div *ngIf="ordersHst.ordersId">
                         <a [routerLink]="['../orders', ordersHst.ordersId , 'view' ]" >{{ordersHst.ordersOrderReference}}</a>

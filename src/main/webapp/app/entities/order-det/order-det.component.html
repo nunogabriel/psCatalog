@@ -29,13 +29,13 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.orderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.orderDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.orderDet.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.orderDet.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.orderDet.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.orderDet.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+<!--             <th jhiSortBy="createdBy"><span jhiTranslate="psCatalogApp.orderDet.createdBy">Created By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="createdDate"><span jhiTranslate="psCatalogApp.orderDet.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedBy"><span jhiTranslate="psCatalogApp.orderDet.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
+<!--             <th jhiSortBy="lastModifiedDate"><span jhiTranslate="psCatalogApp.orderDet.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="orderOrderReference"><span jhiTranslate="psCatalogApp.orderDet.order">Order</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productProductName"><span jhiTranslate="psCatalogApp.orderDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
@@ -43,13 +43,13 @@
             </thead>
             <tbody>
             <tr *ngFor="let orderDet of orderDets ;trackBy: trackId">
-                <td><a [routerLink]="['/order-det', orderDet.id, 'view' ]">{{orderDet.id}}</a></td>
+<!--                 <td><a [routerLink]="['/order-det', orderDet.id, 'view' ]">{{orderDet.id}}</a></td> -->
                 <td>{{orderDet.orderQuantity}}</td>
                 <td>{{orderDet.unitPrice}}</td>
-                <td>{{orderDet.createdBy}}</td>
-                <td>{{orderDet.createdDate | date:'medium'}}</td>
-                <td>{{orderDet.lastModifiedBy}}</td>
-                <td>{{orderDet.lastModifiedDate | date:'medium'}}</td>
+<!--                 <td>{{orderDet.createdBy}}</td> -->
+<!--                 <td>{{orderDet.createdDate | date:'medium'}}</td> -->
+<!--                 <td>{{orderDet.lastModifiedBy}}</td> -->
+<!--                 <td>{{orderDet.lastModifiedDate | date:'medium'}}</td> -->
                 <td>
                     <div *ngIf="orderDet.orderId">
                         <a [routerLink]="['../orders', orderDet.orderId , 'view' ]" >{{orderDet.orderOrderReference}}</a>
