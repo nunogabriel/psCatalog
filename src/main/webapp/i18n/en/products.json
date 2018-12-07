@@ -16,18 +16,18 @@
             "detail": {
                 "title": "Products"
             },
-            "productName": "Product Name",
-            "productDescription": "Product Description",
-            "productPrice": "Product Price",
-            "productStartDate": "Product Start Date",
-            "productEndDate": "Product End Date",
+            "productName": "Name",
+            "productDescription": "Description",
+            "productPrice": "Price",
+            "productStartDate": "Start Date",
+            "productEndDate": "End Date",
             "productType": "Product Type",
-            "productImg": "Product Img",
+            "productImg": "Image",
             "createdBy": "Created By",
             "createdDate": "Created Date",
             "lastModifiedBy": "Last Modified By",
             "lastModifiedDate": "Last Modified Date",
-            "orderDet": "Order Det",
+            "orderDet": "Order Detail",
             "supplier": "Supplier",
             "customers": "Customers"
         }

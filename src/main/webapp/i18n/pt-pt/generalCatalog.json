@@ -1,0 +1,20 @@
+{
+    "psCatalogApp": {
+        "generalCatalog": {
+            "home": {
+                "title": "Catálogo Geral",
+                "search": "Pesquisa de Produtos"
+            },
+            "addPersonal": "O Produto com o identificador {{ param }} foi adicionado ao Catálogo Personalizado",
+            "addBasket": "O Produto com o identificador {{ param }} foi adicionado com sucesso ao carrinho de compras",
+            "detail": {
+                "title": "Produtos"
+            },
+            "productName": "Nome",
+            "productDescription": "Descrição",
+            "productPrice": "Preço",
+            "productType": "Tipo Produto",
+            "productImg": "Imagem"
+        }
+    }
+}

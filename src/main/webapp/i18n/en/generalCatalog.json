@@ -1,0 +1,20 @@
+{
+    "psCatalogApp": {
+        "generalCatalog": {
+            "home": {
+                "title": "General Catalog",
+                "search": "Search for Products"
+            },
+            "addPersonal": "The product with identifier {{ param }} was added to Personal Catalog",
+            "addBasket": "The product with identifier {{ param }} was added to Shopping Cart",
+            "detail": {
+                "title": "Products"
+            },
+            "productName": "Name",
+            "productDescription": "Description",
+            "productPrice": "Price",
+            "productType": "Product Type",
+            "productImg": "Image"
+        }
+    }
+}

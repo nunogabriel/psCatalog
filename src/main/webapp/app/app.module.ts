@@ -17,6 +17,7 @@ import { PsCatalogAppRoutingModule } from './app-routing.module';
 import { PsCatalogHomeModule } from './home/home.module';
 import { PsCatalogAccountModule } from './account/account.module';
 import { PsCatalogEntityModule } from './entities/entity.module';
+import { PsCatalogCatalogModule } from './catalogs/catalog.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -38,7 +39,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         PsCatalogHomeModule,
         PsCatalogAccountModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        PsCatalogEntityModule
+        PsCatalogEntityModule,
+        PsCatalogCatalogModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [

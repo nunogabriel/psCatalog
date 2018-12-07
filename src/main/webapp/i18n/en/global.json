@@ -6,6 +6,11 @@
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "catalogs": {
+                "main": "Catalogs",
+                "generalCatalog": "General Catalog",
+                "jhipster-needle-menu-add-catalogs": "JHipster will add additional catalogs here (do not translate!)"
+            },
             "entities": {
                 "main": "Back Office",
                 "suppliers": "Suppliers",
