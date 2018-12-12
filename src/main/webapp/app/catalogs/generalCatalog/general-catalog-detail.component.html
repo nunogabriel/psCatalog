@@ -1,31 +1,30 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <div *ngIf="products">
+        <div *ngIf="generalCatalog">
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="psCatalogApp.generalCatalog.productName">Product Name</span></dt>
                 <dd>
-                    <span>{{products.productName}}</span>
+                    <span>{{generalCatalog.productName}}</span>
                 </dd>
                 <dt><span jhiTranslate="psCatalogApp.generalCatalog.productDescription">Product Description</span></dt>
                 <dd>
-                    <span>{{products.productDescription}}</span>
+                    <span>{{generalCatalog.productDescription}}</span>
                 </dd>
                 <dt><span jhiTranslate="psCatalogApp.generalCatalog.productPrice">Product Price</span></dt>
                 <dd>
-                    <span>{{products.productPrice}}</span>
+                    <span>{{generalCatalog.productPrice}}</span>
                 </dd>
                 <dt><span jhiTranslate="psCatalogApp.generalCatalog.productType">Product Type</span></dt>
                 <dd>
-                    <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + products.productType}}">{{products.productType}}</span>
+                    <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + generalCatalog.productType}}">{{generalCatalog.productType}}</span>
                 </dd>
                 <dt><span jhiTranslate="psCatalogApp.generalCatalog.productImg">Product Img</span></dt>
                 <dd>
-                    <div *ngIf="products.productImg">
-                        <a (click)="openFile(products.productImgContentType, products.productImg)">
-                            <img [src]="'data:' + products.productImgContentType + ';base64,' + products.productImg" style="max-width: 100%;" alt="products image"/>
+                    <div *ngIf="generalCatalog.productImg">
+                        <a (click)="openFile(generalCatalog.productImgContentType, generalCatalog.productImg)">
+                            <img [src]="'data:' + generalCatalog.productImgContentType + ';base64,' + generalCatalog.productImg" style="max-width: 100%;" alt="generalCatalog image"/>
                         </a>
-                        {{products.productImgContentType}}, {{byteSize(products.productImg)}}
                     </div>
                 </dd>
             </dl>
@@ -34,12 +33,6 @@
                     (click)="previousState()"
                     class="btn btn-info">
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/products', products.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>
     </div>

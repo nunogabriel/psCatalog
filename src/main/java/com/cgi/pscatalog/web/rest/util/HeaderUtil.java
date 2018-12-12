@@ -30,7 +30,7 @@ public final class HeaderUtil {
     public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".updated", param);
     }
-
+    
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deleted", param);
     }
@@ -41,5 +41,13 @@ public final class HeaderUtil {
         headers.add("X-" + APPLICATION_NAME + "-error", "error." + errorKey);
         headers.add("X-" + APPLICATION_NAME + "-params", entityName);
         return headers;
+    }
+    
+    public static HttpHeaders createEntityAddBasketAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".addBasket", param);
+    }
+    
+    public static HttpHeaders createEntityAddPersonalAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonal", param);
     }
 }

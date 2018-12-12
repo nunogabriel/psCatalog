@@ -14,10 +14,14 @@ type CatalogArrayResponseType = HttpResponse<IGeneralCatalog[]>;
 
 @Injectable({ providedIn: 'root' })
 export class GeneralCatalogService {
-    public resourceUrl = SERVER_API_URL + 'api/products';
-    public resourceSearchUrl = SERVER_API_URL + 'api/_search/products';
+    public resourceUrl = SERVER_API_URL + 'api/generalCatalog';
+    public resourceSearchUrl = SERVER_API_URL + 'api/_search/generalCatalog';
 
     constructor(private http: HttpClient) {}
+
+    update(generalCatalog: IGeneralCatalog): Observable<CatalogResponseType> {
+        return this.http.put<IGeneralCatalog>(this.resourceUrl, generalCatalog, { observe: 'response' });
+    }
 
     find(id: number): Observable<CatalogResponseType> {
         return this.http
@@ -28,6 +32,10 @@ export class GeneralCatalogService {
         const options = createRequestOption(req);
         return this.http
             .get<IGeneralCatalog[]>(this.resourceUrl, { params: options, observe: 'response' });
+    }
+
+    delete(id: number): Observable<HttpResponse<any>> {
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
     search(req?: any): Observable<CatalogArrayResponseType> {

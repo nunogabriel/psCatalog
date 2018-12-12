@@ -13,6 +13,7 @@ export interface IGeneralCatalog {
     productType?: ProductTypeEnum;
     productImgContentType?: string;
     productImg?: any;
+    orderQuantity?: number;
 }
 
 export class GeneralCatalog implements IGeneralCatalog {
@@ -23,6 +24,7 @@ export class GeneralCatalog implements IGeneralCatalog {
         public productPrice?: number,
         public productType?: ProductTypeEnum,
         public productImgContentType?: string,
-        public productImg?: any
+        public productImg?: any,
+        public orderQuantity?: number
     ) {}
 }

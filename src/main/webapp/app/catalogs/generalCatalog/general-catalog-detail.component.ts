@@ -5,17 +5,17 @@ import { JhiDataUtils } from 'ng-jhipster';
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 
 @Component({
-    selector: 'jhi-products-detail',
+    selector: 'jhi-general-catalog-detail',
     templateUrl: './general-catalog-detail.component.html'
 })
 export class GeneralCatalogDetailComponent implements OnInit {
-    products: IGeneralCatalog;
+    generalCatalog: IGeneralCatalog;
 
     constructor(private dataUtils: JhiDataUtils, private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe(({ products }) => {
-            this.products = products;
+        this.activatedRoute.data.subscribe(({ generalCatalog }) => {
+            this.generalCatalog = generalCatalog;
         });
     }
 

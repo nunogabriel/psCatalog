@@ -3,10 +3,14 @@
         "generalCatalog": {
             "home": {
                 "title": "Catálogo Geral",
-                "search": "Pesquisa de Produtos"
+                "search": "Pesquisa de Produtos",
+                "addBasket": "Adicionar Produto ao Carrinho de Compras"
             },
-            "addPersonal": "O Produto com o identificador {{ param }} foi adicionado ao Catálogo Personalizado",
-            "addBasket": "O Produto com o identificador {{ param }} foi adicionado com sucesso ao carrinho de compras",
+            "addPersonal": "O Produto {{ param }} foi adicionado ao Catálogo Personalizado",
+            "addBasket": "O Produto {{ param }} foi adicionado com sucesso ao carrinho de compras",
+            "personal": {
+                "question": "Tem a certeza que pretende adicionar o Produto {{ id }} ao Catálogo Personalizado?"
+            },
             "detail": {
                 "title": "Produtos"
             },
@@ -14,7 +18,12 @@
             "productDescription": "Descrição",
             "productPrice": "Preço",
             "productType": "Tipo Produto",
-            "productImg": "Imagem"
+            "productImg": "Imagem",
+            "orderQuantity": "Quantidade",
+            "action": {
+	            "addBasket": "Adicionar Carrinho",
+	            "addPersonal": "Adicionar Cat.Personalizado" 
+        	}
         }
     }
 }

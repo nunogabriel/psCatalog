@@ -19,7 +19,7 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="products">
+    <div class="table-responsive" *ngIf="generalCatalog">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
@@ -32,32 +32,45 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let products of products ;trackBy: trackId">
-                <td>{{products.productName}}</td>
-                <td>{{products.productDescription}}</td>
-                <td>{{products.productPrice}}</td>
-                <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + products.productType}}">{{products.productType}}</td>
+            <tr *ngFor="let generalCatalog of generalCatalog ;trackBy: trackId">
+                <td>{{generalCatalog.productName}}</td>
+                <td>{{generalCatalog.productDescription}}</td>
+                <td>{{generalCatalog.productPrice}}</td>
+                <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + generalCatalog.productType}}">{{generalCatalog.productType}}</td>
                 <td>
-                    <a *ngIf="products.productImg" (click)="openFile(products.productImgContentType, products.productImg)">
-                        <img [src]="'data:' + products.productImgContentType + ';base64,' + products.productImg" style="max-height: 30px;" alt="products image"/>
+                    <a *ngIf="generalCatalog.productImg" (click)="openFile(generalCatalog.productImgContentType, generalCatalog.productImg)">
+                        <img [src]="'data:' + generalCatalog.productImgContentType + ';base64,' + generalCatalog.productImg" style="max-height: 30px;" alt="generalCatalog image"/>
                     </a>
-                    <span *ngIf="products.productImg">{{products.productImgContentType}}, {{byteSize(products.productImg)}}</span>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['/generalCatalog', products.id, 'view' ]"
+                                [routerLink]="['/generalCatalog', generalCatalog.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
+                        <button type="submit"
+                                [routerLink]="['/generalCatalog', generalCatalog.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="psCatalogApp.generalCatalog.action.addBasket">Add to Cart</span>
+                        </button>                        
+<!--                         <button type="submit" -->
+<!--                                 [routerLink]="['/', { outlets: { popup: 'generalCatalog/'+ generalCatalog.id + '/addPersonal'} }]" -->
+<!--                                 replaceUrl="true" -->
+<!--                                 queryParamsHandling="merge" -->
+<!--                                 class="btn btn-danger btn-sm"> -->
+<!--                             <fa-icon [icon]="'times'"></fa-icon> -->
+<!--                             <span class="d-none d-md-inline" jhiTranslate="generalCatalog.action.addPersonal">Add to Personal</span> -->
+<!--                         </button>                         -->
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div *ngIf="products && products.length">
+    <div *ngIf="generalCatalog && generalCatalog.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

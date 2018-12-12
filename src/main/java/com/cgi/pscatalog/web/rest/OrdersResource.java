@@ -57,8 +57,12 @@ public class OrdersResource {
             throw new BadRequestAlertException("A new orders cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        Instant currentDate = Instant.now();
+        
+        ordersDTO.setOrderDate(currentDate);
         ordersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-        ordersDTO.setCreatedDate(Instant.now());
+        ordersDTO.setCreatedDate(currentDate);
+        ordersDTO.setOrderReference("REF_"+ currentDate.getEpochSecond());
         
         OrdersDTO result = ordersService.save(ordersDTO);
         

@@ -3,10 +3,14 @@
         "generalCatalog": {
             "home": {
                 "title": "General Catalog",
-                "search": "Search for Products"
+                "search": "Search for Products",
+                "addBasket": "Add Product to Shopping Cart"
             },
-            "addPersonal": "The product with identifier {{ param }} was added to Personal Catalog",
-            "addBasket": "The product with identifier {{ param }} was added to Shopping Cart",
+            "addPersonal": "The product name {{ param }} was added to Personal Catalog",
+            "addBasket": "The product name {{ param }} was added to Shopping Cart",
+            "personal": {
+                "question": "Are you sure you want to add Product {{ id }} to Personal Catalog?"
+            },            
             "detail": {
                 "title": "Products"
             },
@@ -14,7 +18,12 @@
             "productDescription": "Description",
             "productPrice": "Price",
             "productType": "Product Type",
-            "productImg": "Image"
+            "productImg": "Image",
+            "orderQuantity": "Quantity",
+            "action": {
+	            "addBasket": "Add to Cart",
+	            "addPersonal": "Add to Personal Catalog" 
+        	}
         }
     }
 }

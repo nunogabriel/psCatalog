@@ -5,18 +5,25 @@ import { PsCatalogSharedModule } from 'app/shared';
 import {
     GeneralCatalogComponent,
     GeneralCatalogDetailComponent,
-    generalCatalogRoute
+    GeneralCatalogUpdateComponent,
+    GeneralCatalogDeletePopupComponent,
+    GeneralCatalogDeleteDialogComponent,
+    generalCatalogRoute,
+    generalCatalogPopupRoute
 } from './';
 
-const ENTITY_STATES = [...generalCatalogRoute];
+const ENTITY_STATES = [...generalCatalogRoute, ...generalCatalogPopupRoute];
 
 @NgModule({
     imports: [PsCatalogSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         GeneralCatalogComponent,
-        GeneralCatalogDetailComponent
+        GeneralCatalogDetailComponent,
+        GeneralCatalogUpdateComponent,
+        GeneralCatalogDeleteDialogComponent,
+        GeneralCatalogDeletePopupComponent
     ],
-    entryComponents: [GeneralCatalogComponent],
+    entryComponents: [GeneralCatalogComponent, GeneralCatalogUpdateComponent, GeneralCatalogDeleteDialogComponent, GeneralCatalogDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class PsCatalogGeneralCatalogModule {}

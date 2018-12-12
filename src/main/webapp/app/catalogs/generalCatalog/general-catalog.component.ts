@@ -11,12 +11,12 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 import { GeneralCatalogService } from './general-catalog.service';
 
 @Component({
-    selector: 'jhi-products',
+    selector: 'jhi-general-catalog',
     templateUrl: './general-catalog.component.html'
 })
 export class GeneralCatalogComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    products: IGeneralCatalog[];
+    generalCatalog: IGeneralCatalog[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -64,7 +64,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
                     sort: this.sort()
                 })
                 .subscribe(
-                    (res: HttpResponse<IGeneralCatalog[]>) => this.paginateProducts(res.body, res.headers),
+                    (res: HttpResponse<IGeneralCatalog[]>) => this.paginateGeneralCatalog(res.body, res.headers),
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
             return;
@@ -76,7 +76,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IGeneralCatalog[]>) => this.paginateProducts(res.body, res.headers),
+                (res: HttpResponse<IGeneralCatalog[]>) => this.paginateGeneralCatalog(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -89,7 +89,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/products'], {
+        this.router.navigate(['/generalCatalog'], {
             queryParams: {
                 page: this.page,
                 size: this.itemsPerPage,
@@ -104,7 +104,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         this.page = 0;
         this.currentSearch = '';
         this.router.navigate([
-            '/products',
+            '/generalCatalog',
             {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -120,7 +120,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         this.page = 0;
         this.currentSearch = query;
         this.router.navigate([
-            '/products',
+            '/generalCatalog',
             {
                 search: this.currentSearch,
                 page: this.page,
@@ -135,7 +135,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         this.principal.identity().then(account => {
             this.currentAccount = account;
         });
-        this.registerChangeInProducts();
+        this.registerChangeInGeneralCatalog();
     }
 
     ngOnDestroy() {
@@ -154,8 +154,8 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         return this.dataUtils.openFile(contentType, field);
     }
 
-    registerChangeInProducts() {
-        this.eventSubscriber = this.eventManager.subscribe('productsListModification', response => this.loadAll());
+    registerChangeInGeneralCatalog() {
+        this.eventSubscriber = this.eventManager.subscribe('generalCatalogListModification', response => this.loadAll());
     }
 
     sort() {
@@ -166,11 +166,11 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateProducts(data: IGeneralCatalog[], headers: HttpHeaders) {
+    private paginateGeneralCatalog(data: IGeneralCatalog[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
-        this.products = data;
+        this.generalCatalog = data;
     }
 
     private onError(errorMessage: string) {

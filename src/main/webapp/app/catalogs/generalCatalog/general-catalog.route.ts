@@ -9,6 +9,8 @@ import { GeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { GeneralCatalogService } from './general-catalog.service';
 import { GeneralCatalogComponent } from './general-catalog.component';
 import { GeneralCatalogDetailComponent } from './general-catalog-detail.component';
+import { GeneralCatalogUpdateComponent } from './general-catalog-update.component';
+import { GeneralCatalogDeletePopupComponent } from './general-catalog-delete-dialog.component';
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 
 @Injectable({ providedIn: 'root' })
@@ -20,7 +22,7 @@ export class GeneralCatalogResolve implements Resolve<IGeneralCatalog> {
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<GeneralCatalog>) => response.ok),
-                map((products: HttpResponse<GeneralCatalog>) => products.body)
+                map((generalCatalog: HttpResponse<GeneralCatalog>) => generalCatalog.body)
             );
         }
         return of(new GeneralCatalog());
@@ -45,12 +47,40 @@ export const generalCatalogRoute: Routes = [
         path: 'generalCatalog/:id/view',
         component: GeneralCatalogDetailComponent,
         resolve: {
-            products: GeneralCatalogResolve
+            generalCatalog: GeneralCatalogResolve
         },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'psCatalogApp.generalCatalog.home.title'
         },
         canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'generalCatalog/:id/edit',
+        component: GeneralCatalogUpdateComponent,
+        resolve: {
+            generalCatalog: GeneralCatalogResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'psCatalogApp.generalCatalog.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }
+];
+
+export const generalCatalogPopupRoute: Routes = [
+    {
+        path: 'generalCatalog/:id/delete',
+        component: GeneralCatalogDeletePopupComponent,
+        resolve: {
+            generalCatalog: GeneralCatalogResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'psCatalogApp.generalCatalog.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     }
 ];
