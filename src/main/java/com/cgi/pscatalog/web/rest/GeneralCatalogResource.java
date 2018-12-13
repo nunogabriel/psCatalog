@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cgi.pscatalog.config.Constants;
 import com.cgi.pscatalog.service.OrderDetService;
+import com.cgi.pscatalog.service.OrderStatusService;
 import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.ProductsService;
 import com.cgi.pscatalog.service.dto.GeneralCatalogDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import com.cgi.pscatalog.service.dto.OrderStatusDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
@@ -58,6 +62,9 @@ public class GeneralCatalogResource {
     
     @Autowired
 	private OrderDetService orderDetService;
+    
+    @Autowired
+    private OrderStatusService orderStatusService;
 
 	public GeneralCatalogResource(ProductsService productsService) {
 		this.productsService = productsService;
@@ -66,10 +73,10 @@ public class GeneralCatalogResource {
     /**
      * PUT  /generalCatalog : Updates an existing products.
      *
-     * @param productsDTO the productsDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated productsDTO,
-     * or with status 400 (Bad Request) if the productsDTO is not valid,
-     * or with status 500 (Internal Server Error) if the productsDTO couldn't be updated
+     * @param generalCatalogDTO the generalCatalogDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated generalCatalogDTO,
+     * or with status 400 (Bad Request) if the generalCatalogDTO is not valid,
+     * or with status 500 (Internal Server Error) if the generalCatalogDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/generalCatalog")
@@ -83,11 +90,24 @@ public class GeneralCatalogResource {
         
         // 1 - Verify if there is any order created for customer (get Order by Customer identification)
         
+        // Get Order Status Id
+        Long orderStatusId = new Long(0);
+        
+        OrderStatusResource orderStatusResource = new OrderStatusResource(orderStatusService);
+        ResponseEntity<List<OrderStatusDTO>> responseListOrdersDTO = orderStatusResource.searchOrderStatuses(Constants.ORDER_STATUS_PENDING, PageRequest.of(0, 1));
+        List<OrderStatusDTO> listOrdersDTO = responseListOrdersDTO.getBody();
+        
+        for (Iterator<OrderStatusDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
+			OrderStatusDTO orderStatusDTO = (OrderStatusDTO) iterator.next();
+			orderStatusId = orderStatusDTO.getId();
+			break;
+		}
+        
         // Start Create Order
         OrdersDTO ordersDTO = new OrdersDTO();
         ordersDTO.setCustomerId(new Long(1201));
         ordersDTO.setAddressId(new Long (1401));
-        ordersDTO.setOrderStatusId(new Long(1251));
+        ordersDTO.setOrderStatusId(orderStatusId);
         
         OrdersResource ordersResource = new OrdersResource(ordersService);
         ResponseEntity<OrdersDTO> newOrdersDTO = ordersResource.createOrders(ordersDTO);
@@ -151,9 +171,9 @@ public class GeneralCatalogResource {
 	/**
 	 * GET /generalCatalog/:id : get the "id" general catalog.
 	 *
-	 * @param id the id of the productsDTO to retrieve
+	 * @param id the id of the generalCatalogDTO to retrieve
 	 * @return the ResponseEntity with status 200 (OK) and with body the
-	 *         productsDTO, or with status 404 (Not Found)
+	 *         generalCatalogDTO, or with status 404 (Not Found)
 	 */
 	@GetMapping("/generalCatalog/{id}")
 	@Timed
