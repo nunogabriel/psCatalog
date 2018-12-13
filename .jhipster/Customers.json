@@ -1,5 +1,28 @@
 {
-    "name": "Customers",
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "orders",
+            "otherEntityName": "orders",
+            "otherEntityRelationshipName": "customer"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "addresses",
+            "otherEntityName": "addresses",
+            "otherEntityRelationshipName": "customer"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "customers",
+            "relationshipName": "products",
+            "otherEntityName": "products",
+            "otherEntityField": "productName",
+            "ownerSide": true
+        }
+    ],
     "fields": [
         {
             "fieldName": "customerName",
@@ -54,38 +77,20 @@
         {
             "fieldName": "lastModifiedDate",
             "fieldType": "Instant"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "orders",
-            "otherEntityName": "orders",
-            "otherEntityRelationshipName": "customer"
         },
         {
-            "relationshipType": "one-to-many",
-            "relationshipName": "addresses",
-            "otherEntityName": "addresses",
-            "otherEntityRelationshipName": "customer"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "otherEntityRelationshipName": "customers",
-            "relationshipName": "products",
-            "otherEntityName": "products",
-            "otherEntityField": "productName",
-            "ownerSide": true
+            "fieldName": "login",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181203151038",
-    "entityTableName": "customers",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "searchEngine": "elasticsearch",
     "service": "serviceImpl",
+    "entityTableName": "customers",
     "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*",
-    "searchEngine": "elasticsearch"
+    "pagination": "pagination"
 }

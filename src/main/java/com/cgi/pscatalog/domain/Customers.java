@@ -69,6 +69,10 @@ public class Customers implements Serializable {
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate;
 
+    @NotNull
+    @Column(name = "login", nullable = false)
+    private String login;
+
     @OneToMany(mappedBy = "customer")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Orders> orders = new HashSet<>();
@@ -234,6 +238,19 @@ public class Customers implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public Customers login(String login) {
+        this.login = login;
+        return this;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public Set<Orders> getOrders() {
         return orders;
     }
@@ -345,6 +362,7 @@ public class Customers implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", login='" + getLogin() + "'" +
             "}";
     }
 }

@@ -21,6 +21,7 @@ export interface ICustomers {
     createdDate?: Moment;
     lastModifiedBy?: string;
     lastModifiedDate?: Moment;
+    login?: string;
     orders?: IOrders[];
     addresses?: IAddresses[];
     products?: IProducts[];
@@ -40,6 +41,7 @@ export class Customers implements ICustomers {
         public createdDate?: Moment,
         public lastModifiedBy?: string,
         public lastModifiedDate?: Moment,
+        public login?: string,
         public orders?: IOrders[],
         public addresses?: IAddresses[],
         public products?: IProducts[]

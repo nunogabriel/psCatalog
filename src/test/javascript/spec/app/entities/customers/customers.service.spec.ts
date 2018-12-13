@@ -37,7 +37,8 @@ describe('Service Tests', () => {
                 'AAAAAAA',
                 currentDate,
                 'AAAAAAA',
-                currentDate
+                currentDate,
+                'AAAAAAA'
             );
         });
 
@@ -102,7 +103,8 @@ describe('Service Tests', () => {
                         createdBy: 'BBBBBB',
                         createdDate: currentDate.format(DATE_TIME_FORMAT),
                         lastModifiedBy: 'BBBBBB',
-                        lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+                        lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+                        login: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -137,7 +139,8 @@ describe('Service Tests', () => {
                         createdBy: 'BBBBBB',
                         createdDate: currentDate.format(DATE_TIME_FORMAT),
                         lastModifiedBy: 'BBBBBB',
-                        lastModifiedDate: currentDate.format(DATE_TIME_FORMAT)
+                        lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
+                        login: 'BBBBBB'
                     },
                     elemDefault
                 );

@@ -86,6 +86,9 @@ public class CustomersResourceIntTest {
     private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final String DEFAULT_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_LOGIN = "BBBBBBBBBB";
+
     @Autowired
     private CustomersRepository customersRepository;
 
@@ -154,7 +157,8 @@ public class CustomersResourceIntTest {
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE)
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
-            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
+            .login(DEFAULT_LOGIN);
         return customers;
     }
 
@@ -190,6 +194,7 @@ public class CustomersResourceIntTest {
         assertThat(testCustomers.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testCustomers.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testCustomers.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testCustomers.getLogin()).isEqualTo(DEFAULT_LOGIN);
 
         // Validate the Customers in Elasticsearch
         verify(mockCustomersSearchRepository, times(1)).save(testCustomers);
@@ -277,6 +282,25 @@ public class CustomersResourceIntTest {
 
     @Test
     @Transactional
+    public void checkLoginIsRequired() throws Exception {
+        int databaseSizeBeforeTest = customersRepository.findAll().size();
+        // set the field null
+        customers.setLogin(null);
+
+        // Create the Customers, which fails.
+        CustomersDTO customersDTO = customersMapper.toDto(customers);
+
+        restCustomersMockMvc.perform(post("/api/customers")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(customersDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Customers> customersList = customersRepository.findAll();
+        assertThat(customersList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCustomers() throws Exception {
         // Initialize the database
         customersRepository.saveAndFlush(customers);
@@ -296,7 +320,8 @@ public class CustomersResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY.toString())))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -353,7 +378,8 @@ public class CustomersResourceIntTest {
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY.toString()))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY.toString()))
-            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
+            .andExpect(jsonPath("$.login").value(DEFAULT_LOGIN.toString()));
     }
 
     @Test
@@ -387,7 +413,8 @@ public class CustomersResourceIntTest {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .login(UPDATED_LOGIN);
         CustomersDTO customersDTO = customersMapper.toDto(updatedCustomers);
 
         restCustomersMockMvc.perform(put("/api/customers")
@@ -410,6 +437,7 @@ public class CustomersResourceIntTest {
         assertThat(testCustomers.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testCustomers.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testCustomers.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testCustomers.getLogin()).isEqualTo(UPDATED_LOGIN);
 
         // Validate the Customers in Elasticsearch
         verify(mockCustomersSearchRepository, times(1)).save(testCustomers);
@@ -480,7 +508,8 @@ public class CustomersResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)));
     }
 
     @Test

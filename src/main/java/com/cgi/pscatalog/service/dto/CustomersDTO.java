@@ -40,6 +40,9 @@ public class CustomersDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
+    @NotNull
+    private String login;
+
     private Set<ProductsDTO> products = new HashSet<>();
 
     public Long getId() {
@@ -138,6 +141,14 @@ public class CustomersDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public Set<ProductsDTO> getProducts() {
         return products;
     }
@@ -182,6 +193,7 @@ public class CustomersDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", login='" + getLogin() + "'" +
             "}";
     }
 }

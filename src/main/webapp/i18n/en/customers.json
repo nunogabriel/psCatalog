@@ -27,6 +27,7 @@
             "createdDate": "Created Date",
             "lastModifiedBy": "Last Modified By",
             "lastModifiedDate": "Last Modified Date",
+            "login": "Login",
             "orders": "Orders",
             "addresses": "Addresses",
             "products": "Products"
