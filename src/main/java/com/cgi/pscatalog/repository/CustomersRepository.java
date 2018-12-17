@@ -1,6 +1,8 @@
 package com.cgi.pscatalog.repository;
 
 import com.cgi.pscatalog.domain.Customers;
+import com.cgi.pscatalog.service.dto.CustomersDTO;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -26,5 +28,8 @@ public interface CustomersRepository extends JpaRepository<Customers, Long> {
 
     @Query("select customers from Customers customers left join fetch customers.products where customers.id =:id")
     Optional<Customers> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query("select customers from Customers customers where customers.login =:login")
+	Optional<Customers> findOneByLogin(@Param("login") String login);
 
 }

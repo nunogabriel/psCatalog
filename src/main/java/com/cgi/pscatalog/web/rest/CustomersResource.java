@@ -57,6 +57,7 @@ public class CustomersResource {
             throw new BadRequestAlertException("A new customers cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
+        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
         customersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         customersDTO.setCreatedDate(Instant.now());
         
@@ -159,6 +160,20 @@ public class CustomersResource {
         Page<CustomersDTO> page = customersService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/customers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
+    /**
+     * GET  /customers/login/:login : get the "login" customers.
+     *
+     * @param login the login of the customersDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the customersDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/customers/login/{login}")
+    @Timed
+    public ResponseEntity<CustomersDTO> getCustomersByLogin(@PathVariable String login) {
+        log.debug("REST request to get Customers by login: {}", login);
+        Optional<CustomersDTO> customersDTO = customersService.getCustomersByLogin(login);
+        return ResponseUtil.wrapOrNotFound(customersDTO);
     }
 
 }

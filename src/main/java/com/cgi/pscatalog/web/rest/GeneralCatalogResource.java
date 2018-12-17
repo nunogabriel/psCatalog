@@ -26,10 +26,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.config.Constants;
+import com.cgi.pscatalog.security.SecurityUtils;
+import com.cgi.pscatalog.service.AddressesService;
+import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.service.OrderDetService;
 import com.cgi.pscatalog.service.OrderStatusService;
 import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.ProductsService;
+import com.cgi.pscatalog.service.dto.AddressesDTO;
+import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.GeneralCatalogDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
 import com.cgi.pscatalog.service.dto.OrderStatusDTO;
@@ -65,6 +70,12 @@ public class GeneralCatalogResource {
     
     @Autowired
     private OrderStatusService orderStatusService;
+    
+    @Autowired
+	private CustomersService customersService;
+    
+    @Autowired
+    private AddressesService addressesService;
 
 	public GeneralCatalogResource(ProductsService productsService) {
 		this.productsService = productsService;
@@ -88,43 +99,98 @@ public class GeneralCatalogResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         
-        // 1 - Verify if there is any order created for customer (get Order by Customer identification)
+        // Get customer identification by login
+        CustomersResource customersResource = new CustomersResource(customersService);
+        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+		Long customerId = customersDTO.getId();
+		
+        if (customerId.longValue() == 0) {
+            throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
+        }
         
-        // Get Order Status Id
-        Long orderStatusId = new Long(0);
+        log.debug("REST request to update General Catalog - customerId: {}", customerId);
         
+        // Get Order Status Id of PENDING status
         OrderStatusResource orderStatusResource = new OrderStatusResource(orderStatusService);
-        ResponseEntity<List<OrderStatusDTO>> responseListOrdersDTO = orderStatusResource.searchOrderStatuses(Constants.ORDER_STATUS_PENDING, PageRequest.of(0, 1));
-        List<OrderStatusDTO> listOrdersDTO = responseListOrdersDTO.getBody();
+        ResponseEntity<OrderStatusDTO> responseListOrderStatusDTO = orderStatusResource.getOrderStatusByDescription(Constants.ORDER_STATUS_PENDING);
+        OrderStatusDTO orderStatusDTO = responseListOrderStatusDTO.getBody();
+		Long orderStatusId = orderStatusDTO.getId();
         
-        for (Iterator<OrderStatusDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
-			OrderStatusDTO orderStatusDTO = (OrderStatusDTO) iterator.next();
-			orderStatusId = orderStatusDTO.getId();
+        if (orderStatusId.longValue() == 0) {
+            throw new BadRequestAlertException("Bad configuration, configure order status first", ENTITY_NAME, "idnull");
+        }
+        
+        log.debug("REST request to update General Catalog - orderStatusId: {}", orderStatusId);
+        
+        // Get address identification by customer identification
+        Long addressId = new Long(0);
+        
+        AddressesResource addressesResource = new AddressesResource(addressesService);
+        ResponseEntity<List<AddressesDTO>> responseListAddressesDTO = addressesResource.getAddressesByCustomerId(customerId, PageRequest.of(0, 1));
+        List<AddressesDTO> listAddressesDTO = responseListAddressesDTO.getBody();
+        
+        for (Iterator<AddressesDTO> iterator = listAddressesDTO.iterator(); iterator.hasNext();) {
+			AddressesDTO addressesDTO = (AddressesDTO) iterator.next();
+			addressId = addressesDTO.getId();
 			break;
 		}
         
-        // Start Create Order
-        OrdersDTO ordersDTO = new OrdersDTO();
-        ordersDTO.setCustomerId(new Long(1201));
-        ordersDTO.setAddressId(new Long (1401));
-        ordersDTO.setOrderStatusId(orderStatusId);
+        if (addressId.longValue() == 0) {
+            throw new BadRequestAlertException("You must add a address first", ENTITY_NAME, "idnull");
+        }
         
-        OrdersResource ordersResource = new OrdersResource(ordersService);
-        ResponseEntity<OrdersDTO> newOrdersDTO = ordersResource.createOrders(ordersDTO);
-        // End Create Order
-        
-        // 2 - Verify if the product already exists in Order (get order detail by Order and Product identification)
-        // Add Order Detail to the Order
-        OrderDetDTO orderDetDTO = new OrderDetDTO();
-        orderDetDTO.setOrderId(newOrdersDTO.getBody().getId());
-        orderDetDTO.setOrderQuantity(generalCatalogDTO.getOrderQuantity());
-        orderDetDTO.setUnitPrice(generalCatalogDTO.getProductPrice());
-        orderDetDTO.setProductId(generalCatalogDTO.getId());
-        
-        OrderDetResource ordersDetResource = new OrderDetResource(orderDetService);
-        ordersDetResource.createOrderDet(orderDetDTO);
-        // End Create Order Detail
+        log.debug("REST request to update General Catalog - addressId: {}", addressId);
                 
+        // 1 - Verify if there is any order created for customer (get Order by Customer identification)
+        OrdersResource ordersResource = new OrdersResource(ordersService);
+        ResponseEntity<OrdersDTO> responseOrdersDTO = ordersResource.getOrdersByCustomerIdAndOrderStatusId(customerId, orderStatusId);
+        OrdersDTO oldOrdersDTO = responseOrdersDTO.getBody();
+
+        Long orderId = new Long(0);
+        
+        if (oldOrdersDTO == null || oldOrdersDTO.getId() == 0) {
+	        // Start Create Order
+	        OrdersDTO newOrdersDTO = new OrdersDTO();
+	        newOrdersDTO.setCustomerId(customerId);
+	        newOrdersDTO.setAddressId(addressId);
+	        newOrdersDTO.setDeliveryAddressId(addressId);
+	        newOrdersDTO.setOrderStatusId(orderStatusId);
+	        
+	        ResponseEntity<OrdersDTO> newOrdersDTOAux = ordersResource.createOrders(newOrdersDTO);
+	        orderId = newOrdersDTOAux.getBody().getId();
+	        // End Create Order
+        } else {
+        	orderId = oldOrdersDTO.getId();
+        }
+        
+        log.debug("REST request to update General Catalog - orderId: {}", orderId);
+        
+        // 2 - Verify if the product already exists in Order Detail (get order detail by Order and Product identification)
+        OrderDetResource ordersDetResource = new OrderDetResource(orderDetService);
+        OrderDetDTO orderDetDTO = null;
+        
+        if (oldOrdersDTO != null && oldOrdersDTO.getId() != 0) {
+        	ResponseEntity<OrderDetDTO> responseOrderDetDTO = ordersDetResource.getOrderDetByOrderIdAndProductId(orderId, generalCatalogDTO.getId());
+        	orderDetDTO = responseOrderDetDTO.getBody();
+        }
+        
+        if (oldOrdersDTO == null || oldOrdersDTO.getId() == 0 || orderDetDTO == null) {
+	        // Add Order Detail to the Order
+        	OrderDetDTO newOrderDetDTO = new OrderDetDTO();
+        	newOrderDetDTO.setOrderId(orderId);
+        	newOrderDetDTO.setOrderQuantity(generalCatalogDTO.getOrderQuantity());
+        	newOrderDetDTO.setUnitPrice(generalCatalogDTO.getProductPrice());
+        	newOrderDetDTO.setProductId(generalCatalogDTO.getId());
+	        
+	        ordersDetResource.createOrderDet(newOrderDetDTO);
+	        // End Create Order Detail
+        } else {
+        	// Update quantity in Order Detail
+        	orderDetDTO.setOrderQuantity(generalCatalogDTO.getOrderQuantity() + orderDetDTO.getOrderQuantity());
+        	ordersDetResource.updateOrderDet(orderDetDTO);
+        }
+        
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityAddBasketAlert(ENTITY_NAME, generalCatalogDTO.getProductName()))
             .body(generalCatalogDTO);

@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="orders">
-<!--             <h2><span jhiTranslate="psCatalogApp.orders.detail.title">Orders</span> {{orders.id}}</h2> -->
-<!--             <hr> -->
+            <h2><span jhiTranslate="psCatalogApp.orders.detail.title">Orders</span> {{orders.id}}</h2>
+            <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="psCatalogApp.orders.orderReference">Order Reference</span></dt>
@@ -49,6 +49,12 @@
                 <dd>
                     <div *ngIf="orders.customerId">
                         <a [routerLink]="['/customers', orders.customerId, 'view']">{{orders.customerCustomerName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.orders.deliveryAddress">Delivery Address</span></dt>
+                <dd>
+                    <div *ngIf="orders.deliveryAddressId">
+                        <a [routerLink]="['/addresses', orders.deliveryAddressId, 'view']">{{orders.deliveryAddressAddressReference}}</a>
                     </div>
                 </dd>
             </dl>

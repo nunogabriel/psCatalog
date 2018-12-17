@@ -40,8 +40,11 @@ export class CustomersUpdateComponent implements OnInit {
                 this.customers.customerBeginDate != null ? this.customers.customerBeginDate.format(DATE_TIME_FORMAT) : null;
             this.customerEndDate = this.customers.customerEndDate != null ? this.customers.customerEndDate.format(DATE_TIME_FORMAT) : null;
             this.createdDate = this.customers.createdDate != null ? this.customers.createdDate.format(DATE_TIME_FORMAT) : null;
-            this.lastModifiedDate =
-                this.customers.lastModifiedDate != null ? this.customers.lastModifiedDate.format(DATE_TIME_FORMAT) : null;
+            this.lastModifiedDate = this.customers.lastModifiedDate != null ? this.customers.lastModifiedDate.format(DATE_TIME_FORMAT) : null;
+
+            if ( this.customers.login == null ) {
+               this.customers.login = 'anonymousUser';
+            }
         });
         this.productsService.query().subscribe(
             (res: HttpResponse<IProducts[]>) => {

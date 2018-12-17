@@ -154,5 +154,20 @@ public class OrderDetResource {
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/order-dets");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /order-dets/orderId/:orderId/productId/:productId : get the "id" orderDet.
+     *
+     * @param orderId the orderId of the orderDetDTO to retrieve
+     * @param productId the productId of the orderDetDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the orderDetDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/order-dets/orderId/{orderId}/productId/{productId}")
+    @Timed
+    public ResponseEntity<OrderDetDTO> getOrderDetByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
+        log.debug("REST request to get OrderDet by Order Id {} And Product Id: {}", orderId, productId);
+        Optional<OrderDetDTO> orderDetDTO = orderDetService.getOrderDetByOrderIdAndProductId(orderId, productId);
+        return ResponseUtil.wrapOrNotFound(orderDetDTO);
+    }
 
 }

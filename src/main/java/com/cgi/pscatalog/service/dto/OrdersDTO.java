@@ -40,6 +40,10 @@ public class OrdersDTO implements Serializable {
 
     private String customerCustomerName;
 
+    private Long deliveryAddressId;
+
+    private String deliveryAddressAddressReference;
+
     public Long getId() {
         return id;
     }
@@ -152,6 +156,22 @@ public class OrdersDTO implements Serializable {
         this.customerCustomerName = customersCustomerName;
     }
 
+    public Long getDeliveryAddressId() {
+        return deliveryAddressId;
+    }
+
+    public void setDeliveryAddressId(Long addressesId) {
+        this.deliveryAddressId = addressesId;
+    }
+
+    public String getDeliveryAddressAddressReference() {
+        return deliveryAddressAddressReference;
+    }
+
+    public void setDeliveryAddressAddressReference(String addressesAddressReference) {
+        this.deliveryAddressAddressReference = addressesAddressReference;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -190,6 +210,8 @@ public class OrdersDTO implements Serializable {
             ", address='" + getAddressAddressReference() + "'" +
             ", customer=" + getCustomerId() +
             ", customer='" + getCustomerCustomerName() + "'" +
+            ", deliveryAddress=" + getDeliveryAddressId() +
+            ", deliveryAddress='" + getDeliveryAddressAddressReference() + "'" +
             "}";
     }
 }

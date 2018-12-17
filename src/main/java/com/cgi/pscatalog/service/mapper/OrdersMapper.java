@@ -17,12 +17,15 @@ public interface OrdersMapper extends EntityMapper<OrdersDTO, Orders> {
     @Mapping(source = "address.addressReference", target = "addressAddressReference")
     @Mapping(source = "customer.id", target = "customerId")
     @Mapping(source = "customer.customerName", target = "customerCustomerName")
+    @Mapping(source = "deliveryAddress.id", target = "deliveryAddressId")
+    @Mapping(source = "deliveryAddress.addressReference", target = "deliveryAddressAddressReference")
     OrdersDTO toDto(Orders orders);
 
     @Mapping(target = "orderDets", ignore = true)
     @Mapping(source = "orderStatusId", target = "orderStatus")
     @Mapping(source = "addressId", target = "address")
     @Mapping(source = "customerId", target = "customer")
+    @Mapping(source = "deliveryAddressId", target = "deliveryAddress")
     Orders toEntity(OrdersDTO ordersDTO);
 
     default Orders fromId(Long id) {

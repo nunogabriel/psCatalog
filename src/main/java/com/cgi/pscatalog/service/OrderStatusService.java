@@ -53,4 +53,6 @@ public interface OrderStatusService {
      * @return the list of entities
      */
     Page<OrderStatusDTO> search(String query, Pageable pageable);
+
+	Optional<OrderStatusDTO> getOrderStatusByDescription(String orderStatusDescription);
 }

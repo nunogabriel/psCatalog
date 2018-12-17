@@ -144,5 +144,19 @@ public class OrderStatusResource {
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/order-statuses");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /order-statuses/orderStatusDescription/:description : get the "id" orderStatus.
+     *
+     * @param description the description of the orderStatusDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the orderStatusDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/order-statuses/orderStatusDescription/{description}")
+    @Timed
+    public ResponseEntity<OrderStatusDTO> getOrderStatusByDescription(@PathVariable String orderStatusDescription) {
+        log.debug("REST request to get OrderStatus by description: {}", orderStatusDescription);
+        Optional<OrderStatusDTO> orderStatusDTO = orderStatusService.getOrderStatusByDescription(orderStatusDescription);
+        return ResponseUtil.wrapOrNotFound(orderStatusDTO);
+    }
 
 }

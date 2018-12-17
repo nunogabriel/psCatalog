@@ -109,7 +109,7 @@ public class AddressesResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/addresses");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-
+    
     /**
      * GET  /addresses/:id : get the "id" addresses.
      *
@@ -153,6 +153,22 @@ public class AddressesResource {
         Page<AddressesDTO> page = addressesService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/addresses");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /addresses/customer/:id : get all the addresses.
+     *
+     * @param id the id of the customer to retrieve
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body the addressesDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/addresses/customer/{id}")
+    @Timed
+    public ResponseEntity<List<AddressesDTO>> getAddressesByCustomerId(@PathVariable Long customerId, Pageable pageable) {
+        log.debug("REST request to get a page of Addresses by Customer Id {}", customerId);
+        Page<AddressesDTO> page = addressesService.getAddressesByCustomerId(customerId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/addresses");
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
 }

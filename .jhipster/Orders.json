@@ -1,5 +1,44 @@
 {
-    "name": "Orders",
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "orderDet",
+            "otherEntityName": "orderDet",
+            "otherEntityRelationshipName": "order"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "orderStatus",
+            "otherEntityName": "orderStatus",
+            "otherEntityField": "orderStatusDescription"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "address",
+            "otherEntityName": "addresses",
+            "otherEntityField": "addressReference"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "customer",
+            "otherEntityName": "customers",
+            "otherEntityField": "customerName"
+        },
+        {
+            "relationshipName": "deliveryAddress",
+            "otherEntityName": "addresses",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "addressReference"
+        }
+    ],
     "fields": [
         {
             "fieldName": "orderReference",
@@ -36,43 +75,11 @@
             "fieldType": "Instant"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "orderDet",
-            "otherEntityName": "orderDet",
-            "otherEntityRelationshipName": "order"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "relationshipName": "orderStatus",
-            "otherEntityName": "orderStatus",
-            "otherEntityField": "orderStatusDescription"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "relationshipName": "address",
-            "otherEntityName": "addresses",
-            "otherEntityField": "addressReference"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "relationshipName": "customer",
-            "otherEntityName": "customers",
-            "otherEntityField": "customerName"
-        }
-    ],
     "changelogDate": "20181203151043",
-    "entityTableName": "orders",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "searchEngine": "elasticsearch",
     "service": "serviceImpl",
+    "entityTableName": "orders",
     "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*",
-    "searchEngine": "elasticsearch"
+    "pagination": "pagination"
 }

@@ -111,4 +111,12 @@ public class AddressesServiceImpl implements AddressesService {
         return addressesSearchRepository.search(queryStringQuery(query), pageable)
             .map(addressesMapper::toDto);
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<AddressesDTO> getAddressesByCustomerId(Long id, Pageable pageable) {
+        log.debug("Request to get all Addresses by Customer Id");
+        return addressesRepository.findAllByCustomerId(id, pageable)
+            .map(addressesMapper::toDto);
+	}
 }

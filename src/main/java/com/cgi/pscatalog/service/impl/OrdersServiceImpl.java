@@ -111,4 +111,12 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersSearchRepository.search(queryStringQuery(query), pageable)
             .map(ordersMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+	public Optional<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(Long customerId, Long orderStatusId) {
+        log.debug("Request to get Orders By Customer Id {} And Order Status Id: {}", customerId, orderStatusId);
+        return ordersRepository.findByCustomerIdAndOrderStatusId(customerId, orderStatusId)
+            .map(ordersMapper::toDto);
+	}
 }

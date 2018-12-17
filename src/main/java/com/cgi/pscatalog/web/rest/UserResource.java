@@ -5,6 +5,7 @@ import com.cgi.pscatalog.domain.User;
 import com.cgi.pscatalog.repository.UserRepository;
 import com.cgi.pscatalog.repository.search.UserSearchRepository;
 import com.cgi.pscatalog.security.AuthoritiesConstants;
+import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.MailService;
 import com.cgi.pscatalog.service.UserService;
 import com.cgi.pscatalog.service.dto.UserDTO;

@@ -53,4 +53,6 @@ public interface OrderDetService {
      * @return the list of entities
      */
     Page<OrderDetDTO> search(String query, Pageable pageable);
+
+	Optional<OrderDetDTO> getOrderDetByOrderIdAndProductId(Long orderId, Long productId);
 }

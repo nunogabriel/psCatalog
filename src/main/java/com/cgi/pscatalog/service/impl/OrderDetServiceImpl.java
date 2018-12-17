@@ -111,4 +111,12 @@ public class OrderDetServiceImpl implements OrderDetService {
         return orderDetSearchRepository.search(queryStringQuery(query), pageable)
             .map(orderDetMapper::toDto);
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<OrderDetDTO> getOrderDetByOrderIdAndProductId(Long orderId, Long productId) {
+        log.debug("Request to get OrderDet by Order Id {} And Product Id: {}:", orderId, productId);
+        return orderDetRepository.findByOrderIdAndProductId(orderId, productId)
+            .map(orderDetMapper::toDto);
+	}
 }

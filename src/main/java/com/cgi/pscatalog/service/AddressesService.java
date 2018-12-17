@@ -53,4 +53,6 @@ public interface AddressesService {
      * @return the list of entities
      */
     Page<AddressesDTO> search(String query, Pageable pageable);
+
+	Page<AddressesDTO> getAddressesByCustomerId(Long id, Pageable pageable);
 }

@@ -40,6 +40,7 @@
             <th jhiSortBy="orderStatusOrderStatusDescription"><span jhiTranslate="psCatalogApp.orders.orderStatus">Order Status</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="addressAddressReference"><span jhiTranslate="psCatalogApp.orders.address">Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="customerCustomerName"><span jhiTranslate="psCatalogApp.orders.customer">Customer</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deliveryAddressAddressReference"><span jhiTranslate="psCatalogApp.orders.deliveryAddress">Delivery Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -66,6 +67,11 @@
                 <td>
                     <div *ngIf="orders.customerId">
                         <a [routerLink]="['../customers', orders.customerId , 'view' ]" >{{orders.customerCustomerName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="orders.deliveryAddressId">
+                        <a [routerLink]="['../addresses', orders.deliveryAddressId , 'view' ]" >{{orders.deliveryAddressAddressReference}}</a>
                     </div>
                 </td>
                 <td class="text-right">

@@ -111,4 +111,12 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         return orderStatusSearchRepository.search(queryStringQuery(query), pageable)
             .map(orderStatusMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+	public Optional<OrderStatusDTO> getOrderStatusByDescription(String orderStatusDescription) {
+        log.debug("Request to get OrderStatus by description: {}", orderStatusDescription);
+        return orderStatusRepository.findOneByOrderStatusDescription(orderStatusDescription)
+            .map(orderStatusMapper::toDto);
+	}
 }

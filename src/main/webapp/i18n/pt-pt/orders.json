@@ -25,8 +25,9 @@
             "lastModifiedDate": "Alterado em",
             "orderDet": "Detalhes",
             "orderStatus": "Estado",
-            "address": "Morada",
-            "customer": "Cliente"
+            "address": "Morada Cobrança",
+            "customer": "Cliente",
+            "deliveryAddress": "Morada Envio"
         }
     }
 }

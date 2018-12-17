@@ -6,6 +6,7 @@ import com.cgi.pscatalog.domain.Orders;
 import com.cgi.pscatalog.domain.OrderStatus;
 import com.cgi.pscatalog.domain.Addresses;
 import com.cgi.pscatalog.domain.Customers;
+import com.cgi.pscatalog.domain.Addresses;
 import com.cgi.pscatalog.repository.OrdersRepository;
 import com.cgi.pscatalog.repository.search.OrdersSearchRepository;
 import com.cgi.pscatalog.service.OrdersService;
@@ -148,6 +149,8 @@ public class OrdersResourceIntTest {
         em.persist(customers);
         em.flush();
         orders.setCustomer(customers);
+        // Add required entity
+        orders.setDeliveryAddress(addresses);
         return orders;
     }
 

@@ -120,4 +120,12 @@ public class CustomersServiceImpl implements CustomersService {
         return customersSearchRepository.search(queryStringQuery(query), pageable)
             .map(customersMapper::toDto);
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<CustomersDTO> getCustomersByLogin(String login) {
+        log.debug("Request to get Customers by login: {}", login);
+        return customersRepository.findOneByLogin(login)
+            .map(customersMapper::toDto);
+	}
 }

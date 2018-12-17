@@ -17,6 +17,8 @@ export interface IOrders {
     addressId?: number;
     customerCustomerName?: string;
     customerId?: number;
+    deliveryAddressAddressReference?: string;
+    deliveryAddressId?: number;
 }
 
 export class Orders implements IOrders {
@@ -35,6 +37,8 @@ export class Orders implements IOrders {
         public addressAddressReference?: string,
         public addressId?: number,
         public customerCustomerName?: string,
-        public customerId?: number
+        public customerId?: number,
+        public deliveryAddressAddressReference?: string,
+        public deliveryAddressId?: number
     ) {}
 }

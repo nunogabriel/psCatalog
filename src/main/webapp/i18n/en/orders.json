@@ -25,8 +25,9 @@
             "lastModifiedDate": "Last Modified Date",
             "orderDet": "Order Det",
             "orderStatus": "Order Status",
-            "address": "Address",
-            "customer": "Customer"
+            "address": "Billing Address",
+            "customer": "Customer",
+            "deliveryAddress": "Delivery Address"
         }
     }
 }

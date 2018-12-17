@@ -108,6 +108,19 @@
                         This field is required.
                     </small>
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.orders.deliveryAddress" for="field_deliveryAddress">Delivery Address</label>
+                    <select class="form-control" id="field_deliveryAddress" name="deliveryAddress" [(ngModel)]="orders.deliveryAddressId"  required>
+                        <option *ngIf="!editForm.value.deliveryAddress" [ngValue]="null" selected></option>
+                        <option [ngValue]="addressesOption.id" *ngFor="let addressesOption of addresses; trackBy: trackAddressesById">{{addressesOption.addressReference}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.deliveryAddress?.dirty && editForm.controls.deliveryAddress?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.deliveryAddress?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

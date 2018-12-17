@@ -59,4 +59,6 @@ public interface CustomersService {
      * @return the list of entities
      */
     Page<CustomersDTO> search(String query, Pageable pageable);
+
+	Optional<CustomersDTO> getCustomersByLogin(String login);
 }

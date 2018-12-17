@@ -158,5 +158,20 @@ public class OrdersResource {
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/orders");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /orders/customer/:customerId/orderStatusId/:orderStatusId : get the "id" orders.
+     *
+     * @param customerId the customer id of the ordersDTO to retrieve
+     * @param orderStatusId the order status id of the ordersDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the ordersDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/orders/customer/{customerId}/orderStatusId/{orderStatusId}")
+    @Timed
+    public ResponseEntity<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(@PathVariable Long customerId, @PathVariable Long orderStatusId) {
+        log.debug("REST request to get Orders By Customer Id {} And Order Status Id: {}", customerId, orderStatusId);
+        Optional<OrdersDTO> ordersDTO = ordersService.getOrdersByCustomerIdAndOrderStatusId(customerId, orderStatusId);
+        return ResponseUtil.wrapOrNotFound(ordersDTO);
+    }
 
 }

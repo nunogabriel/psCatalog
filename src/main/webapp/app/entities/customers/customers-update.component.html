@@ -72,37 +72,24 @@
                         />
                     </div>
                 </div>
-<!--                 <div class="form-group"> -->
-<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.createdBy" for="field_createdBy">Created By</label> -->
-<!--                     <input type="text" class="form-control" name="createdBy" id="field_createdBy" -->
-<!--                         [(ngModel)]="customers.createdBy" /> -->
-<!--                 </div> -->
-<!--                 <div class="form-group"> -->
-<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.createdDate" for="field_createdDate">Created Date</label> -->
-<!--                     <div class="d-flex"> -->
-<!--                         <input id="field_createdDate" type="datetime-local" class="form-control" name="createdDate" [(ngModel)]="createdDate" -->
-<!--                         /> -->
-<!--                     </div> -->
-<!--                 </div> -->
-<!--                 <div class="form-group"> -->
-<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.lastModifiedBy" for="field_lastModifiedBy">Last Modified By</label> -->
-<!--                     <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy" -->
-<!--                         [(ngModel)]="customers.lastModifiedBy" /> -->
-<!--                 </div> -->
-<!--                 <div class="form-group"> -->
-<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.lastModifiedDate" for="field_lastModifiedDate">Last Modified Date</label> -->
-<!--                     <div class="d-flex"> -->
-<!--                         <input id="field_lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" [(ngModel)]="lastModifiedDate" -->
-<!--                         /> -->
-<!--                     </div> -->
-<!--                 </div> -->
-
                 <div class="form-group">
                     <label jhiTranslate="psCatalogApp.customers.products" for="field_products">Products</label>
                     <select class="form-control" id="field_products" multiple name="products" [(ngModel)]="customers.products">
                         <option [ngValue]="getSelected(customers.products, productsOption)" *ngFor="let productsOption of products; trackBy: trackProductsById">{{productsOption.productName}}</option>
                     </select>
                 </div>
+                
+<!--                 <div class="form-group"> -->
+<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.login" for="field_login">login</label> -->
+<!--                     <input type="text" class="form-control" name="login" id="field_login" -->
+<!--                         [(ngModel)]="customers.login" required/> -->
+<!--                     <div [hidden]="!(editForm.controls.login?.dirty && editForm.controls.login?.invalid)"> -->
+<!--                         <small class="form-text text-danger" -->
+<!--                         [hidden]="!editForm.controls.login?.errors?.required" jhiTranslate="entity.validation.required"> -->
+<!--                         This field is required. -->
+<!--                         </small> -->
+<!--                     </div> -->
+<!--                 </div> -->
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

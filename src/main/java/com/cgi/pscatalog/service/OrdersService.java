@@ -53,4 +53,6 @@ public interface OrdersService {
      * @return the list of entities
      */
     Page<OrdersDTO> search(String query, Pageable pageable);
+
+	Optional<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(Long customerId, Long orderStatusId);
 }

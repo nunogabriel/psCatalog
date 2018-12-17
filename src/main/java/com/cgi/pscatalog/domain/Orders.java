@@ -59,18 +59,23 @@ public class Orders implements Serializable {
     private Set<OrderDet> orderDets = new HashSet<>();
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("orders")
+    @JsonIgnoreProperties("")
     private OrderStatus orderStatus;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("orders")
+    @JsonIgnoreProperties("")
     private Addresses address;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("orders")
+    @JsonIgnoreProperties("")
     private Customers customer;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("")
+    private Addresses deliveryAddress;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -234,6 +239,19 @@ public class Orders implements Serializable {
 
     public void setCustomer(Customers customers) {
         this.customer = customers;
+    }
+
+    public Addresses getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public Orders deliveryAddress(Addresses addresses) {
+        this.deliveryAddress = addresses;
+        return this;
+    }
+
+    public void setDeliveryAddress(Addresses addresses) {
+        this.deliveryAddress = addresses;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
