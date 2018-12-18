@@ -6,8 +6,8 @@ import {
     GeneralCatalogComponent,
     GeneralCatalogDetailComponent,
     GeneralCatalogUpdateComponent,
-    GeneralCatalogDeletePopupComponent,
-    GeneralCatalogDeleteDialogComponent,
+    GeneralCatalogAddPersonalPopupComponent,
+    GeneralCatalogAddPersonalDialogComponent,
     generalCatalogRoute,
     generalCatalogPopupRoute
 } from './';
@@ -20,10 +20,10 @@ const ENTITY_STATES = [...generalCatalogRoute, ...generalCatalogPopupRoute];
         GeneralCatalogComponent,
         GeneralCatalogDetailComponent,
         GeneralCatalogUpdateComponent,
-        GeneralCatalogDeleteDialogComponent,
-        GeneralCatalogDeletePopupComponent
+        GeneralCatalogAddPersonalDialogComponent,
+        GeneralCatalogAddPersonalPopupComponent
     ],
-    entryComponents: [GeneralCatalogComponent, GeneralCatalogUpdateComponent, GeneralCatalogDeleteDialogComponent, GeneralCatalogDeletePopupComponent],
+    entryComponents: [GeneralCatalogComponent, GeneralCatalogUpdateComponent, GeneralCatalogAddPersonalDialogComponent, GeneralCatalogAddPersonalPopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class PsCatalogGeneralCatalogModule {}

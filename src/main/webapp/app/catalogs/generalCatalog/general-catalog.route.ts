@@ -10,7 +10,7 @@ import { GeneralCatalogService } from './general-catalog.service';
 import { GeneralCatalogComponent } from './general-catalog.component';
 import { GeneralCatalogDetailComponent } from './general-catalog-detail.component';
 import { GeneralCatalogUpdateComponent } from './general-catalog-update.component';
-import { GeneralCatalogDeletePopupComponent } from './general-catalog-delete-dialog.component';
+import { GeneralCatalogAddPersonalPopupComponent } from './general-catalog-add-personal-dialog.component';
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 
 @Injectable({ providedIn: 'root' })
@@ -71,8 +71,8 @@ export const generalCatalogRoute: Routes = [
 
 export const generalCatalogPopupRoute: Routes = [
     {
-        path: 'generalCatalog/:id/delete',
-        component: GeneralCatalogDeletePopupComponent,
+        path: 'generalCatalog/:id/addPersonal',
+        component: GeneralCatalogAddPersonalPopupComponent,
         resolve: {
             generalCatalog: GeneralCatalogResolve
         },

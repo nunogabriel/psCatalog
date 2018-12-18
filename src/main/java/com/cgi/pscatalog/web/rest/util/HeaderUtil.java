@@ -50,4 +50,8 @@ public final class HeaderUtil {
     public static HttpHeaders createEntityAddPersonalAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonal", param);
     }
+    
+    public static HttpHeaders createEntityAddPersonalAlreadyAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonalAlready", param);
+    }
 }

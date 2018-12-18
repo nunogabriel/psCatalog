@@ -4,12 +4,14 @@
             "home": {
                 "title": "Catálogo Geral",
                 "search": "Pesquisa de Produtos",
-                "addBasket": "Adicionar Produto ao Carrinho de Compras"
+                "addBasket": "Adicionar Produto ao Carrinho de Compras",
+                "addPersonal": "Confirma a adição do produto ao Catálogo Personalizado"
             },
-            "addPersonal": "O Produto {{ param }} foi adicionado ao Catálogo Personalizado",
+            "addPersonal": "O Produto {{ param }} foi adicionado com sucesso ao Catálogo Personalizado",
+            "addPersonalAlready": "O Produto {{ param }} já existe no Catálogo Personalizado",
             "addBasket": "O Produto {{ param }} foi adicionado com sucesso ao carrinho de compras",
             "personal": {
-                "question": "Tem a certeza que pretende adicionar o Produto {{ id }} ao Catálogo Personalizado?"
+                "question": "Tem a certeza que pretende adicionar o Produto {{ name }} ao Catálogo Personalizado?"
             },
             "detail": {
                 "title": "Produtos"

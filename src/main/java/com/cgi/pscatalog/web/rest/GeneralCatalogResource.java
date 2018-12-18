@@ -2,9 +2,11 @@ package com.cgi.pscatalog.web.rest;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -308,5 +310,69 @@ public class GeneralCatalogResource {
 
 		return new ResponseEntity<>(listGeneralCatalogDTO, headers, HttpStatus.OK);
 	}
+	
+    /**
+     * GET /generalCatalog/:id/addPersonal : delete the "id" products.
+     *
+     * @param id the id of the productsDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     * @throws URISyntaxException 
+     */
+	@GetMapping("/generalCatalog/{id}/addPersonal")
+    @Timed
+    public ResponseEntity<Void> addPersonalCatalog(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to add personal catalog : {}", id);
+        
+        // Get customer identification by login
+        CustomersResource customersResource = new CustomersResource(customersService);
+        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
+        
+        boolean productAlreadyInPersonalCatalog = false;
+        String productName = null;
+        for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
+			ProductsDTO productsDTO = (ProductsDTO) iterator.next();
+			
+			if (productsDTO.getId().longValue() == id.longValue()) {
+				productName = productsDTO.getProductName();
+				productAlreadyInPersonalCatalog = true;
+				break;
+			}
+		}
+        
+        log.debug("REST request to add personal catalog productAlreadyInPersonalCatalog: {}", productName);
+        	
+        if (productAlreadyInPersonalCatalog) {
+        	return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlreadyAlert(ENTITY_NAME, productName)).build();
+        }
+        
+        // Find product
+        Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
+        Set<ProductsDTO> setProductsDTO = new HashSet<ProductsDTO>();
+        
+        // Add new product
+		if (productsDTOOpt.isPresent()) {
+			ProductsDTO productsDTO = productsDTOOpt.get();
+			productName = productsDTO.getProductName();
+			setProductsDTO.add( productsDTO );
+		}
+		
+		// Add old products
+		for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
+			ProductsDTO productsDTO = (ProductsDTO) iterator.next();
+			
+			setProductsDTO.add( productsDTO );
+		}
+        
+        customersDTO.setProducts(setProductsDTO);
+        
+        // Add product to Personal Catalog
+        customersResource.updateCustomers(customersDTO);
+        
+        log.debug("REST request to add personal catalog updateCustomers: {}", productName);
+		        
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlert(ENTITY_NAME, productName)).build();
+    }
 
 }

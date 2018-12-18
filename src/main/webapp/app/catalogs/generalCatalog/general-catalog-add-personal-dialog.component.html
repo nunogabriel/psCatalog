@@ -1,0 +1,19 @@
+<form name="addPersonalForm" (ngSubmit)="confirmAddPersonal(generalCatalog.id)">
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="psCatalogApp.generalCatalog.home.addPersonal">Confirm add operation to Personal Catalog</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <p id="jhi-add-personal-general-catalog-heading" jhiTranslate="psCatalogApp.generalCatalog.personal.question" translateValues="{name: '{{generalCatalog.productName}}'}">Are you sure you want to add this Product to Personal Catalog?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button id="jhi-confirm-add-personal-general-catalog" type="submit" class="btn btn-danger">
+            <fa-icon [icon]="'times'"></fa-icon>&nbsp;<span jhiTranslate="psCatalogApp.generalCatalog.action.addPersonal">Add to Personal</span>
+        </button>
+    </div>
+</form>

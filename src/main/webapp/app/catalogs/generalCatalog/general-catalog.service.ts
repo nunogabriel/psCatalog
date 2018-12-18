@@ -34,8 +34,8 @@ export class GeneralCatalogService {
             .get<IGeneralCatalog[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
-    delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    addPersonal(id: number): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceUrl}/${id}/addPersonal`, { observe: 'response' });
     }
 
     search(req?: any): Observable<CatalogArrayResponseType> {

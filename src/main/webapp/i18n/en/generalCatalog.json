@@ -4,9 +4,11 @@
             "home": {
                 "title": "General Catalog",
                 "search": "Search for Products",
-                "addBasket": "Add Product to Shopping Cart"
+                "addBasket": "Add Product to Shopping Cart",
+                "addPersonal": "Confirm add operation to Personal Catalog"
             },
             "addPersonal": "The product name {{ param }} was added to Personal Catalog",
+            "addPersonalAlready": "The product name {{ param }} already exists in Personal Catalog",
             "addBasket": "The product name {{ param }} was added to Shopping Cart",
             "personal": {
                 "question": "Are you sure you want to add Product {{ id }} to Personal Catalog?"

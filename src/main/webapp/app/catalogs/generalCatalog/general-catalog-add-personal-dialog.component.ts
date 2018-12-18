@@ -8,10 +8,10 @@ import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { GeneralCatalogService } from './general-catalog.service';
 
 @Component({
-    selector: 'jhi-general-catalog-delete-dialog',
-    templateUrl: './general-catalog-delete-dialog.component.html'
+    selector: 'jhi-general-catalog-add-personal-dialog',
+    templateUrl: './general-catalog-add-personal-dialog.component.html'
 })
-export class GeneralCatalogDeleteDialogComponent {
+export class GeneralCatalogAddPersonalDialogComponent {
     generalCatalog: IGeneralCatalog;
 
     constructor(private generalCatalogService: GeneralCatalogService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
@@ -20,11 +20,11 @@ export class GeneralCatalogDeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: number) {
-        this.generalCatalogService.delete(id).subscribe(response => {
+    confirmAddPersonal(id: number) {
+        this.generalCatalogService.addPersonal(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'generalCatalogListModification',
-                content: 'Deleted an general catalog'
+                content: 'Add Personal an general catalog'
             });
             this.activeModal.dismiss(true);
         });
@@ -32,10 +32,10 @@ export class GeneralCatalogDeleteDialogComponent {
 }
 
 @Component({
-    selector: 'jhi-general-catalog-delete-popup',
+    selector: 'jhi-general-catalog-add-personal-popup',
     template: ''
 })
-export class GeneralCatalogDeletePopupComponent implements OnInit, OnDestroy {
+export class GeneralCatalogAddPersonalPopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
@@ -43,7 +43,7 @@ export class GeneralCatalogDeletePopupComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ generalCatalog }) => {
             setTimeout(() => {
-                this.ngbModalRef = this.modalService.open(GeneralCatalogDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
+                this.ngbModalRef = this.modalService.open(GeneralCatalogAddPersonalDialogComponent as Component, { size: 'lg', backdrop: 'static' });
                 this.ngbModalRef.componentInstance.generalCatalog = generalCatalog;
                 this.ngbModalRef.result.then(
                     result => {
