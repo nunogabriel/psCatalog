@@ -9,7 +9,7 @@ import { GeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { GeneralCatalogService } from './general-catalog.service';
 import { GeneralCatalogComponent } from './general-catalog.component';
 import { GeneralCatalogDetailComponent } from './general-catalog-detail.component';
-import { GeneralCatalogUpdateComponent } from './general-catalog-update.component';
+import { GeneralCatalogAddBasketComponent } from './general-catalog-add-basket.component';
 import { GeneralCatalogAddPersonalPopupComponent } from './general-catalog-add-personal-dialog.component';
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 
@@ -56,8 +56,8 @@ export const generalCatalogRoute: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: 'generalCatalog/:id/edit',
-        component: GeneralCatalogUpdateComponent,
+        path: 'generalCatalog/:id/addBasket',
+        component: GeneralCatalogAddBasketComponent,
         resolve: {
             generalCatalog: GeneralCatalogResolve
         },

@@ -5,7 +5,7 @@ import { PsCatalogSharedModule } from 'app/shared';
 import {
     GeneralCatalogComponent,
     GeneralCatalogDetailComponent,
-    GeneralCatalogUpdateComponent,
+    GeneralCatalogAddBasketComponent,
     GeneralCatalogAddPersonalPopupComponent,
     GeneralCatalogAddPersonalDialogComponent,
     generalCatalogRoute,
@@ -19,11 +19,11 @@ const ENTITY_STATES = [...generalCatalogRoute, ...generalCatalogPopupRoute];
     declarations: [
         GeneralCatalogComponent,
         GeneralCatalogDetailComponent,
-        GeneralCatalogUpdateComponent,
+        GeneralCatalogAddBasketComponent,
         GeneralCatalogAddPersonalDialogComponent,
         GeneralCatalogAddPersonalPopupComponent
     ],
-    entryComponents: [GeneralCatalogComponent, GeneralCatalogUpdateComponent, GeneralCatalogAddPersonalDialogComponent, GeneralCatalogAddPersonalPopupComponent],
+    entryComponents: [GeneralCatalogComponent, GeneralCatalogAddBasketComponent, GeneralCatalogAddPersonalDialogComponent, GeneralCatalogAddPersonalPopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class PsCatalogGeneralCatalogModule {}

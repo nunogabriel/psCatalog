@@ -19,7 +19,7 @@ export class GeneralCatalogService {
 
     constructor(private http: HttpClient) {}
 
-    update(generalCatalog: IGeneralCatalog): Observable<CatalogResponseType> {
+    addBasket(generalCatalog: IGeneralCatalog): Observable<CatalogResponseType> {
         return this.http.put<IGeneralCatalog>(this.resourceUrl, generalCatalog, { observe: 'response' });
     }
 

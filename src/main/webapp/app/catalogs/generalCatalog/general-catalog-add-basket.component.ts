@@ -10,10 +10,10 @@ import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { GeneralCatalogService } from './general-catalog.service';
 
 @Component({
-    selector: 'jhi-general-catalog-update',
-    templateUrl: './general-catalog-update.component.html'
+    selector: 'jhi-general-catalog-add-basket',
+    templateUrl: './general-catalog-add-basket.component.html'
 })
-export class GeneralCatalogUpdateComponent implements OnInit {
+export class GeneralCatalogAddBasketComponent implements OnInit {
     generalCatalog: IGeneralCatalog;
     isSaving: boolean;
 
@@ -55,7 +55,7 @@ export class GeneralCatalogUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.generalCatalog.id !== undefined) {
-            this.subscribeToSaveResponse(this.generalCatalogService.update(this.generalCatalog));
+            this.subscribeToSaveResponse(this.generalCatalogService.addBasket(this.generalCatalog));
         }
     }
 

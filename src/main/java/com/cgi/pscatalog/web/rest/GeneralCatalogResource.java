@@ -84,18 +84,20 @@ public class GeneralCatalogResource {
 	}
 	
     /**
-     * PUT  /generalCatalog : Updates an existing products.
+     * PUT  /generalCatalog : add product to shopping card.
      *
      * @param generalCatalogDTO the generalCatalogDTO to update
+     * 
      * @return the ResponseEntity with status 200 (OK) and with body the updated generalCatalogDTO,
      * or with status 400 (Bad Request) if the generalCatalogDTO is not valid,
      * or with status 500 (Internal Server Error) if the generalCatalogDTO couldn't be updated
+     * 
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/generalCatalog")
     @Timed
-    public ResponseEntity<GeneralCatalogDTO> updateGeneralCatalog(@Valid @RequestBody GeneralCatalogDTO generalCatalogDTO) throws URISyntaxException {
-        log.debug("REST request to update General Catalog : {}", generalCatalogDTO);
+    public ResponseEntity<GeneralCatalogDTO> addBasket(@Valid @RequestBody GeneralCatalogDTO generalCatalogDTO) throws URISyntaxException {
+        log.debug("REST request to addBasket : {}", generalCatalogDTO);
         
         if (generalCatalogDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -111,7 +113,7 @@ public class GeneralCatalogResource {
             throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
         }
         
-        log.debug("REST request to update General Catalog - customerId: {}", customerId);
+        log.debug("REST request to addBasket - customerId: {}", customerId);
         
         // Get Order Status Id of PENDING status
         OrderStatusResource orderStatusResource = new OrderStatusResource(orderStatusService);
@@ -123,7 +125,7 @@ public class GeneralCatalogResource {
             throw new BadRequestAlertException("Bad configuration, configure order status first", ENTITY_NAME, "idnull");
         }
         
-        log.debug("REST request to update General Catalog - orderStatusId: {}", orderStatusId);
+        log.debug("REST request to addBasket - orderStatusId: {}", orderStatusId);
         
         // Get address identification by customer identification
         Long addressId = new Long(0);
@@ -142,7 +144,7 @@ public class GeneralCatalogResource {
             throw new BadRequestAlertException("You must add a address first", ENTITY_NAME, "idnull");
         }
         
-        log.debug("REST request to update General Catalog - addressId: {}", addressId);
+        log.debug("REST request to addBasket - addressId: {}", addressId);
                 
         // 1 - Verify if there is any order created for customer (get Order by Customer identification)
         OrdersResource ordersResource = new OrdersResource(ordersService);
@@ -166,7 +168,7 @@ public class GeneralCatalogResource {
         	orderId = oldOrdersDTO.getId();
         }
         
-        log.debug("REST request to update General Catalog - orderId: {}", orderId);
+        log.debug("REST request to addBasket - orderId: {}", orderId);
         
         // 2 - Verify if the product already exists in Order Detail (get order detail by Order and Product identification)
         OrderDetResource ordersDetResource = new OrderDetResource(orderDetService);
@@ -202,6 +204,7 @@ public class GeneralCatalogResource {
 	 * GET /generalCatalog : get all the general catalog.
 	 *
 	 * @param pageable the pagination information
+	 * 
 	 * @return the ResponseEntity with status 200 (OK) and the list of products in
 	 *         body
 	 */
@@ -240,6 +243,7 @@ public class GeneralCatalogResource {
 	 * GET /generalCatalog/:id : get the "id" general catalog.
 	 *
 	 * @param id the id of the generalCatalogDTO to retrieve
+	 * 
 	 * @return the ResponseEntity with status 200 (OK) and with body the
 	 *         generalCatalogDTO, or with status 404 (Not Found)
 	 */
@@ -277,6 +281,7 @@ public class GeneralCatalogResource {
 	 *
 	 * @param query    the query of the general catalog search
 	 * @param pageable the pagination information
+	 * 
 	 * @return the result of the search
 	 */
 	@GetMapping("/_search/generalCatalog")
@@ -315,7 +320,9 @@ public class GeneralCatalogResource {
      * GET /generalCatalog/:id/addPersonal : delete the "id" products.
      *
      * @param id the id of the productsDTO to delete
+     * 
      * @return the ResponseEntity with status 200 (OK)
+     * 
      * @throws URISyntaxException 
      */
 	@GetMapping("/generalCatalog/{id}/addPersonal")
