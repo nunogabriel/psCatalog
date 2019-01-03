@@ -1,0 +1,62 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-personal-catalog-heading" jhiTranslate="psCatalogApp.personalCatalog.home.addBasket">Add Product to Shopping Cart</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <dl class="row-md jh-entity-details">
+	                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productName">Product Name</span></dt>
+	                <dd>
+	                    <span>{{personalCatalog.productName}}</span>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productDescription">Product Description</span></dt>
+	                <dd>
+	                    <span>{{personalCatalog.productDescription}}</span>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span></dt>
+	                <dd>
+	                    <span>{{personalCatalog.productPrice}}</span>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productType">Product Type</span></dt>
+	                <dd>
+	                    <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + personalCatalog.productType}}">{{personalCatalog.productType}}</span>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productImg">Product Img</span></dt>
+	                <dd>
+	                    <div *ngIf="personalCatalog.productImg">
+	                        <a (click)="openFile(personalCatalog.productImgContentType, personalCatalog.productImg)">
+	                            <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-width: 100%;" alt="personalCatalog image"/>
+	                        </a>
+	                    </div>
+	                </dd>
+	                <dd>
+		                <div class="form-group">
+		                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalCatalog.orderQuantity" for="field_orderQuantity">Order Quantity</label>
+		                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity"
+		                        [(ngModel)]="personalCatalog.orderQuantity" required/>
+		                    <div [hidden]="!(editForm.controls.orderQuantity?.dirty && editForm.controls.orderQuantity?.invalid)">
+		                        <small class="form-text text-danger"
+		                        [hidden]="!editForm.controls.orderQuantity?.errors?.required" jhiTranslate="entity.validation.required">
+		                        This field is required.
+		                        </small>
+		                        <small class="form-text text-danger"
+		                            [hidden]="!editForm.controls.orderQuantity?.errors?.number" jhiTranslate="entity.validation.number">
+		                            This field should be a number.
+		                        </small>
+		                    </div>
+		                </div>
+	                </dd>
+	            </dl>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-success">
+                    <fa-icon [icon]="'cart-plus'"></fa-icon>&nbsp;<span jhiTranslate="psCatalogApp.personalCatalog.action.addBasket">Add to Cart</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+{
+    "psCatalogApp": {
+        "personalCatalog": {
+            "home": {
+                "title": "Personal Catalog",
+                "search": "Search for Products",
+                "addBasket": "Add Product to Shopping Cart",
+                "deletePersonal": "Confirm delete operation from Personal Catalog"
+            },
+            "deletePersonal": "The product name {{ param }} was deleted from Personal Catalog",
+            "deletePersonalDoesNotExist": "The product does not exist in Personal Catalog",
+            "addBasket": "The product name {{ param }} was added to Shopping Cart",
+            "personal": {
+                "question": "Are you sure you want to delete Product {{ id }} from Personal Catalog?"
+            },            
+            "detail": {
+                "title": "Products"
+            },
+            "productName": "Name",
+            "productDescription": "Description",
+            "productPrice": "Price",
+            "productType": "Product Type",
+            "productImg": "Image",
+            "orderQuantity": "Quantity",
+            "action": {
+	            "addBasket": "Add to Cart",
+	            "deletePersonal": "Delete from Personal Catalog" 
+        	}
+        }
+    }
+}

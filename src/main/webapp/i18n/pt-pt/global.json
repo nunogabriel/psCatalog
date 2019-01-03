@@ -9,6 +9,7 @@
             "catalogs": {
                 "main": "Catálogos",
                 "generalCatalog": "Catálogo Geral",
+                "personalCatalog": "Catálogo Personalizado",
                 "jhipster-needle-menu-add-catalogs": "JHipster will add additional catalogs here (do not translate!)"
             },
             "entities": {

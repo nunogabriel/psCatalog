@@ -1,0 +1,31 @@
+{
+    "psCatalogApp": {
+        "personalCatalog": {
+            "home": {
+                "title": "Catálogo Personalizado",
+                "search": "Pesquisa de Produtos",
+                "addBasket": "Adicionar Produto ao Carrinho de Compras",
+                "deletePersonal": "Confirma a eliminação do produto do Catálogo Personalizado"
+            },
+            "deletePersonal": "O Produto {{ param }} foi eliminado com sucesso do Catálogo Personalizado",
+            "deletePersonalDoesNotExist": "O Produto não existe no Catálogo Personalizado",
+            "addBasket": "O Produto {{ param }} foi adicionado com sucesso ao carrinho de compras",
+            "personal": {
+                "question": "Tem a certeza que pretende eliminar o Produto {{ name }} do Catálogo Personalizado?"
+            },
+            "detail": {
+                "title": "Produtos"
+            },
+            "productName": "Nome",
+            "productDescription": "Descrição",
+            "productPrice": "Preço",
+            "productType": "Tipo Produto",
+            "productImg": "Imagem",
+            "orderQuantity": "Quantidade",
+            "action": {
+	            "addBasket": "Adicionar Carrinho",
+	            "deletePersonal": "Eliminar Cat.Personalizado" 
+        	}
+        }
+    }
+}

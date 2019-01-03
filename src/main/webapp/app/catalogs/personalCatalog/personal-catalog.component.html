@@ -1,0 +1,81 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="psCatalogApp.personalCatalog.home.title">Catalogs</span>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.personalCatalog.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="personalCatalog">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.personalCatalog.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.personalCatalog.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.personalCatalog.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.personalCatalog.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let personalCatalog of personalCatalog ;trackBy: trackId">
+                <td>{{personalCatalog.productName}}</td>
+                <td>{{personalCatalog.productDescription}}</td>
+                <td>{{personalCatalog.productPrice}}</td>
+                <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + personalCatalog.productType}}">{{personalCatalog.productType}}</td>
+                <td>
+                    <a *ngIf="personalCatalog.productImg" (click)="openFile(personalCatalog.productImgContentType, personalCatalog.productImg)">
+                        <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-height: 30px;" alt="personalCatalog image"/>
+                    </a>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/personalCatalog', personalCatalog.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'personalCatalog/'+ personalCatalog.id + '/deletePersonal'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'address-card'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="psCatalogApp.personalCatalog.action.deletePersonal">Delete from Personal</span>
+                        </button>  
+                        <button type="submit"
+                                [routerLink]="['/personalCatalog', personalCatalog.id, 'addBasket']"
+                                class="btn btn-success btn-sm">
+                            <fa-icon [icon]="'cart-plus'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="psCatalogApp.personalCatalog.action.addBasket">Add to Cart</span>
+                        </button>                        
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="personalCatalog && personalCatalog.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>
