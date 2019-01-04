@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ public class Promotions implements Serializable {
 
     @NotNull
     @Column(name = "new_product_price", nullable = false)
-    private Long newProductPrice;
+    private BigDecimal newProductPrice;
 
     @NotNull
     @Column(name = "promotion_start_date", nullable = false)
@@ -62,16 +63,16 @@ public class Promotions implements Serializable {
         this.id = id;
     }
 
-    public Long getNewProductPrice() {
+    public BigDecimal getNewProductPrice() {
         return newProductPrice;
     }
 
-    public Promotions newProductPrice(Long newProductPrice) {
+    public Promotions newProductPrice(BigDecimal newProductPrice) {
         this.newProductPrice = newProductPrice;
         return this;
     }
 
-    public void setNewProductPrice(Long newProductPrice) {
+    public void setNewProductPrice(BigDecimal newProductPrice) {
         this.newProductPrice = newProductPrice;
     }
 

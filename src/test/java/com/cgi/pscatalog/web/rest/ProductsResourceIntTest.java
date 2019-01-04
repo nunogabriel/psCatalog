@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -58,8 +60,8 @@ public class ProductsResourceIntTest {
     private static final String DEFAULT_PRODUCT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_PRODUCT_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_PRODUCT_PRICE = 1L;
-    private static final Long UPDATED_PRODUCT_PRICE = 2L;
+    private static final BigDecimal DEFAULT_PRODUCT_PRICE = new BigDecimal("1");
+    private static final BigDecimal UPDATED_PRODUCT_PRICE = new BigDecimal("2");
 
     private static final Instant DEFAULT_PRODUCT_START_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_PRODUCT_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);

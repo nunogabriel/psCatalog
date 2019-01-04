@@ -359,7 +359,7 @@ public class PersonalCatalogResource {
 
 	        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalAlert(ENTITY_NAME, productsDTO.getProductName())).build();
 		} else {
-			return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalAlert(ENTITY_NAME, "")).build();
+			return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalDoesNotExistAlert(ENTITY_NAME, "")).build();
 		}
     }
 }

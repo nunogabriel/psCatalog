@@ -3,6 +3,7 @@ package com.cgi.pscatalog.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ public class PromotionsDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Long newProductPrice;
+    private BigDecimal newProductPrice;
 
     @NotNull
     private Instant promotionStartDate;
@@ -40,11 +41,11 @@ public class PromotionsDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getNewProductPrice() {
+    public BigDecimal getNewProductPrice() {
         return newProductPrice;
     }
 
-    public void setNewProductPrice(Long newProductPrice) {
+    public void setNewProductPrice(BigDecimal newProductPrice) {
         this.newProductPrice = newProductPrice;
     }
 

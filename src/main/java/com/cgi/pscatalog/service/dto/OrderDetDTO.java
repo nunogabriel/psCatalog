@@ -3,6 +3,7 @@ package com.cgi.pscatalog.service.dto;
 import java.time.Instant;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -16,7 +17,7 @@ public class OrderDetDTO implements Serializable {
     private Integer orderQuantity;
 
     @NotNull
-    private Long unitPrice;
+    private BigDecimal unitPrice;
 
     private String createdBy;
 
@@ -50,11 +51,11 @@ public class OrderDetDTO implements Serializable {
         this.orderQuantity = orderQuantity;
     }
 
-    public Long getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

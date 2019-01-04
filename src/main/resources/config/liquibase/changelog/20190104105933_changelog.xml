@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="gabrieln (generated)" id="1546599896220-1">
+        <addColumn tableName="promotions">
+            <column name="new_product_price" type="numeric(19, 2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1546599896220-2">
+        <addColumn tableName="order_det">
+            <column name="unit_price" type="numeric(19, 2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1546599896220-3">
+        <addColumn tableName="order_det_hst">
+            <column name="unit_price" type="numeric(19, 2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1546599896220-4">
+        <addNotNullConstraint columnDataType="number(19,2)" columnName="product_price" tableName="products"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,6 +1,7 @@
 package com.cgi.pscatalog.service.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Lob;
@@ -21,7 +22,7 @@ public class GeneralCatalogDTO implements Serializable {
 	private String productDescription;
 
 	@NotNull
-	private Long productPrice;
+	private BigDecimal productPrice;
 
 	@NotNull
 	private ProductTypeEnum productType;
@@ -57,11 +58,11 @@ public class GeneralCatalogDTO implements Serializable {
 		this.productDescription = productDescription;
 	}
 
-	public Long getProductPrice() {
+	public BigDecimal getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(Long productPrice) {
+	public void setProductPrice(BigDecimal productPrice) {
 		this.productPrice = productPrice;
 	}
 

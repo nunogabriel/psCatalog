@@ -51,11 +51,16 @@ public final class HeaderUtil {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonal", param);
     }
     
-    public static HttpHeaders createEntityDeletePersonalAlert(String entityName, String param) {
-        return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonalDoesNotExist", param);
-    }
-    
     public static HttpHeaders createEntityAddPersonalAlreadyAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonalAlready", param);
     }
+    
+    public static HttpHeaders createEntityDeletePersonalDoesNotExistAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonalDoesNotExist", param);
+    }
+    
+    public static HttpHeaders createEntityDeletePersonalAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonal", param);
+    }
+
 }

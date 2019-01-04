@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="gabrieln (generated)" id="1544711177247-1">
+        <addNotNullConstraint columnDataType="numeric(19, 2)" columnName="product_price" tableName="products"/>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1544711177247-2">
+        <addNotNullConstraint columnDataType="numeric(19, 2)" columnName="new_product_price" tableName="promotions"/>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1544711177247-3">
+        <addNotNullConstraint columnDataType="numeric(19, 2)" columnName="unit_price" tableName="order_det"/>
+    </changeSet>
+    <changeSet author="gabrieln (generated)" id="1544711177247-4">
+        <addNotNullConstraint columnDataType="numeric(19, 2)" columnName="unit_price" tableName="order_det_hst"/>
+    </changeSet>
+</databaseChangeLog>    

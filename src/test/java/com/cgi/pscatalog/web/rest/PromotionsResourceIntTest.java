@@ -27,6 +27,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -50,8 +52,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = PsCatalogApp.class)
 public class PromotionsResourceIntTest {
 
-    private static final Long DEFAULT_NEW_PRODUCT_PRICE = 1L;
-    private static final Long UPDATED_NEW_PRODUCT_PRICE = 2L;
+    private static final BigDecimal DEFAULT_NEW_PRODUCT_PRICE = new BigDecimal("1");
+    private static final BigDecimal UPDATED_NEW_PRODUCT_PRICE = new BigDecimal("2");
 
     private static final Instant DEFAULT_PROMOTION_START_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_PROMOTION_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);

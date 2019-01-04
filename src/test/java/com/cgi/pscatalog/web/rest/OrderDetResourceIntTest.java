@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -55,8 +57,8 @@ public class OrderDetResourceIntTest {
     private static final Integer DEFAULT_ORDER_QUANTITY = 1;
     private static final Integer UPDATED_ORDER_QUANTITY = 2;
 
-    private static final Long DEFAULT_UNIT_PRICE = 1L;
-    private static final Long UPDATED_UNIT_PRICE = 2L;
+    private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal("1");
+    private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal("2");
 
     private static final String DEFAULT_CREATED_BY = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_BY = "BBBBBBBBBB";

@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class OrderDet implements Serializable {
 
     @NotNull
     @Column(name = "unit_price", nullable = false)
-    private Long unitPrice;
+    private BigDecimal unitPrice;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -80,16 +81,16 @@ public class OrderDet implements Serializable {
         this.orderQuantity = orderQuantity;
     }
 
-    public Long getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public OrderDet unitPrice(Long unitPrice) {
+    public OrderDet unitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
         return this;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
