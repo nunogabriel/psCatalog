@@ -1,0 +1,33 @@
+{
+    "psCatalogApp": {
+        "cartOrderDet": {
+            "home": {
+                "title": "Carrinho de Compras",
+                "createLabel": "Encomendar",
+                "createOrEditLabel": "Editar Produto",
+                "search": "Pesquisa de Produtos",
+                "ordered": "Confirme a realização da encomenda"
+            },
+            "created": "Uma nova Encomenda foi criada com o identificador {{ param }}",
+            "updated": "Produto atualizado com o identificador {{ param }}",
+            "deleted": "Produto eliminado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o produto {{ param }} do carrinho?"
+            },
+			"ordered": {
+                "question": "Tem a certeza que pretende realizar a encomenda?"
+            },            
+            "detail": {
+                "title": "Detalhe do Produto"
+            },
+            "orderQuantity": "Quantidade",
+            "unitPrice": "Preço Unitário",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "order": "Encomenda",
+            "product": "Produto"
+        }
+    }
+}

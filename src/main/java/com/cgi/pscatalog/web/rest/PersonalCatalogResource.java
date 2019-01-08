@@ -37,17 +37,16 @@ import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.ProductsService;
 import com.cgi.pscatalog.service.dto.AddressesDTO;
 import com.cgi.pscatalog.service.dto.CustomersDTO;
-import com.cgi.pscatalog.service.dto.PersonalCatalogDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
 import com.cgi.pscatalog.service.dto.OrderStatusDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
+import com.cgi.pscatalog.service.dto.PersonalCatalogDTO;
 import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
+import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
-import com.cgi.pscatalog.web.rest.OrdersResource;
-import com.cgi.pscatalog.web.rest.OrderDetResource;
 
 import io.github.jhipster.web.util.ResponseUtil;
 
@@ -59,100 +58,100 @@ import io.github.jhipster.web.util.ResponseUtil;
 public class PersonalCatalogResource {
 
 	private final Logger log = LoggerFactory.getLogger(PersonalCatalogResource.class);
-	
+
 	private static final String ENTITY_NAME = "personalCatalog";
 
 	private final ProductsService productsService;
-	
+
     @Autowired
 	private OrdersService ordersService;
-    
+
     @Autowired
 	private OrderDetService orderDetService;
-    
+
     @Autowired
     private OrderStatusService orderStatusService;
-    
+
     @Autowired
 	private CustomersService customersService;
-    
+
     @Autowired
     private AddressesService addressesService;
 
 	public PersonalCatalogResource(ProductsService productsService) {
 		this.productsService = productsService;
 	}
-	
+
     /**
      * PUT  /personalCatalog : add product to shopping card.
      *
      * @param personalCatalogDTO the personalCatalogDTO to update
-     * 
+     *
      * @return the ResponseEntity with status 200 (OK) and with body the updated personalCatalogDTO,
      * or with status 400 (Bad Request) if the personalCatalogDTO is not valid,
      * or with status 500 (Internal Server Error) if the personalCatalogDTO couldn't be updated
-     * 
+     *
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/personalCatalog")
     @Timed
     public ResponseEntity<PersonalCatalogDTO> addBasket(@Valid @RequestBody PersonalCatalogDTO personalCatalogDTO) throws URISyntaxException {
         log.debug("REST request to addBasket : {}", personalCatalogDTO);
-        
+
         if (personalCatalogDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        
+
         // Get customer identification by login
         CustomersResource customersResource = new CustomersResource(customersService);
         ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
         CustomersDTO customersDTO = responseCustomersDTO.getBody();
 		Long customerId = customersDTO.getId();
-		
+
         if (customerId.longValue() == 0) {
             throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
         }
-        
+
         log.debug("REST request to addBasket - customerId: {}", customerId);
-        
+
         // Get Order Status Id of PENDING status
         OrderStatusResource orderStatusResource = new OrderStatusResource(orderStatusService);
         ResponseEntity<OrderStatusDTO> responseListOrderStatusDTO = orderStatusResource.getOrderStatusByDescription(Constants.ORDER_STATUS_PENDING);
         OrderStatusDTO orderStatusDTO = responseListOrderStatusDTO.getBody();
 		Long orderStatusId = orderStatusDTO.getId();
-        
+
         if (orderStatusId.longValue() == 0) {
             throw new BadRequestAlertException("Bad configuration, configure order status first", ENTITY_NAME, "idnull");
         }
-        
+
         log.debug("REST request to addBasket - orderStatusId: {}", orderStatusId);
-        
+
         // Get address identification by customer identification
         Long addressId = new Long(0);
-        
+
         AddressesResource addressesResource = new AddressesResource(addressesService);
         ResponseEntity<List<AddressesDTO>> responseListAddressesDTO = addressesResource.getAddressesByCustomerId(customerId, PageRequest.of(0, 1));
         List<AddressesDTO> listAddressesDTO = responseListAddressesDTO.getBody();
-        
+
         for (Iterator<AddressesDTO> iterator = listAddressesDTO.iterator(); iterator.hasNext();) {
-			AddressesDTO addressesDTO = (AddressesDTO) iterator.next();
+			AddressesDTO addressesDTO = iterator.next();
 			addressId = addressesDTO.getId();
 			break;
 		}
-        
+
         if (addressId.longValue() == 0) {
             throw new BadRequestAlertException("You must add a address first", ENTITY_NAME, "idnull");
         }
-        
+
         log.debug("REST request to addBasket - addressId: {}", addressId);
-                
+
         // 1 - Verify if there is any order created for customer (get Order by Customer identification)
         OrdersResource ordersResource = new OrdersResource(ordersService);
         ResponseEntity<OrdersDTO> responseOrdersDTO = ordersResource.getOrdersByCustomerIdAndOrderStatusId(customerId, orderStatusId);
         OrdersDTO oldOrdersDTO = responseOrdersDTO.getBody();
 
         Long orderId = new Long(0);
-        
+
         if (oldOrdersDTO == null || oldOrdersDTO.getId() == 0) {
 	        // Start Create Order
 	        OrdersDTO newOrdersDTO = new OrdersDTO();
@@ -160,25 +159,25 @@ public class PersonalCatalogResource {
 	        newOrdersDTO.setAddressId(addressId);
 	        newOrdersDTO.setDeliveryAddressId(addressId);
 	        newOrdersDTO.setOrderStatusId(orderStatusId);
-	        
+
 	        ResponseEntity<OrdersDTO> newOrdersDTOAux = ordersResource.createOrders(newOrdersDTO);
 	        orderId = newOrdersDTOAux.getBody().getId();
 	        // End Create Order
         } else {
         	orderId = oldOrdersDTO.getId();
         }
-        
+
         log.debug("REST request to addBasket - orderId: {}", orderId);
-        
+
         // 2 - Verify if the product already exists in Order Detail (get order detail by Order and Product identification)
         OrderDetResource ordersDetResource = new OrderDetResource(orderDetService);
         OrderDetDTO orderDetDTO = null;
-        
+
         if (oldOrdersDTO != null && oldOrdersDTO.getId() != 0) {
         	ResponseEntity<OrderDetDTO> responseOrderDetDTO = ordersDetResource.getOrderDetByOrderIdAndProductId(orderId, personalCatalogDTO.getId());
         	orderDetDTO = responseOrderDetDTO.getBody();
         }
-        
+
         if (oldOrdersDTO == null || oldOrdersDTO.getId() == 0 || orderDetDTO == null) {
 	        // Add Order Detail to the Order
         	OrderDetDTO newOrderDetDTO = new OrderDetDTO();
@@ -186,7 +185,7 @@ public class PersonalCatalogResource {
         	newOrderDetDTO.setOrderQuantity(personalCatalogDTO.getOrderQuantity());
         	newOrderDetDTO.setUnitPrice(personalCatalogDTO.getProductPrice());
         	newOrderDetDTO.setProductId(personalCatalogDTO.getId());
-	        
+
 	        ordersDetResource.createOrderDet(newOrderDetDTO);
 	        // End Create Order Detail
         } else {
@@ -194,7 +193,7 @@ public class PersonalCatalogResource {
         	orderDetDTO.setOrderQuantity(personalCatalogDTO.getOrderQuantity() + orderDetDTO.getOrderQuantity());
         	ordersDetResource.updateOrderDet(orderDetDTO);
         }
-        
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityAddBasketAlert(ENTITY_NAME, personalCatalogDTO.getProductName()))
             .body(personalCatalogDTO);
@@ -204,7 +203,7 @@ public class PersonalCatalogResource {
 	 * GET /personalCatalog : get all the personal catalog.
 	 *
 	 * @param pageable the pagination information
-	 * 
+	 *
 	 * @return the ResponseEntity with status 200 (OK) and the list of products in
 	 *         body
 	 */
@@ -212,17 +211,22 @@ public class PersonalCatalogResource {
 	@Timed
 	public ResponseEntity<List<PersonalCatalogDTO>> getAllPersonalCatalog(Pageable pageable) {
 		log.debug("REST request to get a page of Personal Catalog");
-		
+
         // Get customer identification by login
         CustomersResource customersResource = new CustomersResource(customersService);
         ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
         CustomersDTO customersDTO = responseCustomersDTO.getBody();
+
+        if (customersDTO == null) {
+            throw new FirstCreateCustomerException(ENTITY_NAME);
+        }
+
         Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
-        
+
 		List<PersonalCatalogDTO> listPersonalCatalogDTO = new ArrayList<PersonalCatalogDTO>();
 
 		for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = (ProductsDTO) iterator.next();
+			ProductsDTO productsDTO = iterator.next();
 
 			PersonalCatalogDTO personalCatalogDTO = new PersonalCatalogDTO();
 			personalCatalogDTO.setId(productsDTO.getId());
@@ -236,7 +240,7 @@ public class PersonalCatalogResource {
 
 			listPersonalCatalogDTO.add(personalCatalogDTO);
 		}
-		
+
 		Page<PersonalCatalogDTO> page = new PageImpl<PersonalCatalogDTO>(listPersonalCatalogDTO, pageable, listPersonalCatalogDTO.size());
 
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/personalCatalog");
@@ -248,7 +252,7 @@ public class PersonalCatalogResource {
 	 * GET /personalCatalog/:id : get the "id" personal catalog.
 	 *
 	 * @param id the id of the personalCatalogDTO to retrieve
-	 * 
+	 *
 	 * @return the ResponseEntity with status 200 (OK) and with body the
 	 *         personalCatalogDTO, or with status 404 (Not Found)
 	 */
@@ -286,7 +290,7 @@ public class PersonalCatalogResource {
 	 *
 	 * @param query    the query of the personal catalog search
 	 * @param pageable the pagination information
-	 * 
+	 *
 	 * @return the result of the search
 	 */
 	@GetMapping("/_search/personalCatalog")
@@ -300,7 +304,7 @@ public class PersonalCatalogResource {
 		List<PersonalCatalogDTO> listPersonalCatalogDTO = new ArrayList<PersonalCatalogDTO>();
 
 		for (Iterator<ProductsDTO> iterator = listProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = (ProductsDTO) iterator.next();
+			ProductsDTO productsDTO = iterator.next();
 
 			PersonalCatalogDTO personalCatalogDTO = new PersonalCatalogDTO();
 			personalCatalogDTO.setId(productsDTO.getId());
@@ -320,41 +324,41 @@ public class PersonalCatalogResource {
 
 		return new ResponseEntity<>(listPersonalCatalogDTO, headers, HttpStatus.OK);
 	}
-	
+
     /**
      * GET /personalCatalog/:id/deletePersonal : delete the "id" products.
      *
      * @param id the id of the productsDTO to delete
-     * 
+     *
      * @return the ResponseEntity with status 200 (OK)
-     * 
-     * @throws URISyntaxException 
+     *
+     * @throws URISyntaxException
      */
 	@GetMapping("/personalCatalog/{id}/deletePersonal")
     @Timed
     public ResponseEntity<Void> deletePersonalCatalog(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to delete personal catalog : {}", id);
-        
+
         // Get customer identification by login
         CustomersResource customersResource = new CustomersResource(customersService);
         ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
         CustomersDTO customersDTO = responseCustomersDTO.getBody();
         Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
-        
+
         // Find product
         Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
         ProductsDTO productsDTO = null;
-        
+
         // Add new product
 		if (productsDTOOpt.isPresent()) {
 			productsDTO = productsDTOOpt.get();
 			oldSetProductsDTO.remove(productsDTO);
 
 	        customersDTO.setProducts(oldSetProductsDTO);
-		        
+
 	        // Delete product from Personal Catalog
 	        customersResource.updateCustomers(customersDTO);
-		        
+
 	        log.debug("REST request to delete personal catalog updateCustomers: {}", productsDTO.getId());
 
 	        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalAlert(ENTITY_NAME, productsDTO.getProductName())).build();

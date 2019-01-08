@@ -13,6 +13,7 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "pt-pt";
     
     public static final String ORDER_STATUS_PENDING = "PENDENTE";
+    public static final String ORDER_STATUS_NEW = "NOVA";
     
     private Constants() {
     }

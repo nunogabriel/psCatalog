@@ -1,0 +1,33 @@
+{
+    "psCatalogApp": {
+        "cartOrderDet": {
+            "home": {
+                "title": "Shopping Cart",
+                "createLabel": "Order",
+                "createOrEditLabel": "Edit Product",
+                "search": "Search for Products",
+                "ordered": "Confirm Order"
+            },
+            "created": "A new Order was created with identifier {{ param }}",
+            "updated": "Product is updated with identifier {{ param }}",
+            "deleted": "Product is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete product {{ param }} from shopping cart?"
+            },
+            "ordered": {
+                "question": "Are you sure you want to realize Order?"
+            },
+            "detail": {
+                "title": "Product Detail"
+            },
+            "orderQuantity": "Order Quantity",
+            "unitPrice": "Unit Price",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "order": "Order",
+            "product": "Product"
+        }
+    }
+}

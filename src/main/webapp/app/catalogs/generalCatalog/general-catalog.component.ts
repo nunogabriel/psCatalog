@@ -7,7 +7,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'n
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { Principal } from 'app/core';
 
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { ITEMS_PER_PAGE, FIRST_CREATE_CUSTOMER } from 'app/shared';
 import { GeneralCatalogService } from './general-catalog.service';
 
 @Component({
@@ -30,6 +30,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
+    firstCreateCustomer: string;
 
     constructor(
         private generalCatalogService: GeneralCatalogService,
@@ -69,6 +70,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
                 );
             return;
         }
+        this.firstCreateCustomer = null;
         this.generalCatalogService
             .query({
                 page: this.page - 1,
@@ -77,7 +79,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
             })
             .subscribe(
                 (res: HttpResponse<IGeneralCatalog[]>) => this.paginateGeneralCatalog(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
+                response => this.onErrorAux(response)
             );
     }
 
@@ -171,6 +173,14 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
         this.generalCatalog = data;
+    }
+
+    private onErrorAux(response: HttpErrorResponse) {
+        if (response.status === 400 && response.error.type === FIRST_CREATE_CUSTOMER) {
+             this.firstCreateCustomer = 'ERROR';
+        } else {
+             this.jhiAlertService.error(response.message, null, null);
+        }
     }
 
     private onError(errorMessage: string) {

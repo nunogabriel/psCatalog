@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-cart-order-det-heading" jhiTranslate="psCatalogApp.cartOrderDet.home.createOrEditLabel">Create or edit a Order Det</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <dl class="row-md jh-entity-details">
+	                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.order">Order</span></dt>
+	                <dd>
+	                    <div *ngIf="cartOrderDet.orderId">
+	                        <a [routerLink]="['/orders', cartOrderDet.orderId, 'view']">{{cartOrderDet.orderOrderReference}}</a>
+	                    </div>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span></dt>
+	                <dd>
+	                    <div *ngIf="cartOrderDet.productId">
+	                        <a [routerLink]="['/products', cartOrderDet.productId, 'view']">{{cartOrderDet.productProductName}}</a>
+	                    </div>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span></dt>
+	                <dd>
+	                    <span>{{cartOrderDet.unitPrice}}</span>
+	                </dd>
+	                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span></dt>
+	                <dd>
+		                <div class="form-group">
+<!-- 		                    <label class="form-control-label" jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity" for="field_orderQuantity">Order Quantity</label> -->
+		                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity"
+		                        [(ngModel)]="cartOrderDet.orderQuantity" required/>
+		                    <div [hidden]="!(editForm.controls.orderQuantity?.dirty && editForm.controls.orderQuantity?.invalid)">
+		                        <small class="form-text text-danger"
+		                        [hidden]="!editForm.controls.orderQuantity?.errors?.required" jhiTranslate="entity.validation.required">
+		                        This field is required.
+		                        </small>
+		                        <small class="form-text text-danger"
+		                            [hidden]="!editForm.controls.orderQuantity?.errors?.number" jhiTranslate="entity.validation.number">
+		                            This field should be a number.
+		                        </small>
+		                    </div>
+		                </div>	                   
+	                </dd>
+            	</dl>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

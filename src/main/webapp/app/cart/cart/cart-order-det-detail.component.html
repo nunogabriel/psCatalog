@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="cartOrderDet">
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.order">Order</span></dt>
+                <dd>
+                    <div *ngIf="cartOrderDet.orderId">
+                        <a [routerLink]="['/orders', cartOrderDet.orderId, 'view']">{{cartOrderDet.orderOrderReference}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span></dt>
+                <dd>
+                    <div *ngIf="cartOrderDet.productId">
+                        <a [routerLink]="['/products', cartOrderDet.productId, 'view']">{{cartOrderDet.productProductName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span></dt>
+                <dd>
+                    <span>{{cartOrderDet.unitPrice}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span></dt>
+                <dd>
+                    <span>{{cartOrderDet.orderQuantity}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/cart-order-det', cartOrderDet.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

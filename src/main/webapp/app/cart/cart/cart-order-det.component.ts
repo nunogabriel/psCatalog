@@ -2,21 +2,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IPersonalCatalog } from 'app/shared/catalogs/personal-catalog.model';
+import { ICart } from 'app/shared/cart/cart.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE, FIRST_CREATE_CUSTOMER } from 'app/shared';
-import { PersonalCatalogService } from './personal-catalog.service';
+import { CartOrderDetService } from './cart-order-det.service';
 
 @Component({
-    selector: 'jhi-personal-catalog',
-    templateUrl: './personal-catalog.component.html'
+    selector: 'jhi-cart-order-det',
+    templateUrl: './cart-order-det.component.html'
 })
-export class PersonalCatalogComponent implements OnInit, OnDestroy {
+export class CartOrderDetComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    personalCatalog: IPersonalCatalog[];
+    cartOrderDet: ICart[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -33,12 +33,11 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
     firstCreateCustomer: string;
 
     constructor(
-        private personalCatalogService: PersonalCatalogService,
+        private cartOrderDetService: CartOrderDetService,
         private parseLinks: JhiParseLinks,
         private jhiAlertService: JhiAlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
-        private dataUtils: JhiDataUtils,
         private router: Router,
         private eventManager: JhiEventManager
     ) {
@@ -57,7 +56,7 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
 
     loadAll() {
         if (this.currentSearch) {
-            this.personalCatalogService
+            this.cartOrderDetService
                 .search({
                     page: this.page - 1,
                     query: this.currentSearch,
@@ -65,20 +64,20 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
                     sort: this.sort()
                 })
                 .subscribe(
-                    (res: HttpResponse<IPersonalCatalog[]>) => this.paginatePersonalCatalog(res.body, res.headers),
+                    (res: HttpResponse<ICart[]>) => this.paginateCartOrderDets(res.body, res.headers),
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
             return;
         }
         this.firstCreateCustomer = null;
-        this.personalCatalogService
+        this.cartOrderDetService
             .query({
                 page: this.page - 1,
                 size: this.itemsPerPage,
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IPersonalCatalog[]>) => this.paginatePersonalCatalog(res.body, res.headers),
+                (res: HttpResponse<ICart[]>) => this.paginateCartOrderDets(res.body, res.headers),
                 response => this.onErrorAux(response)
             );
     }
@@ -91,7 +90,7 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/personalCatalog'], {
+        this.router.navigate(['/cart-order-det'], {
             queryParams: {
                 page: this.page,
                 size: this.itemsPerPage,
@@ -106,7 +105,7 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
         this.page = 0;
         this.currentSearch = '';
         this.router.navigate([
-            '/personalCatalog',
+            '/cart-order-det',
             {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -122,7 +121,7 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
         this.page = 0;
         this.currentSearch = query;
         this.router.navigate([
-            '/personalCatalog',
+            '/cart-order-det',
             {
                 search: this.currentSearch,
                 page: this.page,
@@ -137,27 +136,19 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
         this.principal.identity().then(account => {
             this.currentAccount = account;
         });
-        this.registerChangeInPersonalCatalog();
+        this.registerChangeInCartOrderDets();
     }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: IPersonalCatalog) {
+    trackId(index: number, item: ICart) {
         return item.id;
     }
 
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
-    }
-
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
-    }
-
-    registerChangeInPersonalCatalog() {
-        this.eventSubscriber = this.eventManager.subscribe('personalCatalogListModification', response => this.loadAll());
+    registerChangeInCartOrderDets() {
+        this.eventSubscriber = this.eventManager.subscribe('cartOrderDetListModification', response => this.loadAll());
     }
 
     sort() {
@@ -168,11 +159,11 @@ export class PersonalCatalogComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginatePersonalCatalog(data: IPersonalCatalog[], headers: HttpHeaders) {
+    private paginateCartOrderDets(data: ICart[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
-        this.personalCatalog = data;
+        this.cartOrderDet = data;
     }
 
     private onErrorAux(response: HttpErrorResponse) {

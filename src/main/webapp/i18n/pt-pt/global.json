@@ -5,6 +5,7 @@
             "Está a usar um navegador <strong>desatualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=pt_PT\">atualize o seu navegador</a> para ter uma experiência melhor.",
         "menu": {
             "home": "Início",
+            "cart": "Carrinho",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "catalogs": {
                 "main": "Catálogos",
@@ -148,7 +149,8 @@
         "userexists": "Login já se econtra em utilização!",
         "emailexists": "Email já se econtra em utilização!",
         "idexists": "Um(a) novo(a) {{entityName}} não pode já ter um ID",
-        "idnull": "ID Inválido"
+        "idnull": "ID Inválido",
+        "firstcreatecustomer": "<strong>O seus dados de cliente não existem!</strong> Por favor preencha-os."
     },
     "footer": "Este é o seu rodapé"
 }

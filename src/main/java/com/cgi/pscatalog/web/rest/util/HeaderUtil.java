@@ -62,5 +62,9 @@ public final class HeaderUtil {
     public static HttpHeaders createEntityDeletePersonalAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonal", param);
     }
+    
+    public static HttpHeaders createEntityOrderAlert(String entityName, String param) {
+        return createAlert(APPLICATION_NAME + "." + entityName + ".created", param);
+    }
 
 }

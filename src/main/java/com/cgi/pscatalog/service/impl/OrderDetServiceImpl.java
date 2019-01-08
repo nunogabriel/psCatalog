@@ -119,4 +119,12 @@ public class OrderDetServiceImpl implements OrderDetService {
         return orderDetRepository.findByOrderIdAndProductId(orderId, productId)
             .map(orderDetMapper::toDto);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<OrderDetDTO> getAllByOrderId(Long id, Pageable pageable) {
+        log.debug("Request to get all Order Details by Order Id");
+        return orderDetRepository.findAllByOrderId(id, pageable)
+            .map(orderDetMapper::toDto);
+	}
 }

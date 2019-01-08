@@ -55,4 +55,6 @@ public interface OrderDetService {
     Page<OrderDetDTO> search(String query, Pageable pageable);
 
 	Optional<OrderDetDTO> getOrderDetByOrderIdAndProductId(Long orderId, Long productId);
+	
+	Page<OrderDetDTO> getAllByOrderId(Long id, Pageable pageable);
 }
