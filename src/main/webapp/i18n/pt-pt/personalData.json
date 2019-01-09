@@ -1,0 +1,36 @@
+{
+    "psCatalogApp": {
+        "personalData": {
+            "home": {
+                "title": "Dados Pessoais",
+                "createLabel": "Criar",
+                "createOrEditLabel": "Criar ou editar",
+                "search": "Pesquisa de Dados Pessoais"
+            },
+            "created": "Os seus dados pessoais foram criados",
+            "updated": "Os seus dados pessoais foram atualizados",
+            "deleted": "Os seus dados pessoais foram eliminados",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar os seus dados pessoais?"
+            },
+            "detail": {
+                "title": "Dados Pessoais"
+            },
+            "customerName": "Nome",
+            "customerEmail": "Email",
+            "customerNif": "NIF",
+            "customerPhone": "Telefone",
+            "customerGender": "Sexo",
+            "customerBeginDate": "Data Início",
+            "customerEndDate": "Data Fim",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "login": "Utilizador",
+            "orders": "Encomendas",
+            "addresses": "Moradas",
+            "products": "Produtos"
+        }
+    }
+}

@@ -13,6 +13,12 @@
                 "personalCatalog": "Personal Catalog",
                 "jhipster-needle-menu-add-catalogs": "JHipster will add additional catalogs here (do not translate!)"
             },
+            "customer": {
+                "main": "Customer",
+                "personalData": "Personal Data",
+                "customerAddresses": "Addresses",
+                "jhipster-needle-menu-add-catalogs": "JHipster will add additional catalogs here (do not translate!)"
+            },
             "entities": {
                 "main": "Back Office",
                 "suppliers": "Suppliers",

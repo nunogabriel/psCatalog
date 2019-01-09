@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-personal-data-heading" jhiTranslate="psCatalogApp.personalData.home.createOrEditLabel">Create or edit a Personal Data</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalData.customerName" for="field_customerName">Customer Name</label>
+                    <input type="text" class="form-control" name="customerName" id="field_customerName"
+                        [(ngModel)]="personalData.customerName" required/>
+                    <div [hidden]="!(editForm.controls.customerName?.dirty && editForm.controls.customerName?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerName?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalData.customerEmail" for="field_customerEmail">Customer Email</label>
+                    <input type="text" class="form-control" name="customerEmail" id="field_customerEmail"
+                        [(ngModel)]="personalData.customerEmail" required/>
+                    <div [hidden]="!(editForm.controls.customerEmail?.dirty && editForm.controls.customerEmail?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.customerEmail?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalData.customerNif" for="field_customerNif">Customer Nif</label>
+                    <input type="text" class="form-control" name="customerNif" id="field_customerNif"
+                        [(ngModel)]="personalData.customerNif" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalData.customerPhone" for="field_customerPhone">Customer Phone</label>
+                    <input type="text" class="form-control" name="customerPhone" id="field_customerPhone"
+                        [(ngModel)]="personalData.customerPhone" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalData.customerGender" for="field_customerGender">Customer Gender</label>
+                    <select class="form-control" name="customerGender" [(ngModel)]="personalData.customerGender" id="field_customerGender" >
+                        <option value="MASCULINO">{{'psCatalogApp.GenderEnum.MASCULINO' | translate}}</option>
+                        <option value="FEMININO">{{'psCatalogApp.GenderEnum.FEMININO' | translate}}</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

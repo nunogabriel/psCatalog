@@ -19,6 +19,7 @@ import { PsCatalogAccountModule } from './account/account.module';
 import { PsCatalogEntityModule } from './entities/entity.module';
 import { PsCatalogCatalogModule } from './catalogs/catalog.module';
 import { PsCatalogCartModule } from './cart/cart.module';
+import { PsCatalogCustomerModule } from './customer/customer.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -42,7 +43,8 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         // jhipster-needle-angular-add-module JHipster will add new module here
         PsCatalogEntityModule,
         PsCatalogCatalogModule,
-        PsCatalogCartModule
+        PsCatalogCartModule,
+        PsCatalogCustomerModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [

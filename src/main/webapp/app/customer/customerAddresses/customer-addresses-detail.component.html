@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="customerAddresses">
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.addressReference">Address Reference</span></dt>
+                <dd>
+                    <span>{{customerAddresses.addressReference}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.addressName">Address Name</span></dt>
+                <dd>
+                    <span>{{customerAddresses.addressName}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.streetAddress">Street Address</span></dt>
+                <dd>
+                    <span>{{customerAddresses.streetAddress}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.city">City</span></dt>
+                <dd>
+                    <span>{{customerAddresses.city}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.state">State</span></dt>
+                <dd>
+                    <span>{{customerAddresses.state}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.zipCode">Zip Code</span></dt>
+                <dd>
+                    <span>{{customerAddresses.zipCode}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{customerAddresses.phoneNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerAddresses.country">Country</span></dt>
+                <dd>
+                    <span>{{customerAddresses.countryCountryName}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/customerAddresses', customerAddresses.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

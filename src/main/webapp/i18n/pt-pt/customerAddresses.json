@@ -1,0 +1,36 @@
+{
+    "psCatalogApp": {
+        "customerAddresses": {
+            "home": {
+                "title": "Moradas",
+                "createLabel": "Criar uma nova Morada",
+                "createOrEditLabel": "Criar ou editar uma Morada",
+                "search": "Pesquisa de Moradas"
+            },
+            "created": "Uma nova Morada foi criada com a referência {{ param }}",
+            "updated": "Morada com a referência {{ param }} foi atualizada",
+            "deleted": "Morada eliminada",
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar a Morada com a referência {{ param }}?"
+            },
+            "detail": {
+                "title": "Moradas"
+            },
+            "addressReference": "Referência",
+            "addressName": "Nome",
+            "streetAddress": "Rua",
+            "city": "Cidade",
+            "state": "Distrito",
+            "zipCode": "Código Postal",
+            "phoneNumber": "Nº de Telefone",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "orders": "Encomendas",
+            "customer": "Cliente",
+            "supplier": "Fornecedor",
+            "country": "País"
+        }
+    }
+}

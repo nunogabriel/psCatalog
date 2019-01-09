@@ -1,0 +1,36 @@
+{
+    "psCatalogApp": {
+        "personalData": {
+            "home": {
+                "title": "Personal Data",
+                "createLabel": "Create",
+                "createOrEditLabel": "Create or edit",
+                "search": "Search for Personal Data"
+            },
+            "created": "Your personal data has been created",
+            "updated": "Your personal data has been updated",
+            "deleted": "Your personal data has been deleted",
+            "delete": {
+                "question": "Are you sure you want to delete your personal data?"
+            },
+            "detail": {
+                "title": "Personal Data"
+            },
+            "customerName": "Name",
+            "customerEmail": "Email",
+            "customerNif": "VAT",
+            "customerPhone": "Phone",
+            "customerGender": "Gender",
+            "customerBeginDate": "Begin Date",
+            "customerEndDate": "End Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "login": "Login",
+            "orders": "Orders",
+            "addresses": "Addresses",
+            "products": "Products"
+        }
+    }
+}

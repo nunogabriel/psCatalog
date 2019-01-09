@@ -1,22 +1,19 @@
 <div>
     <h2 id="page-heading">
-        <span jhiTranslate="psCatalogApp.cartOrderDet.home.title">Shopping Cart</span>
-        <button id="jh-create-entity" *ngIf="!firstCreateCustomer && cartOrderDet && cartOrderDet.length != 0" class="btn btn-primary float-right jh-create-entity create-order-det" [routerLink]="['/', { outlets: { popup: 'cart-order-det/order'} }]">
+        <span jhiTranslate="psCatalogApp.personalData.home.title">Personal Data</span>
+        <button *ngIf="personalData && personalData.length == 0" id="jh-create-personal-data" class="btn btn-primary float-right jh-create-entity create-personal-data" [routerLink]="['/personalData/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.cartOrderDet.home.createLabel">
-            Create new Order Det
+            <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.personalData.home.createLabel">
+            Create
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="alert alert-danger" *ngIf="firstCreateCustomer" jhiTranslate="error.firstcreatecustomer">
-        <strong>Your customer data doesn´t exist!</strong> Please create it.
-    </div>
-    <div class="row" *ngIf="!firstCreateCustomer && cartOrderDet && cartOrderDet.length != 0">
+    <div class="row">
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.cartOrderDet.home.search' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'psCatalogApp.personalData.home.search' | translate }}">
                     <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
                         <fa-icon [icon]="'search'"></fa-icon>
                     </button>
@@ -28,47 +25,41 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="cartOrderDet">
+    <div class="table-responsive" *ngIf="personalData">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="orderOrderReference"><span jhiTranslate="psCatalogApp.cartOrderDet.order">Order</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productProductName"><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerName"><span jhiTranslate="psCatalogApp.personalData.customerName">Customer Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerEmail"><span jhiTranslate="psCatalogApp.personalData.customerEmail">Customer Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerNif"><span jhiTranslate="psCatalogApp.personalData.customerNif">Customer Nif</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerPhone"><span jhiTranslate="psCatalogApp.personalData.customerPhone">Customer Phone</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="customerGender"><span jhiTranslate="psCatalogApp.personalData.customerGender">Customer Gender</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let cartOrderDet of cartOrderDet ;trackBy: trackId">
-                <td>
-                    <div *ngIf="cartOrderDet.orderId">
-                        <a [routerLink]="['../orders', cartOrderDet.orderId , 'view' ]" >{{cartOrderDet.orderOrderReference}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="cartOrderDet.productId">
-                        <a [routerLink]="['../products', cartOrderDet.productId , 'view' ]" >{{cartOrderDet.productProductName}}</a>
-                    </div>
-                </td>
-                <td>{{cartOrderDet.orderQuantity}}</td>
-                <td>{{cartOrderDet.unitPrice}}</td>
+            <tr *ngFor="let personalData of personalData ;trackBy: trackId">
+                <td>{{personalData.customerName}}</td>
+                <td>{{personalData.customerEmail}}</td>
+                <td>{{personalData.customerNif}}</td>
+                <td>{{personalData.customerPhone}}</td>
+                <td jhiTranslate="{{'psCatalogApp.GenderEnum.' + personalData.customerGender}}">{{personalData.customerGender}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['/cart-order-det', cartOrderDet.id, 'view' ]"
+                                [routerLink]="['/personalData', personalData.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/cart-order-det', cartOrderDet.id, 'edit']"
+                                [routerLink]="['/personalData', personalData.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'cart-order-det/'+ cartOrderDet.id + '/delete'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'personalData/'+ personalData.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
@@ -81,7 +72,7 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="cartOrderDet && cartOrderDet.length">
+    <div *ngIf="personalData && personalData.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

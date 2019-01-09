@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="personalData">
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.personalData.customerName">Customer Name</span></dt>
+                <dd>
+                    <span>{{personalData.customerName}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.personalData.customerEmail">Customer Email</span></dt>
+                <dd>
+                    <span>{{personalData.customerEmail}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.personalData.customerNif">Customer Nif</span></dt>
+                <dd>
+                    <span>{{personalData.customerNif}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.personalData.customerPhone">Customer Phone</span></dt>
+                <dd>
+                    <span>{{personalData.customerPhone}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.personalData.customerGender">Customer Gender</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'psCatalogApp.GenderEnum.' + personalData.customerGender}}">{{personalData.customerGender}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/personalData', personalData.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
