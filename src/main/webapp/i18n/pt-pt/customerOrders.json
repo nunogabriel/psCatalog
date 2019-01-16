@@ -1,0 +1,30 @@
+{
+    "psCatalogApp": {
+        "customerOrders": {
+            "home": {
+                "title": "Encomendas",
+                "createOrEditLabel": "Editar uma Encomenda",
+                "search": "Pesquisa de Encomendas"
+            },
+            "updated": "Encomenda atualizada com o identificador {{ param }}",
+            "detail": {
+                "title": "Encomendas"
+            },
+            "orderReference": "Referência",
+            "orderDate": "Data",
+            "deliveryDate": "Data Entrega",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "orderDet": "Detalhes",
+            "orderStatus": "Estado",
+            "address": "Morada Cobrança",
+            "customer": "Cliente",
+            "deliveryAddress": "Morada Envio",
+            "action": {
+	            "detail": "Detalhe" 
+        	}
+        }
+    }
+}

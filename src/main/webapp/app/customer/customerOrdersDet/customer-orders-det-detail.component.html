@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="customerOrdersDet">
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.order">Order</span></dt>
+                <dd>
+                    <div *ngIf="customerOrdersDet.orderId">
+                        <a [routerLink]="['/customer-orders', customerOrdersDet.orderId, 'view']">{{customerOrdersDet.orderOrderReference}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.product">Product</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.productProductName}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.productDescription">Description</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.productDescription}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.unitPrice">Unit Price</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.unitPrice}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.orderQuantity">Order Quantity</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.orderQuantity}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.productType">Product Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + customerOrdersDet.productType}}">{{customerOrdersDet.productType}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.productImg">Product Img</span></dt>
+                <dd>
+                    <div *ngIf="customerOrdersDet.productImg">
+                        <a (click)="openFile(customerOrdersDet.productImgContentType, customerOrdersDet.productImg)">
+                            <img [src]="'data:' + customerOrdersDet.productImgContentType + ';base64,' + customerOrdersDet.productImg" style="max-width: 100%;" alt="customerOrdersDet image"/>
+                        </a>
+                        {{customerOrdersDet.productImgContentType}}, {{byteSize(customerOrdersDet.productImg)}}
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+        </div>
+    </div>
+</div>

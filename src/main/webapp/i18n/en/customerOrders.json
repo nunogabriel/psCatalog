@@ -1,0 +1,30 @@
+{
+    "psCatalogApp": {
+        "customerOrders": {
+            "home": {
+                "title": "Orders",
+                "createOrEditLabel": "Edit Order",
+                "search": "Search for Orders"
+            },
+            "updated": "A Orders is updated with identifier {{ param }}",
+            "detail": {
+                "title": "Orders"
+            },
+            "orderReference": "Order Reference",
+            "orderDate": "Order Date",
+            "deliveryDate": "Delivery Date",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "orderDet": "Order Det",
+            "orderStatus": "Order Status",
+            "address": "Billing Address",
+            "customer": "Customer",
+            "deliveryAddress": "Delivery Address",
+            "action": {
+	            "detail": "Detail" 
+        	}
+        }
+    }
+}

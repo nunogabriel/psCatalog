@@ -1,0 +1,24 @@
+{
+    "psCatalogApp": {
+        "customerOrdersDet": {
+            "home": {
+                "title": "Orders Detail",
+                "search": "Search for Order Detail"
+            },
+            "detail": {
+                "title": "Product Detail"
+            },
+            "orderQuantity": "Order Quantity",
+            "unitPrice": "Unit Price",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "order": "Order",
+            "product": "Product",
+            "productDescription": "Description",
+            "productType": "Product Type",
+            "productImg": "Image"
+        }
+    }
+}

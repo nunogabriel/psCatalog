@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="customerOrders">
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.orderReference">Order Reference</span></dt>
+                <dd>
+                    <span>{{customerOrders.orderReference}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.orderDate">Order Date</span></dt>
+                <dd>
+                    <span>{{customerOrders.orderDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.deliveryDate">Delivery Date</span></dt>
+                <dd>
+                    <span>{{customerOrders.deliveryDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.orderStatus">Order Status</span></dt>
+                <dd>
+                    <span>{{customerOrders.orderStatusOrderStatusDescription}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.address">Address</span></dt>
+                <dd>
+                    <div *ngIf="customerOrders.addressId">
+                        <a [routerLink]="['/customerAddresses', customerOrders.addressId, 'view']">{{customerOrders.addressAddressReference}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrders.deliveryAddress">Delivery Address</span></dt>
+                <dd>
+                    <div *ngIf="customerOrders.deliveryAddressId">
+                        <a [routerLink]="['/customerAddresses', customerOrders.deliveryAddressId, 'view']">{{customerOrders.deliveryAddressAddressReference}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/customer-orders', customerOrders.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

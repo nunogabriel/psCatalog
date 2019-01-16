@@ -1,11 +1,11 @@
 package com.cgi.pscatalog.service;
 
-import com.cgi.pscatalog.service.dto.OrdersDTO;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import com.cgi.pscatalog.service.dto.OrdersDTO;
 
 /**
  * Service Interface for managing Orders.
@@ -48,11 +48,13 @@ public interface OrdersService {
      * Search for the orders corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<OrdersDTO> search(String query, Pageable pageable);
 
 	Optional<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(Long customerId, Long orderStatusId);
+
+	Page<OrdersDTO> getOrdersByCustomerId(Long customerId, Pageable pageable);
 }

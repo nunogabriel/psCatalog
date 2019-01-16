@@ -1,0 +1,24 @@
+{
+    "psCatalogApp": {
+        "customerOrdersDet": {
+            "home": {
+                "title": "Detalhe da Encomenda",
+                "search": "Pesquisa de Detalhe da Encomenda"
+            },
+            "detail": {
+                "title": "Detalhe do Produto"
+            },
+            "orderQuantity": "Quantidade",
+            "unitPrice": "Preço Unitário",
+            "createdBy": "Criado por",
+            "createdDate": "Criado em",
+            "lastModifiedBy": "Alterado por",
+            "lastModifiedDate": "Alterado em",
+            "order": "Encomenda",
+            "product": "Produto",
+            "productDescription": "Descrição",
+            "productType": "Tipo Produto",
+            "productImg": "Imagem"
+        }
+    }
+}

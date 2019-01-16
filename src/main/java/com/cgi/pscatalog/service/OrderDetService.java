@@ -1,11 +1,11 @@
 package com.cgi.pscatalog.service;
 
-import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import com.cgi.pscatalog.service.dto.OrderDetDTO;
 
 /**
  * Service Interface for managing OrderDet.
@@ -48,13 +48,17 @@ public interface OrderDetService {
      * Search for the orderDet corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<OrderDetDTO> search(String query, Pageable pageable);
 
 	Optional<OrderDetDTO> getOrderDetByOrderIdAndProductId(Long orderId, Long productId);
-	
+
 	Page<OrderDetDTO> getAllByOrderId(Long id, Pageable pageable);
+
+	Page<OrderDetDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable);
+
+	Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable);
 }

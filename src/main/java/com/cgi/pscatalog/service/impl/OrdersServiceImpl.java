@@ -1,22 +1,22 @@
 package com.cgi.pscatalog.service.impl;
 
-import com.cgi.pscatalog.service.OrdersService;
-import com.cgi.pscatalog.domain.Orders;
-import com.cgi.pscatalog.repository.OrdersRepository;
-import com.cgi.pscatalog.repository.search.OrdersSearchRepository;
-import com.cgi.pscatalog.service.dto.OrdersDTO;
-import com.cgi.pscatalog.service.mapper.OrdersMapper;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import com.cgi.pscatalog.domain.Orders;
+import com.cgi.pscatalog.repository.OrdersRepository;
+import com.cgi.pscatalog.repository.search.OrdersSearchRepository;
+import com.cgi.pscatalog.service.OrdersService;
+import com.cgi.pscatalog.service.dto.OrdersDTO;
+import com.cgi.pscatalog.service.mapper.OrdersMapper;
 
 /**
  * Service Implementation for managing Orders.
@@ -119,4 +119,13 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersRepository.findByCustomerIdAndOrderStatusId(customerId, orderStatusId)
             .map(ordersMapper::toDto);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<OrdersDTO> getOrdersByCustomerId(Long customerId, Pageable pageable) {
+        log.debug("Request to get all Addresses by Customer Id: {}", customerId);
+        return ordersRepository.findAllByCustomerId(customerId, pageable)
+            .map(ordersMapper::toDto);
+	}
+
 }

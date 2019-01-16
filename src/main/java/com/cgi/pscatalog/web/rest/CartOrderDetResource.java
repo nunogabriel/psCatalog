@@ -114,6 +114,8 @@ public class CartOrderDetResource {
         ResponseEntity<OrdersDTO> responseOrdersDTO = ordersResource.getOrdersByCustomerIdAndOrderStatusId(customerId, orderStatusId);
         OrdersDTO ordersDTO = responseOrdersDTO.getBody();
 
+        OrdersDTO ordersDTOAux = new OrdersDTO();
+
         if (ordersDTO == null || ordersDTO.getId() == 0) {
 
         } else {
@@ -133,10 +135,10 @@ public class CartOrderDetResource {
 			ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
 			ordersDTO.setLastModifiedDate(Instant.now());
 
-	        ordersService.save(ordersDTO);
+			ordersDTOAux = ordersService.save(ordersDTO);
         }
 
-		return ResponseEntity.ok().headers(HeaderUtil.createEntityOrderAlert(ENTITY_NAME, "")).build();
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityOrderAlert(ENTITY_NAME, ordersDTOAux.getOrderReference())).build();
     }
 
     /**

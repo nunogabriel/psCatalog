@@ -1,22 +1,22 @@
 package com.cgi.pscatalog.service.impl;
 
-import com.cgi.pscatalog.service.OrderDetService;
-import com.cgi.pscatalog.domain.OrderDet;
-import com.cgi.pscatalog.repository.OrderDetRepository;
-import com.cgi.pscatalog.repository.search.OrderDetSearchRepository;
-import com.cgi.pscatalog.service.dto.OrderDetDTO;
-import com.cgi.pscatalog.service.mapper.OrderDetMapper;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import com.cgi.pscatalog.domain.OrderDet;
+import com.cgi.pscatalog.repository.OrderDetRepository;
+import com.cgi.pscatalog.repository.search.OrderDetSearchRepository;
+import com.cgi.pscatalog.service.OrderDetService;
+import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import com.cgi.pscatalog.service.mapper.OrderDetMapper;
 
 /**
  * Service Implementation for managing OrderDet.
@@ -119,12 +119,28 @@ public class OrderDetServiceImpl implements OrderDetService {
         return orderDetRepository.findByOrderIdAndProductId(orderId, productId)
             .map(orderDetMapper::toDto);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<OrderDetDTO> getAllByOrderId(Long id, Pageable pageable) {
         log.debug("Request to get all Order Details by Order Id");
         return orderDetRepository.findAllByOrderId(id, pageable)
             .map(orderDetMapper::toDto);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<OrderDetDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable) {
+        log.debug("Request to get all Order Details by Order Id");
+        return orderDetRepository.findAllByLoginAndOrderStatus(login, pageable)
+                .map(orderDetMapper::toDto);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable) {
+        log.debug("Request to get all Order Details by Order Id");
+        return orderDetRepository.findAllByLoginAndOrderIdAndOrderStatus(login, orderId, pageable)
+                .map(orderDetMapper::toDto);
 	}
 }

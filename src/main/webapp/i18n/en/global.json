@@ -17,6 +17,8 @@
                 "main": "Customer",
                 "personalData": "Personal Data",
                 "customerAddresses": "Addresses",
+                "customerOrders": "Orders",
+                "customerOrdersDet": "Orders Detail",
                 "jhipster-needle-menu-add-catalogs": "JHipster will add additional catalogs here (do not translate!)"
             },
             "entities": {
