@@ -114,18 +114,17 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     @Transactional(readOnly = true)
-	public Optional<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(Long customerId, Long orderStatusId) {
-        log.debug("Request to get Orders By Customer Id {} And Order Status Id: {}", customerId, orderStatusId);
-        return ordersRepository.findByCustomerIdAndOrderStatusId(customerId, orderStatusId)
+	public Page<OrdersDTO> getAllByLoginAndOrderStatusPending(String login, Pageable pageable) {
+        log.debug("Request to get all Pending Orders By Login: {}", login);
+        return ordersRepository.findAllByLoginAndOrderStatusPending(login, pageable)
             .map(ordersMapper::toDto);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<OrdersDTO> getOrdersByCustomerId(Long customerId, Pageable pageable) {
-        log.debug("Request to get all Addresses by Customer Id: {}", customerId);
-        return ordersRepository.findAllByCustomerId(customerId, pageable)
-            .map(ordersMapper::toDto);
+	public Page<OrdersDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable) {
+        log.debug("Request to get all Orders by Login: {} and Order Status", login);
+        return ordersRepository.findAllByLoginAndOrderStatus(login, pageable)
+                .map(ordersMapper::toDto);
 	}
-
 }

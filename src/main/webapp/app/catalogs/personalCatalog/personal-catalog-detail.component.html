@@ -11,10 +11,6 @@
                 <dd>
                     <span>{{personalCatalog.productDescription}}</span>
                 </dd>
-                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span></dt>
-                <dd>
-                    <span>{{personalCatalog.productPrice}}</span>
-                </dd>
                 <dt><span jhiTranslate="psCatalogApp.personalCatalog.productType">Product Type</span></dt>
                 <dd>
                     <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + personalCatalog.productType}}">{{personalCatalog.productType}}</span>
@@ -26,6 +22,10 @@
                             <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-width: 100%;" alt="personalCatalog image"/>
                         </a>
                     </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span></dt>
+                <dd>
+                    <span>{{personalCatalog.productPrice}}</span>
                 </dd>
             </dl>
 

@@ -63,7 +63,7 @@ public class CustomerOrdersDetResource {
 
 		List<CustomerOrdersDetDTO> listCustomerOrdersDetDTO = new ArrayList<CustomerOrdersDetDTO>();
 
-        // Get customer order details by order id
+        // Get customer order details by order id and status different from PENDING
         Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), pageable);
 
         List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
@@ -214,6 +214,17 @@ public class CustomerOrdersDetResource {
 			customerOrdersDetDTO.setProductId(orderDetDTO.getProductId());
 			customerOrdersDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			customerOrdersDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+
+			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
+
+			if (productsDTOopt.isPresent()) {
+				ProductsDTO productsDTO = productsDTOopt.get();
+
+				customerOrdersDetDTO.setProductDescription(productsDTO.getProductDescription());
+				customerOrdersDetDTO.setProductType(productsDTO.getProductType());
+				customerOrdersDetDTO.setProductImg(productsDTO.getProductImg());
+				customerOrdersDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
+			}
 
 			listCustomerOrdersDetDTO.add(customerOrdersDetDTO);
 		}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { JhiDataUtils } from 'ng-jhipster';
 
 import { ICart } from 'app/shared/cart/cart.model';
 
@@ -10,12 +11,20 @@ import { ICart } from 'app/shared/cart/cart.model';
 export class CartOrderDetDetailComponent implements OnInit {
     cartOrderDet: ICart;
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(private dataUtils: JhiDataUtils, private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ cartOrderDet }) => {
             this.cartOrderDet = cartOrderDet;
         });
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
 
     previousState() {

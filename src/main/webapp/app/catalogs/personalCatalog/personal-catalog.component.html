@@ -28,9 +28,9 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.personalCatalog.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.personalCatalog.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.personalCatalog.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.personalCatalog.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.personalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -38,13 +38,13 @@
             <tr *ngFor="let personalCatalog of personalCatalog ;trackBy: trackId">
                 <td>{{personalCatalog.productName}}</td>
                 <td>{{personalCatalog.productDescription}}</td>
-                <td>{{personalCatalog.productPrice}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + personalCatalog.productType}}">{{personalCatalog.productType}}</td>
                 <td>
                     <a *ngIf="personalCatalog.productImg" (click)="openFile(personalCatalog.productImgContentType, personalCatalog.productImg)">
                         <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-height: 30px;" alt="personalCatalog image"/>
                     </a>
                 </td>
+                <td>{{personalCatalog.productPrice}}</td>                
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

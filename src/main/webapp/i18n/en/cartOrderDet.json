@@ -10,7 +10,7 @@
             },
             "created": "A new Order was created with identifier {{ param }}",
             "updated": "Product is updated with identifier {{ param }}",
-            "deleted": "Product is deleted with identifier {{ param }}",
+            "deleted": "The Product has deleted",
             "delete": {
                 "question": "Are you sure you want to delete product {{ param }} from shopping cart?"
             },
@@ -27,7 +27,10 @@
             "lastModifiedBy": "Last Modified By",
             "lastModifiedDate": "Last Modified Date",
             "order": "Order",
-            "product": "Product"
+            "product": "Product",
+            "productDescription": "Description",
+            "productType": "Product Type",
+            "productImg": "Image"
         }
     }
 }

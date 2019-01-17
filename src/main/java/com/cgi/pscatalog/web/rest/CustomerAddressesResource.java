@@ -167,22 +167,9 @@ public class CustomerAddressesResource {
     public ResponseEntity<List<CustomerAddressesDTO>> getAllCustomerAddresses(Pageable pageable) {
         log.debug("REST request to get a page of Customer Addresses");
 
-        // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
-		Long customerId = customersDTO.getId();
-
-        if (customerId.longValue() == 0) {
-            throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
-        }
-
-        log.debug("REST request to getAllCustomerAddresses - customerId: {}", customerId);
-
         // Get address identification by customer identification
-        AddressesResource addressesResource = new AddressesResource(addressesService);
-        ResponseEntity<List<AddressesDTO>> responseListAddressesDTO = addressesResource.getAddressesByCustomerId(customerId, pageable);
-        List<AddressesDTO> listAddressesDTO = responseListAddressesDTO.getBody();
+        Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
 
         List<CustomerAddressesDTO> listCustomerAddressesDTO = new ArrayList<CustomerAddressesDTO>();
 

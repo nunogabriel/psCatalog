@@ -1,17 +1,26 @@
 package com.cgi.pscatalog.service.dto;
 
-import java.time.Instant;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Objects;
+
+import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+
+import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
 
 /**
  * A DTO for the OrderDet entity.
  */
 public class CartOrderDetDTO implements Serializable {
 
-    private Long id;
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Long id;
 
     @NotNull
     private Integer orderQuantity;
@@ -34,6 +43,15 @@ public class CartOrderDetDTO implements Serializable {
     private Long productId;
 
     private String productProductName;
+
+    private String productDescription;
+
+    @NotNull
+    private ProductTypeEnum productType;
+
+    @Lob
+    private byte[] productImg;
+    private String productImgContentType;
 
     public Long getId() {
         return id;
@@ -123,6 +141,38 @@ public class CartOrderDetDTO implements Serializable {
         this.productProductName = productsProductName;
     }
 
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public ProductTypeEnum getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductTypeEnum productType) {
+        this.productType = productType;
+    }
+
+    public byte[] getProductImg() {
+        return productImg;
+    }
+
+    public void setProductImg(byte[] productImg) {
+        this.productImg = productImg;
+    }
+
+    public String getProductImgContentType() {
+        return productImgContentType;
+    }
+
+    public void setProductImgContentType(String productImgContentType) {
+        this.productImgContentType = productImgContentType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,11 +182,12 @@ public class CartOrderDetDTO implements Serializable {
             return false;
         }
 
-        CartOrderDetDTO orderDetDTO = (CartOrderDetDTO) o;
-        if (orderDetDTO.getId() == null || getId() == null) {
+        CartOrderDetDTO cartOrderDetDTO = (CartOrderDetDTO) o;
+
+        if (cartOrderDetDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), orderDetDTO.getId());
+        return Objects.equals(getId(), cartOrderDetDTO.getId());
     }
 
     @Override
@@ -154,10 +205,13 @@ public class CartOrderDetDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
-            ", order=" + getOrderId() +
-            ", order='" + getOrderOrderReference() + "'" +
-            ", product=" + getProductId() +
-            ", product='" + getProductProductName() + "'" +
+            ", orderId=" + getOrderId() +
+            ", orderReference='" + getOrderOrderReference() + "'" +
+            ", productId=" + getProductId() +
+            ", productName='" + getProductProductName() + "'" +
+            ", productDescription='" + getProductDescription() + "'" +
+            ", productType='" + getProductType() + "'" +
+            ", productImg='" + getProductImg() + "'" +
             "}";
     }
 }

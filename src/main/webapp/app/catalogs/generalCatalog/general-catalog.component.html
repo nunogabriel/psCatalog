@@ -28,9 +28,9 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.generalCatalog.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.generalCatalog.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.generalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.generalCatalog.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.generalCatalog.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.generalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -38,13 +38,13 @@
             <tr *ngFor="let generalCatalog of generalCatalog ;trackBy: trackId">
                 <td>{{generalCatalog.productName}}</td>
                 <td>{{generalCatalog.productDescription}}</td>
-                <td>{{generalCatalog.productPrice}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + generalCatalog.productType}}">{{generalCatalog.productType}}</td>
                 <td>
                     <a *ngIf="generalCatalog.productImg" (click)="openFile(generalCatalog.productImgContentType, generalCatalog.productImg)">
                         <img [src]="'data:' + generalCatalog.productImgContentType + ';base64,' + generalCatalog.productImg" style="max-height: 30px;" alt="generalCatalog image"/>
                     </a>
                 </td>
+                <td>{{generalCatalog.productPrice}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

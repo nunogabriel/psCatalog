@@ -115,7 +115,7 @@ public class OrderDetServiceImpl implements OrderDetService {
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<OrderDetDTO> getOrderDetByOrderIdAndProductId(Long orderId, Long productId) {
-        log.debug("Request to get OrderDet by Order Id {} And Product Id: {}:", orderId, productId);
+        log.debug("Request to get OrderDet by Order Id {} And Product Id {}", orderId, productId);
         return orderDetRepository.findByOrderIdAndProductId(orderId, productId)
             .map(orderDetMapper::toDto);
 	}
@@ -123,7 +123,7 @@ public class OrderDetServiceImpl implements OrderDetService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<OrderDetDTO> getAllByOrderId(Long id, Pageable pageable) {
-        log.debug("Request to get all Order Details by Order Id");
+        log.debug("Request to get all Order Details by Order Id {}", id);
         return orderDetRepository.findAllByOrderId(id, pageable)
             .map(orderDetMapper::toDto);
 	}
@@ -131,15 +131,23 @@ public class OrderDetServiceImpl implements OrderDetService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<OrderDetDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable) {
-        log.debug("Request to get all Order Details by Order Id");
+        log.debug("Request to get all Order Details by Login {} and Order Status", login);
         return orderDetRepository.findAllByLoginAndOrderStatus(login, pageable)
                 .map(orderDetMapper::toDto);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
+	public Page<OrderDetDTO> getAllByLoginAndOrderStatusPending(String login, Pageable pageable) {
+        log.debug("Request to get all Order Details by Login {} and Order Status Pending", login);
+        return orderDetRepository.findAllByLoginAndOrderStatusPending(login, pageable)
+                .map(orderDetMapper::toDto);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable) {
-        log.debug("Request to get all Order Details by Order Id");
+        log.debug("Request to get all Order Details by login {} and Order Id {}", login, orderId);
         return orderDetRepository.findAllByLoginAndOrderIdAndOrderStatus(login, orderId, pageable)
                 .map(orderDetMapper::toDto);
 	}

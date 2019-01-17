@@ -31,10 +31,10 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="productProductName"><span jhiTranslate="psCatalogApp.customerOrdersDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.customerOrdersDet.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.customerOrdersDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.customerOrdersDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.customerOrdersDet.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.customerOrdersDet.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.customerOrdersDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.customerOrdersDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -42,15 +42,14 @@
             <tr *ngFor="let customerOrdersDet of customerOrdersDet ;trackBy: trackId">
                 <td>{{customerOrdersDet.productProductName}}</td>
                 <td>{{customerOrdersDet.productDescription}}</td>
-                <td>{{customerOrdersDet.orderQuantity}}</td>
-                <td>{{customerOrdersDet.unitPrice}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + customerOrdersDet.productType}}">{{customerOrdersDet.productType}}</td>
                 <td>
                     <a *ngIf="customerOrdersDet.productImg" (click)="openFile(customerOrdersDet.productImgContentType, customerOrdersDet.productImg)">
                         <img [src]="'data:' + customerOrdersDet.productImgContentType + ';base64,' + customerOrdersDet.productImg" style="max-height: 30px;" alt="customerOrdersDet image"/>
                     </a>
-                    <span *ngIf="customerOrdersDet.productImg">{{customerOrdersDet.productImgContentType}}, {{byteSize(customerOrdersDet.productImg)}}</span>
                 </td>
+                <td>{{customerOrdersDet.unitPrice}}</td>                
+                <td>{{customerOrdersDet.orderQuantity}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

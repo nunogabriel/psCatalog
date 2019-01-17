@@ -3,16 +3,24 @@
         <div *ngIf="cartOrderDet">
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.order">Order</span></dt>
-                <dd>
-                    <div *ngIf="cartOrderDet.orderId">
-                        <a [routerLink]="['/orders', cartOrderDet.orderId, 'view']">{{cartOrderDet.orderOrderReference}}</a>
-                    </div>
-                </dd>
                 <dt><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span></dt>
                 <dd>
-                    <div *ngIf="cartOrderDet.productId">
-                        <a [routerLink]="['/products', cartOrderDet.productId, 'view']">{{cartOrderDet.productProductName}}</a>
+                    <span>{{cartOrderDet.productProductName}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.productDescription">Description</span></dt>
+                <dd>
+                    <span>{{cartOrderDet.productDescription}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.productType">Product Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + cartOrderDet.productType}}">{{cartOrderDet.productType}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span></dt>
+                <dd>
+                    <div *ngIf="cartOrderDet.productImg">
+                        <a (click)="openFile(cartOrderDet.productImgContentType, cartOrderDet.productImg)">
+                            <img [src]="'data:' + cartOrderDet.productImgContentType + ';base64,' + cartOrderDet.productImg" style="max-width: 100%;" alt="cartOrderDet image"/>
+                        </a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span></dt>

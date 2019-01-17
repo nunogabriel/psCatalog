@@ -11,7 +11,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,10 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.security.SecurityUtils;
-import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.dto.CustomerOrdersDTO;
-import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -51,9 +48,6 @@ public class CustomerOrdersResource {
     private static final String ENTITY_NAME = "customerOrders";
 
     private final OrdersService ordersService;
-
-    @Autowired
-	private CustomersService customersService;
 
     public CustomerOrdersResource(OrdersService ordersService) {
         this.ordersService = ordersService;
@@ -106,19 +100,7 @@ public class CustomerOrdersResource {
     public ResponseEntity<List<CustomerOrdersDTO>> getAllCustomerOrders(Pageable pageable) {
         log.debug("REST request to get a page of Customer Orders");
 
-        // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
-		Long customerId = customersDTO.getId();
-
-        if (customerId.longValue() == 0) {
-            throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
-        }
-
-        log.debug("REST request to getAllCustomerAddresses - customerId: {}", customerId);
-
-        Page<OrdersDTO> page = ordersService.getOrdersByCustomerId(customerId, pageable);
+        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), pageable);
 
         List<OrdersDTO> listOrdersDTO = page.getContent();
 		List<CustomerOrdersDTO> listCustomerOrdersDTO = new ArrayList<CustomerOrdersDTO>();

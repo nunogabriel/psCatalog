@@ -10,7 +10,7 @@
             },
             "created": "Uma nova Encomenda foi criada com o identificador {{ param }}",
             "updated": "Produto atualizado com o identificador {{ param }}",
-            "deleted": "Produto eliminado com o identificador {{ param }}",
+            "deleted": "Produto eliminado",
             "delete": {
                 "question": "Tem a certeza que pretende eliminar o produto {{ param }} do carrinho?"
             },
@@ -27,7 +27,10 @@
             "lastModifiedBy": "Alterado por",
             "lastModifiedDate": "Alterado em",
             "order": "Encomenda",
-            "product": "Produto"
+            "product": "Produto",
+            "productDescription": "Descrição",
+            "productType": "Tipo Produto",
+            "productImg": "Imagem"
         }
     }
 }

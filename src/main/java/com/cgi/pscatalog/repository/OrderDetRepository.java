@@ -26,6 +26,9 @@ public interface OrderDetRepository extends JpaRepository<OrderDet, Long> {
 	@Query("select orderdet from OrderDet orderdet where orderdet.order.id =:orderId")
 	Page<OrderDet> findAllByOrderId(@Param("orderId") Long orderId, Pageable pageable);
 
+	@Query("select orderdet from OrderDet orderdet where orderdet.order.customer.login =:login and orderdet.order.orderStatus.orderStatusDescription = '" + Constants.ORDER_STATUS_PENDING + "'")
+	Page<OrderDet> findAllByLoginAndOrderStatusPending(@Param("login") String login, Pageable pageable);
+
 	@Query("select orderdet from OrderDet orderdet where orderdet.order.customer.login =:login and orderdet.order.orderStatus.orderStatusDescription != '" + Constants.ORDER_STATUS_PENDING + "'")
 	Page<OrderDet> findAllByLoginAndOrderStatus(@Param("login") String login, Pageable pageable);
 

@@ -1,22 +1,22 @@
 package com.cgi.pscatalog.service.impl;
 
-import com.cgi.pscatalog.service.AddressesService;
-import com.cgi.pscatalog.domain.Addresses;
-import com.cgi.pscatalog.repository.AddressesRepository;
-import com.cgi.pscatalog.repository.search.AddressesSearchRepository;
-import com.cgi.pscatalog.service.dto.AddressesDTO;
-import com.cgi.pscatalog.service.mapper.AddressesMapper;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import com.cgi.pscatalog.domain.Addresses;
+import com.cgi.pscatalog.repository.AddressesRepository;
+import com.cgi.pscatalog.repository.search.AddressesSearchRepository;
+import com.cgi.pscatalog.service.AddressesService;
+import com.cgi.pscatalog.service.dto.AddressesDTO;
+import com.cgi.pscatalog.service.mapper.AddressesMapper;
 
 /**
  * Service Implementation for managing Addresses.
@@ -114,9 +114,9 @@ public class AddressesServiceImpl implements AddressesService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<AddressesDTO> getAddressesByCustomerId(Long id, Pageable pageable) {
-        log.debug("Request to get all Addresses by Customer Id");
-        return addressesRepository.findAllByCustomerId(id, pageable)
+	public Page<AddressesDTO> getAddressesByLogin(String login, Pageable pageable) {
+        log.debug("Request to get all Addresses by login {}", login);
+        return addressesRepository.findAllByLogin(login, pageable)
             .map(addressesMapper::toDto);
 	}
 }

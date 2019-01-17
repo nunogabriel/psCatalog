@@ -54,7 +54,7 @@ public interface OrdersService {
      */
     Page<OrdersDTO> search(String query, Pageable pageable);
 
-	Optional<OrdersDTO> getOrdersByCustomerIdAndOrderStatusId(Long customerId, Long orderStatusId);
+	Page<OrdersDTO> getAllByLoginAndOrderStatusPending(String login, Pageable pageable);
 
-	Page<OrdersDTO> getOrdersByCustomerId(Long customerId, Pageable pageable);
+	Page<OrdersDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable);
 }

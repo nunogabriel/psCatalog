@@ -183,6 +183,7 @@ public class CustomerOrdersDetDTO implements Serializable {
         }
 
         CustomerOrdersDetDTO customerOrdersDetDTO = (CustomerOrdersDetDTO) o;
+
         if (customerOrdersDetDTO.getId() == null || getId() == null) {
             return false;
         }

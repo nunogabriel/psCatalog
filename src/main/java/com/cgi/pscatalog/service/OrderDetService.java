@@ -60,5 +60,7 @@ public interface OrderDetService {
 
 	Page<OrderDetDTO> getAllByLoginAndOrderStatus(String login, Pageable pageable);
 
+	Page<OrderDetDTO> getAllByLoginAndOrderStatusPending(String login, Pageable pageable);
+
 	Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable);
 }

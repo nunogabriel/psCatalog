@@ -17,14 +17,6 @@
                 <dd>
                     <span>{{customerOrdersDet.productDescription}}</span>
                 </dd>
-                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.unitPrice">Unit Price</span></dt>
-                <dd>
-                    <span>{{customerOrdersDet.unitPrice}}</span>
-                </dd>
-                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.orderQuantity">Order Quantity</span></dt>
-                <dd>
-                    <span>{{customerOrdersDet.orderQuantity}}</span>
-                </dd>
                 <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.productType">Product Type</span></dt>
                 <dd>
                     <span jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + customerOrdersDet.productType}}">{{customerOrdersDet.productType}}</span>
@@ -35,8 +27,15 @@
                         <a (click)="openFile(customerOrdersDet.productImgContentType, customerOrdersDet.productImg)">
                             <img [src]="'data:' + customerOrdersDet.productImgContentType + ';base64,' + customerOrdersDet.productImg" style="max-width: 100%;" alt="customerOrdersDet image"/>
                         </a>
-                        {{customerOrdersDet.productImgContentType}}, {{byteSize(customerOrdersDet.productImg)}}
                     </div>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.unitPrice">Unit Price</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.unitPrice}}</span>
+                </dd>
+                <dt><span jhiTranslate="psCatalogApp.customerOrdersDet.orderQuantity">Order Quantity</span></dt>
+                <dd>
+                    <span>{{customerOrdersDet.orderQuantity}}</span>
                 </dd>
             </dl>
 

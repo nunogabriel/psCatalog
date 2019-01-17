@@ -32,27 +32,27 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="orderOrderReference"><span jhiTranslate="psCatalogApp.cartOrderDet.order">Order</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productProductName"><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.cartOrderDet.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.cartOrderDet.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let cartOrderDet of cartOrderDet ;trackBy: trackId">
+                <td>{{cartOrderDet.productProductName}}</td>
+                <td>{{cartOrderDet.productDescription}}</td>
+                <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + cartOrderDet.productType}}">{{cartOrderDet.productType}}</td>
                 <td>
-                    <div *ngIf="cartOrderDet.orderId">
-                        <a [routerLink]="['../orders', cartOrderDet.orderId , 'view' ]" >{{cartOrderDet.orderOrderReference}}</a>
-                    </div>
+                    <a *ngIf="cartOrderDet.productImg" (click)="openFile(cartOrderDet.productImgContentType, cartOrderDet.productImg)">
+                        <img [src]="'data:' + cartOrderDet.productImgContentType + ';base64,' + cartOrderDet.productImg" style="max-height: 30px;" alt="cartOrderDet image"/>
+                    </a>
                 </td>
-                <td>
-                    <div *ngIf="cartOrderDet.productId">
-                        <a [routerLink]="['../products', cartOrderDet.productId , 'view' ]" >{{cartOrderDet.productProductName}}</a>
-                    </div>
-                </td>
-                <td>{{cartOrderDet.orderQuantity}}</td>
                 <td>{{cartOrderDet.unitPrice}}</td>
+                <td>{{cartOrderDet.orderQuantity}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
