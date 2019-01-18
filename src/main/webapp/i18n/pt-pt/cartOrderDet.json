@@ -30,7 +30,9 @@
             "product": "Produto",
             "productDescription": "Descrição",
             "productType": "Tipo Produto",
-            "productImg": "Imagem"
+            "productImg": "Imagem",
+            "address": "Morada de Cobrança",
+            "deliveryAddress": "Morada de Envio"
         }
     }
 }

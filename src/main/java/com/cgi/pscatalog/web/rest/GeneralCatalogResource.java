@@ -156,7 +156,7 @@ public class GeneralCatalogResource {
 
             log.debug("REST request to addBasket - customerId: {}", customerId);
 
-            // Get address identification by customer identification
+            // Get default address identification by login
             Long addressId = new Long(0);
 
             Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, PageRequest.of(0, 1));

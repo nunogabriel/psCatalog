@@ -1,4 +1,4 @@
-<form name="orderForm" (ngSubmit)="confirmOrder()">
+<form name="editForm" role="form" novalidate (ngSubmit)="confirmOrder(cartOrderDet.addressId, cartOrderDet.deliveryAddressId)" #editForm="ngForm">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="psCatalogApp.cartOrderDet.home.ordered">Confirm order operation</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -7,12 +7,42 @@
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <p id="jhi-order-cartOrderDet-heading" jhiTranslate="psCatalogApp.cartOrderDet.ordered.question">Are you sure you want to realize the Order?</p>
-    </div>
+
+	    <div class="form-group">
+	   		<label class="form-control-label" jhiTranslate="psCatalogApp.cartOrderDet.address" for="field_address">Billing Address</label>
+	        <select class="form-control" id="field_address" name="address" [(ngModel)]="cartOrderDet.addressId" required>
+	        	<option [ngValue]="null" selected></option>
+	            <option [ngValue]="customerAddressesOption.id" *ngFor="let customerAddressesOption of customerAddresses; trackBy: trackCustomerAddressesById">{{customerAddressesOption.addressReference}}</option>
+	      	</select>
+	  	</div>
+	  	<div [hidden]="!(editForm.controls.address?.dirty && editForm.controls.address?.invalid)">
+        	<small class="form-text text-danger"
+            	[hidden]="!editForm.controls.address?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+	  	
+	    <div class="form-group">
+	   		<label class="form-control-label" jhiTranslate="psCatalogApp.cartOrderDet.deliveryAddress" for="field_deliveryAddress">Delivery Address</label>
+	        <select class="form-control" id="field_deliveryAddress" name="deliveryAddress" [(ngModel)]="cartOrderDet.deliveryAddressId" required>
+	        	<option [ngValue]="null" selected></option>
+	            <option [ngValue]="customerAddressesOption.id" *ngFor="let customerAddressesOption of customerAddresses; trackBy: trackCustomerAddressesById">{{customerAddressesOption.addressReference}}</option>
+	      	</select>
+	  	</div>
+	  	<div [hidden]="!(editForm.controls.deliveryAddress?.dirty && editForm.controls.deliveryAddress?.invalid)">
+        	<small class="form-text text-danger"
+            	[hidden]="!editForm.controls.deliveryAddress?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+	  	
+	</div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button id="jhi-confirm-order-cartOrderDet" type="submit" class="btn btn-primary">
+        <button id="jhi-confirm-order-cartOrderDet" [disabled]="editForm.form.invalid" type="submit" class="btn btn-primary">
             <fa-icon [icon]="'plus'"></fa-icon>&nbsp;<span jhiTranslate="psCatalogApp.cartOrderDet.home.createLabel">Order</span>
         </button>
     </div>

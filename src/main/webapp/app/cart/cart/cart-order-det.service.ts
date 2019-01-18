@@ -50,8 +50,8 @@ export class CartOrderDetService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    order(): Observable<HttpResponse<any>> {
-        return this.http.get<any>(`${this.resourceUrl}/order`, { observe: 'response' });
+    order(addressId: number, deliveryAddressId: number): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceUrl}/order/${addressId}/${deliveryAddressId}`, { observe: 'response' });
     }
 
     search(req?: any): Observable<EntityArrayResponseType> {

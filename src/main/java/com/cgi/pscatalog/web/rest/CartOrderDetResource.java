@@ -79,15 +79,15 @@ public class CartOrderDetResource {
     }
 
     /**
-     * GET  /cart-order-det/order : Create a new cartOrderDet.
+     * GET  /cart-order-det/order/:addressId/:deliveryAddressId : Create a new cartOrderDet.
      *
      * @param cartOrderDetDTO the cartOrderDetDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new cartOrderDetDTO, or with status 400 (Bad Request) if the orderDet has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @GetMapping("/cart-order-det/order")
+    @GetMapping("/cart-order-det/order/{addressId}/{deliveryAddressId}")
     @Timed
-    public ResponseEntity<Void> createCartOrderDet() throws URISyntaxException {
+    public ResponseEntity<Void> createCartOrderDet(@PathVariable Long addressId, @PathVariable Long deliveryAddressId) throws URISyntaxException {
         log.debug("REST request to save CartOrderDet");
 
         // 1 - Verify if there is any pending order created for customer
@@ -118,6 +118,9 @@ public class CartOrderDetResource {
 			ordersDTO.setOrderStatusId(orderStatusId);
 			ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
 			ordersDTO.setLastModifiedDate(Instant.now());
+			ordersDTO.setOrderDate(Instant.now());
+			ordersDTO.setAddressId(addressId);
+			ordersDTO.setDeliveryAddressId(deliveryAddressId);
 
 			ordersDTOAux = ordersService.save(ordersDTO);
         }

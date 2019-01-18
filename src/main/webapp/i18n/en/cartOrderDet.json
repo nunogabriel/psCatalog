@@ -30,7 +30,9 @@
             "product": "Product",
             "productDescription": "Description",
             "productType": "Product Type",
-            "productImg": "Image"
+            "productImg": "Image",
+            "address": "Billing Address",
+            "deliveryAddress": "Delivery Address"
         }
     }
 }

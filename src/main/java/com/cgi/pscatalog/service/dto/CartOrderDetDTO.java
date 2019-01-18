@@ -53,6 +53,14 @@ public class CartOrderDetDTO implements Serializable {
     private byte[] productImg;
     private String productImgContentType;
 
+    private Long addressId;
+
+    private String addressAddressReference;
+
+    private Long deliveryAddressId;
+
+    private String deliveryAddressAddressReference;
+
     public Long getId() {
         return id;
     }
@@ -173,6 +181,38 @@ public class CartOrderDetDTO implements Serializable {
         this.productImgContentType = productImgContentType;
     }
 
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressesId) {
+        this.addressId = addressesId;
+    }
+
+    public String getAddressAddressReference() {
+        return addressAddressReference;
+    }
+
+    public void setAddressAddressReference(String addressesAddressReference) {
+        this.addressAddressReference = addressesAddressReference;
+    }
+
+    public Long getDeliveryAddressId() {
+        return deliveryAddressId;
+    }
+
+    public void setDeliveryAddressId(Long addressesId) {
+        this.deliveryAddressId = addressesId;
+    }
+
+    public String getDeliveryAddressAddressReference() {
+        return deliveryAddressAddressReference;
+    }
+
+    public void setDeliveryAddressAddressReference(String addressesAddressReference) {
+        this.deliveryAddressAddressReference = addressesAddressReference;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -212,6 +252,10 @@ public class CartOrderDetDTO implements Serializable {
             ", productDescription='" + getProductDescription() + "'" +
             ", productType='" + getProductType() + "'" +
             ", productImg='" + getProductImg() + "'" +
+            ", addressId=" + getAddressId() +
+            ", addressReference='" + getAddressAddressReference() + "'" +
+            ", deliveryAddressId=" + getDeliveryAddressId() +
+            ", deliveryAddressReference='" + getDeliveryAddressAddressReference() + "'" +
             "}";
     }
 }

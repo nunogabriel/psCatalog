@@ -21,6 +21,10 @@ export interface ICart {
     productType?: ProductTypeEnum;
     productImgContentType?: string;
     productImg?: any;
+    deliveryAddressAddressReference?: string;
+    deliveryAddressId?: number;
+    addressAddressReference?: string;
+    addressId?: number;
 }
 
 export class Cart implements ICart {
@@ -39,6 +43,10 @@ export class Cart implements ICart {
         public productDescription?: string,
         public productType?: ProductTypeEnum,
         public productImgContentType?: string,
-        public productImg?: any
+        public productImg?: any,
+        public deliveryAddressAddressReference?: string,
+        public deliveryAddressId?: number,
+        public addressAddressReference?: string,
+        public addressId?: number
     ) {}
 }

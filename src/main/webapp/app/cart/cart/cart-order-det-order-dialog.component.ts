@@ -1,27 +1,32 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
-import { ICart } from 'app/shared/cart/cart.model';
+import { ICustomerAddresses } from 'app/shared/customer/customer-addresses.model';
 import { CartOrderDetService } from './cart-order-det.service';
+import { CustomerAddressesService } from 'app/customer/customerAddresses';
 
 @Component({
     selector: 'jhi-cart-order-det-order-dialog',
     templateUrl: './cart-order-det-order-dialog.component.html'
 })
 export class CartOrderDetOrderDialogComponent {
-    orderDet: ICart;
 
-    constructor(private cartOrderDetService: CartOrderDetService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(
+            private cartOrderDetService: CartOrderDetService,
+            public activeModal: NgbActiveModal,
+            private eventManager: JhiEventManager
+            ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmOrder() {
-        this.cartOrderDetService.order().subscribe(response => {
+    confirmOrder(addressId: number, deliveryAddressId: number) {
+        this.cartOrderDetService.order(addressId, deliveryAddressId).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'cartOrderDetListModification',
                 content: 'Ordered an cartOrderDet'
@@ -37,14 +42,27 @@ export class CartOrderDetOrderDialogComponent {
 })
 export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
+    customerAddresses: ICustomerAddresses[];
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(
+            private jhiAlertService: JhiAlertService,
+            private activatedRoute: ActivatedRoute,
+            private router: Router,
+            private modalService: NgbModal,
+            private customerAddressesService: CustomerAddressesService
+            ) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ cartOrderDet }) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(CartOrderDetOrderDialogComponent as Component, { size: 'lg', backdrop: 'static' });
                 this.ngbModalRef.componentInstance.cartOrderDet = cartOrderDet;
+                this.customerAddressesService.query().subscribe(
+                        (res: HttpResponse<ICustomerAddresses[]>) => {
+                            this.ngbModalRef.componentInstance.customerAddresses = res.body;
+                        },
+                        (res: HttpErrorResponse) => this.ngbModalRef.componentInstance.onError(res.message)
+                    );
                 this.ngbModalRef.result.then(
                     result => {
                         this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
@@ -57,6 +75,14 @@ export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
                 );
             }, 0);
         });
+    }
+
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    trackCustomerAddressesById(index: number, item: ICustomerAddresses) {
+        return item.id;
     }
 
     ngOnDestroy() {
