@@ -159,7 +159,8 @@
         "emailexists": "Email is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID",
         "idnull": "Invalid ID",
-        "firstcreatecustomer": "<strong>Your customer data doesn´t exist!</strong> Please create it."
+        "firstcreatecustomer": "<strong>Your customer data doesn´t exist!</strong> Please create it.",
+        "firstcreateaddress": "<strong>Your addresses data doesn´t exist!</strong> Please create it."
     },
     "footer": "This is your footer"
 }

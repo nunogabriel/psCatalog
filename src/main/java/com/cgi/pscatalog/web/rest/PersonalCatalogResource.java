@@ -43,6 +43,7 @@ import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.service.dto.PersonalCatalogDTO;
 import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
+import com.cgi.pscatalog.web.rest.errors.FirstCreateAddressException;
 import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
@@ -169,7 +170,7 @@ public class PersonalCatalogResource {
     		}
 
             if (addressId.longValue() == 0) {
-                throw new BadRequestAlertException("You must add a address first", ENTITY_NAME, "idnull");
+                throw new FirstCreateAddressException(ENTITY_NAME);
             }
 
             log.debug("REST request to addBasket - addressId: {}", addressId);

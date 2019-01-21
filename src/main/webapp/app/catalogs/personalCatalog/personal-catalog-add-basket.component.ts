@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
+import { FIRST_CREATE_ADDRESS } from 'app/shared';
 import { IPersonalCatalog } from 'app/shared/catalogs/personal-catalog.model';
 import { PersonalCatalogService } from './personal-catalog.service';
 
@@ -16,6 +17,7 @@ import { PersonalCatalogService } from './personal-catalog.service';
 export class PersonalCatalogAddBasketComponent implements OnInit {
     personalCatalog: IPersonalCatalog;
     isSaving: boolean;
+    firstCreateAddress: string;
 
     constructor(
         private dataUtils: JhiDataUtils,
@@ -54,13 +56,14 @@ export class PersonalCatalogAddBasketComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.firstCreateAddress = null;
         if (this.personalCatalog.id !== undefined) {
             this.subscribeToSaveResponse(this.personalCatalogService.addBasket(this.personalCatalog));
         }
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IPersonalCatalog>>) {
-        result.subscribe((res: HttpResponse<IPersonalCatalog>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe((res: HttpResponse<IPersonalCatalog>) => this.onSaveSuccess(), response => this.onSaveError(response));
     }
 
     private onSaveSuccess() {
@@ -68,8 +71,14 @@ export class PersonalCatalogAddBasketComponent implements OnInit {
         this.previousState();
     }
 
-    private onSaveError() {
+    private onSaveError(response: HttpErrorResponse) {
         this.isSaving = false;
+
+        if (response.status === 400 && response.error.type === FIRST_CREATE_ADDRESS) {
+            this.firstCreateAddress = 'ERROR';
+       } else {
+            this.jhiAlertService.error(response.message, null, null);
+       }
     }
 
     private onError(errorMessage: string) {

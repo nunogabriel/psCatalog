@@ -36,6 +36,7 @@ import com.cgi.pscatalog.service.dto.AddressesDTO;
 import com.cgi.pscatalog.service.dto.CustomerAddressesDTO;
 import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
+import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -167,8 +168,19 @@ public class CustomerAddressesResource {
     public ResponseEntity<List<CustomerAddressesDTO>> getAllCustomerAddresses(Pageable pageable) {
         log.debug("REST request to get a page of Customer Addresses");
 
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
+        // Get customer identification by login
+        CustomersResource customersResource = new CustomersResource(customersService);
+        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
+        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+
+        if (customersDTO == null) {
+            throw new FirstCreateCustomerException(ENTITY_NAME);
+        }
+
         // Get address identification by customer identification
-        Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, pageable);
         List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
 
         List<CustomerAddressesDTO> listCustomerAddressesDTO = new ArrayList<CustomerAddressesDTO>();

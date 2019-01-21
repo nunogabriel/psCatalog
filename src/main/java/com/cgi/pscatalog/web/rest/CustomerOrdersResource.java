@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +27,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.security.SecurityUtils;
+import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.dto.CustomerOrdersDTO;
+import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
+import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -48,6 +52,9 @@ public class CustomerOrdersResource {
     private static final String ENTITY_NAME = "customerOrders";
 
     private final OrdersService ordersService;
+
+    @Autowired
+	private CustomersService customersService;
 
     public CustomerOrdersResource(OrdersService ordersService) {
         this.ordersService = ordersService;
@@ -100,7 +107,19 @@ public class CustomerOrdersResource {
     public ResponseEntity<List<CustomerOrdersDTO>> getAllCustomerOrders(Pageable pageable) {
         log.debug("REST request to get a page of Customer Orders");
 
-        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
+        // Get customer identification by login
+        CustomersResource customersResource = new CustomersResource(customersService);
+        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
+        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+
+        if (customersDTO == null) {
+            throw new FirstCreateCustomerException(ENTITY_NAME);
+        }
+
+        // Get all orders with status different from PENDING by login
+        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatus(login, pageable);
 
         List<OrdersDTO> listOrdersDTO = page.getContent();
 		List<CustomerOrdersDTO> listCustomerOrdersDTO = new ArrayList<CustomerOrdersDTO>();

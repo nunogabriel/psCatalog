@@ -1,7 +1,7 @@
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="psCatalogApp.customerAddresses.home.title">Customer Addresses</span>
-        <button id="jh-create-customer-addresses" class="btn btn-primary float-right jh-create-entity create-customer-addresses" [routerLink]="['/customerAddresses/new']">
+        <button id="jh-create-customer-addresses" *ngIf="!firstCreateCustomer" class="btn btn-primary float-right jh-create-entity create-customer-addresses" [routerLink]="['/customerAddresses/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down"  jhiTranslate="psCatalogApp.customerAddresses.home.createLabel">
             Create new Addresses
@@ -9,7 +9,10 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
+    <div class="alert alert-danger" *ngIf="firstCreateCustomer" jhiTranslate="error.firstcreatecustomer">
+        <strong>Your customer data doesn´t exist!</strong> Please create it.
+    </div>
+    <div class="row" *ngIf="!firstCreateCustomer && customerAddresses && customerAddresses.length != 0">
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">

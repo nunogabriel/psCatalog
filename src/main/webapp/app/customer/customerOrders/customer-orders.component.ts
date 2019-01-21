@@ -7,7 +7,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { ICustomerOrders } from 'app/shared/customer/customer-orders.model';
 import { Principal } from 'app/core';
 
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { ITEMS_PER_PAGE, FIRST_CREATE_CUSTOMER } from 'app/shared';
 import { CustomerOrdersService } from './customer-orders.service';
 
 @Component({
@@ -30,6 +30,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
+    firstCreateCustomer: string;
 
     constructor(
         private customerOrdersService: CustomerOrdersService,
@@ -68,6 +69,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
                 );
             return;
         }
+        this.firstCreateCustomer = null;
         this.customerOrdersService
             .query({
                 page: this.page - 1,
@@ -76,7 +78,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
             })
             .subscribe(
                 (res: HttpResponse<ICustomerOrders[]>) => this.paginateCustomerOrders(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
+                response => this.onErrorAux(response)
             );
     }
 
@@ -162,6 +164,14 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
         this.customerOrders = data;
+    }
+
+    private onErrorAux(response: HttpErrorResponse) {
+        if (response.status === 400 && response.error.type === FIRST_CREATE_CUSTOMER) {
+             this.firstCreateCustomer = 'ERROR';
+        } else {
+             this.jhiAlertService.error(response.message, null, null);
+        }
     }
 
     private onError(errorMessage: string) {

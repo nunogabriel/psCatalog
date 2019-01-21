@@ -286,6 +286,26 @@ public class CartOrderDetResource {
 
         orderDetService.delete(id);
 
+        // Get customer order details by order id and status different from PENDING
+        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+
+        List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+
+		// Delete Order if there are not more products associated with it
+		if (listOrderDetDTO.size() == 0) {
+			// Get PENDING order
+			Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+
+	        List<OrdersDTO> listOrdersDTO = page.getContent();
+
+	        if (listOrdersDTO.size() != 0) {
+	        	OrdersDTO ordersDTO = listOrdersDTO.get(0);
+
+	        	// Delete PENDING ORDER
+	        	ordersService.delete(ordersDTO.getId());
+	        }
+		}
+
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, "")).build();
     }
 

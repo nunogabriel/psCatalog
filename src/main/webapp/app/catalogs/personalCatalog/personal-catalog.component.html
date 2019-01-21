@@ -6,7 +6,7 @@
     <div class="alert alert-danger" *ngIf="firstCreateCustomer" jhiTranslate="error.firstcreatecustomer">
         <strong>Your customer data doesn´t exist!</strong> Please create it.
     </div>
-    <div class="row" *ngIf="!firstCreateCustomer">
+    <div class="row" *ngIf="!firstCreateCustomer && personalCatalog && personalCatalog.length != 0">
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
