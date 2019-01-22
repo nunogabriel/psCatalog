@@ -1,5 +1,6 @@
 package com.cgi.pscatalog.repository;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -34,4 +35,7 @@ public interface OrderDetRepository extends JpaRepository<OrderDet, Long> {
 
 	@Query("select orderdet from OrderDet orderdet where orderdet.order.customer.login =:login and orderdet.order.id =:orderId and orderdet.order.orderStatus.orderStatusDescription != '" + Constants.ORDER_STATUS_PENDING + "'")
 	Page<OrderDet> findAllByLoginAndOrderIdAndOrderStatus(@Param("login") String login, @Param("orderId") Long orderId, Pageable pageable);
+
+	@Query("select sum(orderdet.unitPrice * orderdet.orderQuantity) from OrderDet orderdet where orderdet.order.id =:orderId")
+	BigDecimal findOrderTotal(@Param("orderId") Long orderId);
 }

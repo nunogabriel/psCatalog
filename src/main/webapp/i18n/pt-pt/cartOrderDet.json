@@ -15,7 +15,7 @@
                 "question": "Tem a certeza que pretende eliminar o produto {{ param }} do carrinho?"
             },
 			"ordered": {
-                "question": "Tem a certeza que pretende realizar a encomenda?"
+                "question": "Tem a certeza que pretende realizar a encomenda no valor total de {{ orderTotalValue }} euros?"
             },            
             "detail": {
                 "title": "Detalhe do Produto"
@@ -32,7 +32,8 @@
             "productType": "Tipo Produto",
             "productImg": "Imagem",
             "address": "Morada de Cobrança",
-            "deliveryAddress": "Morada de Envio"
+            "deliveryAddress": "Morada de Envio",
+            "totalPrice": "Preço Total"
         }
     }
 }

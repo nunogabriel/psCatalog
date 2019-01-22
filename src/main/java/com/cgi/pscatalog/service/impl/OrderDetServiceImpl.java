@@ -2,6 +2,7 @@ package com.cgi.pscatalog.service.impl;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -150,5 +151,12 @@ public class OrderDetServiceImpl implements OrderDetService {
         log.debug("Request to get all Order Details by login {} and Order Id {}", login, orderId);
         return orderDetRepository.findAllByLoginAndOrderIdAndOrderStatus(login, orderId, pageable)
                 .map(orderDetMapper::toDto);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BigDecimal getOrderTotal(Long orderId) {
+        log.debug("Request to get Order Total by Order Id {}", orderId);
+        return orderDetRepository.findOrderTotal(orderId);
 	}
 }

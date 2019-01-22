@@ -47,6 +47,11 @@ export class CustomerOrdersDetService {
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
+    getOrderTotal(): Observable<HttpResponse<any>> {
+        return this.http
+            .get<any>(`${this.resourceUrl}/orderTotal`, { observe: 'response' });
+    }
+
     protected convertDateFromClient(customerOrdersDet: ICustomerOrdersDet): ICustomerOrdersDet {
         const copy: ICustomerOrdersDet = Object.assign({}, customerOrdersDet, {
             createdDate: customerOrdersDet.createdDate != null && customerOrdersDet.createdDate.isValid() ? customerOrdersDet.createdDate.toJSON() : null,

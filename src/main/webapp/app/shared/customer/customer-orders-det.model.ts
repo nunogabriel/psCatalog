@@ -21,6 +21,7 @@ export interface ICustomerOrdersDet {
     productType?: ProductTypeEnum;
     productImgContentType?: string;
     productImg?: any;
+    totalPrice?: number;
 }
 
 export class CustomerOrdersDet implements ICustomerOrdersDet {
@@ -39,6 +40,7 @@ export class CustomerOrdersDet implements ICustomerOrdersDet {
         public productDescription?: string,
         public productType?: ProductTypeEnum,
         public productImgContentType?: string,
-        public productImg?: any
+        public productImg?: any,
+        public totalPrice?: number
     ) {}
 }

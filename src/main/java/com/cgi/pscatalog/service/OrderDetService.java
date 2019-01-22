@@ -1,5 +1,6 @@
 package com.cgi.pscatalog.service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -63,4 +64,6 @@ public interface OrderDetService {
 	Page<OrderDetDTO> getAllByLoginAndOrderStatusPending(String login, Pageable pageable);
 
 	Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable);
+
+	BigDecimal getOrderTotal(Long orderId);
 }

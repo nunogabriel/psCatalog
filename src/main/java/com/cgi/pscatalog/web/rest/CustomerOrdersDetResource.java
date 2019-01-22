@@ -1,5 +1,6 @@
 package com.cgi.pscatalog.web.rest;
 
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.OrderDetService;
+import com.cgi.pscatalog.service.OrdersService;
 import com.cgi.pscatalog.service.ProductsService;
 import com.cgi.pscatalog.service.dto.CustomerOrdersDetDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -45,6 +49,9 @@ public class CustomerOrdersDetResource {
 
     @Autowired
 	private ProductsService productsService;
+
+    @Autowired
+	private OrdersService ordersService;
 
     public CustomerOrdersDetResource(OrderDetService orderDetService) {
         this.orderDetService = orderDetService;
@@ -79,6 +86,7 @@ public class CustomerOrdersDetResource {
 			customerOrdersDetDTO.setProductId(orderDetDTO.getProductId());
 			customerOrdersDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			customerOrdersDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			customerOrdersDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			listCustomerOrdersDetDTO.add(customerOrdersDetDTO);
 		}
@@ -119,6 +127,7 @@ public class CustomerOrdersDetResource {
 			customerOrdersDetDTO.setProductId(orderDetDTO.getProductId());
 			customerOrdersDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			customerOrdersDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			customerOrdersDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 
@@ -167,6 +176,7 @@ public class CustomerOrdersDetResource {
 			customerOrdersDetDTO.setProductId(orderDetDTO.getProductId());
 			customerOrdersDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			customerOrdersDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			customerOrdersDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 
@@ -183,6 +193,32 @@ public class CustomerOrdersDetResource {
 		}
 
         return ResponseUtil.wrapOrNotFound(customerOrdersDetDTOOpt);
+    }
+
+    /**
+     * GET  /customer-orders-det/orderTotal : get the "id" orderDet.
+     *
+     * @param id the id of the customerOrdersDetDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the customerOrdersDetDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/customer-orders-det/orderTotal")
+    @Timed
+    public BigDecimal getOrderTotal() {
+        log.debug("REST request to get getOrderTotal");
+
+        //
+        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+
+        List<OrdersDTO> listOrdersDTO = page.getContent();
+
+        BigDecimal orderTotal = new BigDecimal(0);
+
+        if (listOrdersDTO.size() != 0) {
+	        // Get customer order details by order id
+	        orderTotal = orderDetService.getOrderTotal(listOrdersDTO.get(0).getId());
+        }
+
+        return orderTotal;
     }
 
     /**
@@ -214,6 +250,7 @@ public class CustomerOrdersDetResource {
 			customerOrdersDetDTO.setProductId(orderDetDTO.getProductId());
 			customerOrdersDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			customerOrdersDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			customerOrdersDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 

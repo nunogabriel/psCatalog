@@ -145,7 +145,10 @@
             "maxbytes": "Este campo não pode ter mais que {{max}} bytes.",
             "pattern": "Este campo deve estar dentro do seguinte padrão {{pattern}}.",
             "number": "Este campo é do tipo número.",
-            "datetimelocal": "Este campo é do tipo data/hora."
+            "datetimelocal": "Este campo é do tipo data/hora.",
+            "patternLogin": "Este campo pode apenas conter letras, digitos e endereços de e-mail.",
+            "patternNaturalNumber_3": "Este campo deve ser um número natural compreendido entre 1 e 999.",
+            "patternDecimalNumber_3_2": "Este campo deve ser um número decimal compreendido entre 0.01 e 999.99."
         }
     },
     "error": {

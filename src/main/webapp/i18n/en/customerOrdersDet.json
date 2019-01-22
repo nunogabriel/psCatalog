@@ -18,7 +18,8 @@
             "product": "Product",
             "productDescription": "Description",
             "productType": "Product Type",
-            "productImg": "Image"
+            "productImg": "Image",
+            "totalPrice": "Total Price"
         }
     }
 }

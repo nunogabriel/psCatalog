@@ -53,6 +53,9 @@ public class CustomerOrdersDetDTO implements Serializable {
     private byte[] productImg;
     private String productImgContentType;
 
+    @NotNull
+    private BigDecimal totalPrice;
+
     public Long getId() {
         return id;
     }
@@ -173,6 +176,14 @@ public class CustomerOrdersDetDTO implements Serializable {
         this.productImgContentType = productImgContentType;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -212,6 +223,7 @@ public class CustomerOrdersDetDTO implements Serializable {
             ", productDescription='" + getProductDescription() + "'" +
             ", productType='" + getProductType() + "'" +
             ", productImg='" + getProductImg() + "'" +
+            ", totalPrice=" + getTotalPrice() +
             "}";
     }
 }

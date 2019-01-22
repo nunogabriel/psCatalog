@@ -18,7 +18,8 @@
             "product": "Produto",
             "productDescription": "Descrição",
             "productType": "Tipo Produto",
-            "productImg": "Imagem"
+            "productImg": "Imagem",
+            "totalPrice": "Preço Total"
         }
     }
 }

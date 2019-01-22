@@ -35,7 +35,7 @@
 	                <dd>
 		                <div class="form-group">
 		                    <label class="form-control-label" jhiTranslate="psCatalogApp.personalCatalog.orderQuantity" for="field_orderQuantity">Order Quantity</label>
-		                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity"
+		                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity" pattern="[1-9][0-9]{0,2}"
 		                        [(ngModel)]="personalCatalog.orderQuantity" required/>
 		                    <div [hidden]="!(editForm.controls.orderQuantity?.dirty && editForm.controls.orderQuantity?.invalid)">
 		                        <small class="form-text text-danger"
@@ -45,6 +45,10 @@
 		                        <small class="form-text text-danger"
 		                            [hidden]="!editForm.controls.orderQuantity?.errors?.number" jhiTranslate="entity.validation.number">
 		                            This field should be a number.
+		                        </small>
+		                        <small class="form-text text-danger"
+		                            [hidden]="!editForm.controls.orderQuantity?.errors?.pattern" jhiTranslate="entity.validation.patternNaturalNumber_3">
+		                            This field should be a natural number between 1 and 999.
 		                        </small>
 		                    </div>
 		                </div>

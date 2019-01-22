@@ -38,6 +38,7 @@
             <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="totalPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.totalPrice">Total Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -53,6 +54,7 @@
                 </td>
                 <td>{{cartOrderDet.unitPrice}}</td>
                 <td>{{cartOrderDet.orderQuantity}}</td>
+                <td>{{cartOrderDet.totalPrice}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

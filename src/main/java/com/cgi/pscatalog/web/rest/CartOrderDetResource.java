@@ -1,5 +1,6 @@
 package com.cgi.pscatalog.web.rest;
 
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -207,6 +208,7 @@ public class CartOrderDetResource {
 			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
 			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 
@@ -255,6 +257,7 @@ public class CartOrderDetResource {
 			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
 			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 
@@ -338,6 +341,7 @@ public class CartOrderDetResource {
 			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
 			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
 			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
 			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
 

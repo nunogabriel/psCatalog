@@ -8,6 +8,7 @@ import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { ICustomerAddresses } from 'app/shared/customer/customer-addresses.model';
 import { CartOrderDetService } from './cart-order-det.service';
 import { CustomerAddressesService } from 'app/customer/customerAddresses';
+import { CustomerOrdersDetService } from 'app/customer/customerOrdersDet';
 
 @Component({
     selector: 'jhi-cart-order-det-order-dialog',
@@ -43,13 +44,15 @@ export class CartOrderDetOrderDialogComponent {
 export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
     customerAddresses: ICustomerAddresses[];
+    orderTotalValue: number;
 
     constructor(
             private jhiAlertService: JhiAlertService,
             private activatedRoute: ActivatedRoute,
             private router: Router,
             private modalService: NgbModal,
-            private customerAddressesService: CustomerAddressesService
+            private customerAddressesService: CustomerAddressesService,
+            private customerOrdersDetService: CustomerOrdersDetService
             ) {}
 
     ngOnInit() {
@@ -57,6 +60,7 @@ export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(CartOrderDetOrderDialogComponent as Component, { size: 'lg', backdrop: 'static' });
                 this.ngbModalRef.componentInstance.cartOrderDet = cartOrderDet;
+                this.customerOrdersDetService.getOrderTotal().subscribe((response: HttpResponse<any> ) => this.ngbModalRef.componentInstance.orderTotalValue = response.body);
                 this.customerAddressesService.query().subscribe(
                         (res: HttpResponse<ICustomerAddresses[]>) => {
                             this.ngbModalRef.componentInstance.customerAddresses = res.body;

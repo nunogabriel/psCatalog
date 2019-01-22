@@ -25,6 +25,7 @@ export interface ICart {
     deliveryAddressId?: number;
     addressAddressReference?: string;
     addressId?: number;
+    totalPrice?: number;
 }
 
 export class Cart implements ICart {
@@ -47,6 +48,7 @@ export class Cart implements ICart {
         public deliveryAddressAddressReference?: string,
         public deliveryAddressId?: number,
         public addressAddressReference?: string,
-        public addressId?: number
+        public addressId?: number,
+        public totalPrice?: number
     ) {}
 }

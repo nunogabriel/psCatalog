@@ -61,6 +61,9 @@ public class CartOrderDetDTO implements Serializable {
 
     private String deliveryAddressAddressReference;
 
+    @NotNull
+    private BigDecimal totalPrice;
+
     public Long getId() {
         return id;
     }
@@ -213,6 +216,14 @@ public class CartOrderDetDTO implements Serializable {
         this.deliveryAddressAddressReference = addressesAddressReference;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -256,6 +267,7 @@ public class CartOrderDetDTO implements Serializable {
             ", addressReference='" + getAddressAddressReference() + "'" +
             ", deliveryAddressId=" + getDeliveryAddressId() +
             ", deliveryAddressReference='" + getDeliveryAddressAddressReference() + "'" +
+            ", totalPrice=" + getTotalPrice() +
             "}";
     }
 }

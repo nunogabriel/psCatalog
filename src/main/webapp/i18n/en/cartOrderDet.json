@@ -15,7 +15,7 @@
                 "question": "Are you sure you want to delete product {{ param }} from shopping cart?"
             },
             "ordered": {
-                "question": "Are you sure you want to realize Order?"
+                "question": "Are you sure you want to realize Order with total value of {{ orderTotalValue }} euros?"
             },
             "detail": {
                 "title": "Product Detail"
@@ -32,7 +32,8 @@
             "productType": "Product Type",
             "productImg": "Image",
             "address": "Billing Address",
-            "deliveryAddress": "Delivery Address"
+            "deliveryAddress": "Delivery Address",
+            "totalPrice": "Total Price"
         }
     }
 }
