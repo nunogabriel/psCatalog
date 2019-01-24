@@ -1,5 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.config.Constants;
+import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
 import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.AddressesService;
 import com.cgi.pscatalog.service.CustomersService;
@@ -239,22 +242,22 @@ public class GeneralCatalogResource {
             throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
-		Page<ProductsDTO> page = productsService.findAll(pageable);
+        // Get all active products with or not with promotions
+        Page<Object[]> page = productsService.getAllProductsWithPromotions(pageable);
 
-		List<ProductsDTO> listProductsDTO = page.getContent();
 		List<GeneralCatalogDTO> listGeneralCatalogDTO = new ArrayList<GeneralCatalogDTO>();
 
-		for (Iterator<ProductsDTO> iterator = listProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = iterator.next();
+		for (Iterator<Object[]> iterator = page.iterator(); iterator.hasNext();) {
+			Object[] products = iterator.next();
 
 			GeneralCatalogDTO generalCatalogDTO = new GeneralCatalogDTO();
-			generalCatalogDTO.setId(productsDTO.getId());
-			generalCatalogDTO.setProductName(productsDTO.getProductName());
-			generalCatalogDTO.setProductDescription(productsDTO.getProductDescription());
-			generalCatalogDTO.setProductType(productsDTO.getProductType());
-			generalCatalogDTO.setProductImg(productsDTO.getProductImg());
-			generalCatalogDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			generalCatalogDTO.setProductPrice(productsDTO.getProductPrice());
+			generalCatalogDTO.setId(((BigInteger)products[0]).longValue());
+			generalCatalogDTO.setProductName((String)products[1]);
+			generalCatalogDTO.setProductDescription((String)products[2]);
+			generalCatalogDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+			generalCatalogDTO.setProductImg((byte[])products[4]);
+			generalCatalogDTO.setProductImgContentType((String)products[5]);
+			generalCatalogDTO.setProductPrice((BigDecimal)products[6]);
 			generalCatalogDTO.setOrderQuantity(new Integer(0));
 
 			listGeneralCatalogDTO.add(generalCatalogDTO);
@@ -278,24 +281,26 @@ public class GeneralCatalogResource {
 	public ResponseEntity<GeneralCatalogDTO> getGeneralCatalog(@PathVariable Long id) {
 		log.debug("REST request to get General Catalog : {}", id);
 
-		Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
+		// Get all active products with or not with promotions by product id
+		Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(id, PageRequest.of(0, 1));
 
 		Optional<GeneralCatalogDTO> generalCatalogDTOOpt = Optional.empty();
 
-		if (productsDTOOpt.isPresent()) {
-			ProductsDTO productsDTO = productsDTOOpt.get();
+		for (Iterator<Object[]> iterator = page.iterator(); iterator.hasNext();) {
+			Object[] products = iterator.next();
 
 			GeneralCatalogDTO generalCatalogDTO = new GeneralCatalogDTO();
-			generalCatalogDTO.setId(productsDTO.getId());
-			generalCatalogDTO.setProductName(productsDTO.getProductName());
-			generalCatalogDTO.setProductDescription(productsDTO.getProductDescription());
-			generalCatalogDTO.setProductType(productsDTO.getProductType());
-			generalCatalogDTO.setProductImg(productsDTO.getProductImg());
-			generalCatalogDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			generalCatalogDTO.setProductPrice(productsDTO.getProductPrice());
+			generalCatalogDTO.setId(((BigInteger)products[0]).longValue());
+			generalCatalogDTO.setProductName((String)products[1]);
+			generalCatalogDTO.setProductDescription((String)products[2]);
+			generalCatalogDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+			generalCatalogDTO.setProductImg((byte[])products[4]);
+			generalCatalogDTO.setProductImgContentType((String)products[5]);
+			generalCatalogDTO.setProductPrice((BigDecimal)products[6]);
 			generalCatalogDTO.setOrderQuantity(new Integer(0));
 
 			generalCatalogDTOOpt = Optional.of(generalCatalogDTO);
+			break;
 		}
 
 		return ResponseUtil.wrapOrNotFound(generalCatalogDTOOpt);

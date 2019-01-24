@@ -2,7 +2,7 @@
     "psCatalogApp": {
         "customerOrdersDet": {
             "home": {
-                "title": "Orders Detail",
+                "title": "Order Details {{ orderReference }} - total value: {{ orderTotalValue }} euros",
                 "search": "Search for Order Detail"
             },
             "detail": {

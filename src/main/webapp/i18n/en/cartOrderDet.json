@@ -15,7 +15,7 @@
                 "question": "Are you sure you want to delete product {{ param }} from shopping cart?"
             },
             "ordered": {
-                "question": "Are you sure you want to realize Order with total value of {{ orderTotalValue }} euros?"
+                "question": "Are you sure you want to realize Order with total value of {{ pendingOrderTotalValue }} euros?"
             },
             "detail": {
                 "title": "Product Detail"

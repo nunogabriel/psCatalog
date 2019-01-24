@@ -66,4 +66,6 @@ public interface OrderDetService {
 	Page<OrderDetDTO> getAllByLoginAndOrderIdAndOrderStatus(String login, Long orderId, Pageable pageable);
 
 	BigDecimal getOrderTotal(Long orderId);
+
+	BigDecimal getOrderTotalWithPromotions(Long orderId);
 }

@@ -1,8 +1,7 @@
 <div>
     <h2 id="page-heading">
         <div *ngFor="let customerOrdersDetAux of customerOrdersDet; let i = index; trackBy: trackId">
-        	<span *ngIf="i == 0" jhiTranslate="psCatalogApp.customerOrdersDet.home.title">Orders</span>
-        	<span *ngIf="i == 0">{{customerOrdersDetAux.orderOrderReference}}</span>
+        	<span *ngIf="i == 0" jhiTranslate="psCatalogApp.customerOrdersDet.home.title" translateValues="{orderReference: '{{customerOrdersDetAux.orderOrderReference}}', orderTotalValue: '{{orderTotalValue}}'}">Orders</span>
         </div>
     </h2>
     <jhi-alert></jhi-alert>

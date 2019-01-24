@@ -38,4 +38,9 @@ public interface OrderDetRepository extends JpaRepository<OrderDet, Long> {
 
 	@Query("select sum(orderdet.unitPrice * orderdet.orderQuantity) from OrderDet orderdet where orderdet.order.id =:orderId")
 	BigDecimal findOrderTotal(@Param("orderId") Long orderId);
+
+	@Query(
+			value = "select sum((CASE WHEN p.new_product_price is null THEN od.unit_price ELSE p.new_product_price END) * od.order_Quantity) from Order_Det od left join promotions p on od.product_id = p.products_id and ((now() between p.promotion_Start_Date and p.promotion_Expiry_Date) or p.promotion_Expiry_Date is null) where od.order_id = ?1",
+			nativeQuery = true)
+	BigDecimal findOrderTotalWithPromotions(@Param("orderId") Long orderId);
 }

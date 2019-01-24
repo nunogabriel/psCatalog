@@ -1,11 +1,11 @@
 package com.cgi.pscatalog.service;
 
-import com.cgi.pscatalog.service.dto.ProductsDTO;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import com.cgi.pscatalog.service.dto.ProductsDTO;
 
 /**
  * Service Interface for managing Products.
@@ -48,9 +48,18 @@ public interface ProductsService {
      * Search for the products corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<ProductsDTO> search(String query, Pageable pageable);
+
+    Page<Object[]> getAllProductsWithPromotions(Pageable pageable);
+
+    Page<Object[]> getAllProductsWithPromotionsByProductId(Long productId, Pageable pageable);
+
+	Page<Object[]> getAllProductsWithPromotionsByCustomersId(Long customerId, Pageable pageable);
+
+	Page<Object[]> getAllProductsWithPromotionsByCustomersIdAndProductId(Long customerId, Long productId, Pageable pageable);
+
 }

@@ -15,7 +15,7 @@
                 "question": "Tem a certeza que pretende eliminar o produto {{ param }} do carrinho?"
             },
 			"ordered": {
-                "question": "Tem a certeza que pretende realizar a encomenda no valor total de {{ orderTotalValue }} euros?"
+                "question": "Tem a certeza que pretende realizar a encomenda no valor total de {{ pendingOrderTotalValue }} euros?"
             },            
             "detail": {
                 "title": "Detalhe do Produto"

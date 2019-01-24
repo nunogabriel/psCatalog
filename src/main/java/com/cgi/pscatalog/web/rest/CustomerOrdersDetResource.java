@@ -203,8 +203,8 @@ public class CustomerOrdersDetResource {
      */
     @GetMapping("/customer-orders-det/orderTotal")
     @Timed
-    public BigDecimal getOrderTotal() {
-        log.debug("REST request to get getOrderTotal");
+    public BigDecimal getPendingOrderTotal() {
+        log.debug("REST request to get getOrderTotalWithPromotions");
 
         //
         Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
@@ -215,10 +215,25 @@ public class CustomerOrdersDetResource {
 
         if (listOrdersDTO.size() != 0) {
 	        // Get customer order details by order id
-	        orderTotal = orderDetService.getOrderTotal(listOrdersDTO.get(0).getId());
+	        orderTotal = orderDetService.getOrderTotalWithPromotions(listOrdersDTO.get(0).getId());
         }
 
         return orderTotal;
+    }
+
+    /**
+     * GET  /customer-orders-det/orderTotalByOrderId/:orderId : get the "id" orderDet.
+     *
+     * @param id the id of the customerOrdersDetDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the customerOrdersDetDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/customer-orders-det/orderTotalByOrderId/{orderId}")
+    @Timed
+    public BigDecimal getOrderTotalByOrderId(@PathVariable Long orderId) {
+        log.debug("REST request to get getOrderTotalByOrderId");
+
+        // Get customer order details by order id
+	    return orderDetService.getOrderTotal(orderId);
     }
 
     /**

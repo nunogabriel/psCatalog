@@ -44,7 +44,7 @@ export class CartOrderDetOrderDialogComponent {
 export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
     customerAddresses: ICustomerAddresses[];
-    orderTotalValue: number;
+    pendingOrderTotalValue: number;
 
     constructor(
             private jhiAlertService: JhiAlertService,
@@ -60,7 +60,8 @@ export class CartOrderDetOrderPopupComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(CartOrderDetOrderDialogComponent as Component, { size: 'lg', backdrop: 'static' });
                 this.ngbModalRef.componentInstance.cartOrderDet = cartOrderDet;
-                this.customerOrdersDetService.getOrderTotal().subscribe((response: HttpResponse<any> ) => this.ngbModalRef.componentInstance.orderTotalValue = response.body);
+                this.customerOrdersDetService.getPendingOrderTotal().subscribe(
+                        (response: HttpResponse<any> ) => this.ngbModalRef.componentInstance.pendingOrderTotalValue = response.body);
                 this.customerAddressesService.query().subscribe(
                         (res: HttpResponse<ICustomerAddresses[]>) => {
                             this.ngbModalRef.componentInstance.customerAddresses = res.body;

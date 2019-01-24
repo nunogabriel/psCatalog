@@ -1,22 +1,22 @@
 package com.cgi.pscatalog.service.impl;
 
-import com.cgi.pscatalog.service.ProductsService;
-import com.cgi.pscatalog.domain.Products;
-import com.cgi.pscatalog.repository.ProductsRepository;
-import com.cgi.pscatalog.repository.search.ProductsSearchRepository;
-import com.cgi.pscatalog.service.dto.ProductsDTO;
-import com.cgi.pscatalog.service.mapper.ProductsMapper;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import com.cgi.pscatalog.domain.Products;
+import com.cgi.pscatalog.repository.ProductsRepository;
+import com.cgi.pscatalog.repository.search.ProductsSearchRepository;
+import com.cgi.pscatalog.service.ProductsService;
+import com.cgi.pscatalog.service.dto.ProductsDTO;
+import com.cgi.pscatalog.service.mapper.ProductsMapper;
 
 /**
  * Service Implementation for managing Products.
@@ -111,4 +111,32 @@ public class ProductsServiceImpl implements ProductsService {
         return productsSearchRepository.search(queryStringQuery(query), pageable)
             .map(productsMapper::toDto);
     }
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Object[]> getAllProductsWithPromotions(Pageable pageable) {
+        log.debug("Request to get all products promotions");
+        return productsRepository.findAllProductsWithPromotions(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Object[]> getAllProductsWithPromotionsByProductId(Long productId, Pageable pageable) {
+        log.debug("Request to get all products promotions by product id {}", productId);
+        return productsRepository.findAllProductsWithPromotionsByProductId(productId, pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Object[]> getAllProductsWithPromotionsByCustomersId(Long customerId, Pageable pageable) {
+        log.debug("Request to get all products promotions by customer id {}", customerId);
+        return productsRepository.findAllProductsWithPromotionsByCustomersId(customerId, pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Object[]> getAllProductsWithPromotionsByCustomersIdAndProductId(Long customerId, Long productId, Pageable pageable) {
+        log.debug("Request to get all products promotions by customer id {} and product id {}", customerId, productId);
+        return productsRepository.findAllProductsWithPromotionsByCustomersIdAndProductId(customerId, productId, pageable);
+	}
 }

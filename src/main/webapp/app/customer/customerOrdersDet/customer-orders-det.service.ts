@@ -47,9 +47,14 @@ export class CustomerOrdersDetService {
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
-    getOrderTotal(): Observable<HttpResponse<any>> {
+    getPendingOrderTotal(): Observable<HttpResponse<any>> {
         return this.http
             .get<any>(`${this.resourceUrl}/orderTotal`, { observe: 'response' });
+    }
+
+    getOrderTotalByOrderId(orderId: number): Observable<HttpResponse<any>> {
+        return this.http
+            .get<any>(`${this.resourceUrl}/orderTotalByOrderId/${orderId}`, { observe: 'response' });
     }
 
     protected convertDateFromClient(customerOrdersDet: ICustomerOrdersDet): ICustomerOrdersDet {

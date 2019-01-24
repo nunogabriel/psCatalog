@@ -159,4 +159,11 @@ public class OrderDetServiceImpl implements OrderDetService {
         log.debug("Request to get Order Total by Order Id {}", orderId);
         return orderDetRepository.findOrderTotal(orderId);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BigDecimal getOrderTotalWithPromotions(Long orderId) {
+        log.debug("Request to get Order Total with promotions by Order Id {}", orderId);
+        return orderDetRepository.findOrderTotalWithPromotions(orderId);
+	}
 }

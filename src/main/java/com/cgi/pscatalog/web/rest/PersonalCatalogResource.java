@@ -1,5 +1,7 @@
 package com.cgi.pscatalog.web.rest;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.config.Constants;
+import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
 import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.AddressesService;
 import com.cgi.pscatalog.service.CustomersService;
@@ -239,27 +241,26 @@ public class PersonalCatalogResource {
             throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
-        Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
+        // Get all active products with or not with promotions by customer id
+        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersId(customersDTO.getId(), pageable);
 
 		List<PersonalCatalogDTO> listPersonalCatalogDTO = new ArrayList<PersonalCatalogDTO>();
 
-		for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = iterator.next();
+		for (Iterator<Object[]> iterator = page.iterator(); iterator.hasNext();) {
+			Object[] products = iterator.next();
 
 			PersonalCatalogDTO personalCatalogDTO = new PersonalCatalogDTO();
-			personalCatalogDTO.setId(productsDTO.getId());
-			personalCatalogDTO.setProductName(productsDTO.getProductName());
-			personalCatalogDTO.setProductDescription(productsDTO.getProductDescription());
-			personalCatalogDTO.setProductType(productsDTO.getProductType());
-			personalCatalogDTO.setProductImg(productsDTO.getProductImg());
-			personalCatalogDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			personalCatalogDTO.setProductPrice(productsDTO.getProductPrice());
+			personalCatalogDTO.setId(((BigInteger)products[0]).longValue());
+			personalCatalogDTO.setProductName((String)products[1]);
+			personalCatalogDTO.setProductDescription((String)products[2]);
+			personalCatalogDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+			personalCatalogDTO.setProductImg((byte[])products[4]);
+			personalCatalogDTO.setProductImgContentType((String)products[5]);
+			personalCatalogDTO.setProductPrice((BigDecimal)products[6]);
 			personalCatalogDTO.setOrderQuantity(new Integer(0));
 
 			listPersonalCatalogDTO.add(personalCatalogDTO);
 		}
-
-		Page<PersonalCatalogDTO> page = new PageImpl<PersonalCatalogDTO>(listPersonalCatalogDTO, pageable, listPersonalCatalogDTO.size());
 
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/personalCatalog");
 
@@ -279,24 +280,35 @@ public class PersonalCatalogResource {
 	public ResponseEntity<PersonalCatalogDTO> getPersonalCatalog(@PathVariable Long id) {
 		log.debug("REST request to get Personal Catalog : {}", id);
 
-		Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
+		// Get customer identification by login
+        CustomersResource customersResource = new CustomersResource(customersService);
+        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+
+        if (customersDTO == null) {
+            throw new FirstCreateCustomerException(ENTITY_NAME);
+        }
+
+        // Get all active products with or not with promotions by customer id and product id
+        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersIdAndProductId(customersDTO.getId(), id, PageRequest.of(0, 1));
 
 		Optional<PersonalCatalogDTO> personalCatalogDTOOpt = Optional.empty();
 
-		if (productsDTOOpt.isPresent()) {
-			ProductsDTO productsDTO = productsDTOOpt.get();
+		for (Iterator<Object[]> iterator = page.iterator(); iterator.hasNext();) {
+			Object[] products = iterator.next();
 
 			PersonalCatalogDTO personalCatalogDTO = new PersonalCatalogDTO();
-			personalCatalogDTO.setId(productsDTO.getId());
-			personalCatalogDTO.setProductName(productsDTO.getProductName());
-			personalCatalogDTO.setProductDescription(productsDTO.getProductDescription());
-			personalCatalogDTO.setProductType(productsDTO.getProductType());
-			personalCatalogDTO.setProductImg(productsDTO.getProductImg());
-			personalCatalogDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			personalCatalogDTO.setProductPrice(productsDTO.getProductPrice());
+			personalCatalogDTO.setId(((BigInteger)products[0]).longValue());
+			personalCatalogDTO.setProductName((String)products[1]);
+			personalCatalogDTO.setProductDescription((String)products[2]);
+			personalCatalogDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+			personalCatalogDTO.setProductImg((byte[])products[4]);
+			personalCatalogDTO.setProductImgContentType((String)products[5]);
+			personalCatalogDTO.setProductPrice((BigDecimal)products[6]);
 			personalCatalogDTO.setOrderQuantity(new Integer(0));
 
 			personalCatalogDTOOpt = Optional.of(personalCatalogDTO);
+			break;
 		}
 
 		return ResponseUtil.wrapOrNotFound(personalCatalogDTOOpt);

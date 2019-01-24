@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.config.Constants;
+import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
 import com.cgi.pscatalog.security.SecurityUtils;
 import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.service.OrderDetService;
@@ -92,9 +93,9 @@ public class CartOrderDetResource {
         log.debug("REST request to save CartOrderDet");
 
         // 1 - Verify if there is any pending order created for customer
-        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+        Page<OrdersDTO> pageOrdersDTO = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
 
-        List<OrdersDTO> listOrdersDTO = page.getContent();
+        List<OrdersDTO> listOrdersDTO = pageOrdersDTO.getContent();
 
         OrdersDTO ordersDTOAux = new OrdersDTO();
 
@@ -114,6 +115,7 @@ public class CartOrderDetResource {
 
 	        log.debug("REST request to createCartOrderDet - orderStatusId: {}", orderStatusId);
 
+	        // Change order status from PENDING to NEW
 	        OrdersDTO ordersDTO = listOrdersDTO.get(0);
 
 			ordersDTO.setOrderStatusId(orderStatusId);
@@ -124,6 +126,33 @@ public class CartOrderDetResource {
 			ordersDTO.setDeliveryAddressId(deliveryAddressId);
 
 			ordersDTOAux = ordersService.save(ordersDTO);
+
+			// Get all order details from order
+			Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByOrderId(ordersDTO.getId(), PageRequest.of(0, 1000));
+
+			List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+
+			for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
+				OrderDetDTO orderDetDTO = iterator.next();
+
+				// Get all active products with or not with promotions by product id
+				Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
+
+				for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
+					Object[] products = iteratorProducts.next();
+
+					// Update unit price because of promotions
+					orderDetDTO.setUnitPrice((BigDecimal)products[6]);
+			        orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+			        orderDetDTO.setLastModifiedDate(Instant.now());
+					break;
+				}
+
+				if ( page.getSize() != 0) {
+					// Update order detail with unit price
+					orderDetService.save(orderDetDTO);
+				}
+			}
         }
 
 		return ResponseEntity.ok().headers(HeaderUtil.createEntityOrderAlert(ENTITY_NAME, ordersDTOAux.getOrderReference())).build();
@@ -207,18 +236,20 @@ public class CartOrderDetResource {
 			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
 			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
 			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
-			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
-			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
+			// Get all active products with or not with promotions by product id
+			Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
 
-			if (productsDTOopt.isPresent()) {
-				ProductsDTO productsDTO = productsDTOopt.get();
+			for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
+				Object[] products = iteratorProducts.next();
 
-				cartOrderDetDTO.setProductDescription(productsDTO.getProductDescription());
-				cartOrderDetDTO.setProductType(productsDTO.getProductType());
-				cartOrderDetDTO.setProductImg(productsDTO.getProductImg());
-				cartOrderDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
+				cartOrderDetDTO.setProductDescription((String)products[2]);
+				cartOrderDetDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+				cartOrderDetDTO.setProductImg((byte[])products[4]);
+				cartOrderDetDTO.setProductImgContentType((String)products[5]);
+				cartOrderDetDTO.setUnitPrice((BigDecimal)products[6]);
+				cartOrderDetDTO.setTotalPrice(((BigDecimal)products[6]).multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
+				break;
 			}
 
 			listCartOrderDetDTO.add(cartOrderDetDTO);
@@ -256,18 +287,20 @@ public class CartOrderDetResource {
 			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
 			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
 			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
-			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
 
-			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
+			// Get all active products with or not with promotions by product id
+			Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
 
-			if (productsDTOopt.isPresent()) {
-				ProductsDTO productsDTO = productsDTOopt.get();
+			for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
+				Object[] products = iteratorProducts.next();
 
-				cartOrderDetDTO.setProductDescription(productsDTO.getProductDescription());
-				cartOrderDetDTO.setProductType(productsDTO.getProductType());
-				cartOrderDetDTO.setProductImg(productsDTO.getProductImg());
-				cartOrderDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
+				cartOrderDetDTO.setProductDescription((String)products[2]);
+				cartOrderDetDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
+				cartOrderDetDTO.setProductImg((byte[])products[4]);
+				cartOrderDetDTO.setProductImgContentType((String)products[5]);
+				cartOrderDetDTO.setUnitPrice((BigDecimal)products[6]);
+				cartOrderDetDTO.setTotalPrice(((BigDecimal)products[6]).multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
+				break;
 			}
 
 			cartOrderDetDTOOpt = Optional.of(cartOrderDetDTO);

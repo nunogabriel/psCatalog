@@ -32,6 +32,7 @@ export class CustomerOrdersDetComponent implements OnInit, OnDestroy {
     previousPage: any;
     reverse: any;
     firstCreateCustomer: string;
+    orderTotalValue: number;
 
     constructor(
         private customerOrdersDetService: CustomerOrdersDetService,
@@ -87,6 +88,7 @@ export class CustomerOrdersDetComponent implements OnInit, OnDestroy {
                     (res: HttpResponse<ICustomerOrdersDet[]>) => this.paginateCustomerOrdersDets(res.body, res.headers),
                     (res: HttpErrorResponse) => this.onError(res.message)
                 );
+            this.customerOrdersDetService.getOrderTotalByOrderId(this.currentOrderId).subscribe((response: HttpResponse<any> ) => this.orderTotalValue = response.body);
             return;
         }
         this.firstCreateCustomer = null;
