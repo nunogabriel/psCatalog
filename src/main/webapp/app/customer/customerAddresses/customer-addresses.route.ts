@@ -22,7 +22,7 @@ export class CustomerAddressesResolve implements Resolve<ICustomerAddresses> {
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<CustomerAddresses>) => response.ok),
-                map((addresses: HttpResponse<CustomerAddresses>) => addresses.body)
+                map((customerAddresses: HttpResponse<CustomerAddresses>) => customerAddresses.body)
             );
         }
         return of(new CustomerAddresses());

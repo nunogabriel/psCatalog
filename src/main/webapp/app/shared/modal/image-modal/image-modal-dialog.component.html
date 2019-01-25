@@ -1,0 +1,13 @@
+<form name="imageModalForm">
+	 <div class="modal-body">
+	     <jhi-alert-error></jhi-alert-error>
+	     <div *ngIf="products.productImg">
+	     		<img [src]="'data:' + products.productImgContentType + ';base64,' + products.productImg" alt="products image"/>
+	     </div>
+	 </div>
+	 <div class="modal-footer">
+	     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+	         <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.close">Close</span>
+	     </button>
+	 </div>
+</form> 

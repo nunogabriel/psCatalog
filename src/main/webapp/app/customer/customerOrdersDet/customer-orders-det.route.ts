@@ -20,7 +20,7 @@ export class CustomerOrdersDetResolve implements Resolve<ICustomerOrdersDet> {
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<CustomerOrdersDet>) => response.ok),
-                map((orderDet: HttpResponse<CustomerOrdersDet>) => orderDet.body)
+                map((customerOrderDet: HttpResponse<CustomerOrdersDet>) => customerOrderDet.body)
             );
         }
         return of(new CustomerOrdersDet());

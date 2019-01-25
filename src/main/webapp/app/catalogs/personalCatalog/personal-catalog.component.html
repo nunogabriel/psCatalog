@@ -40,7 +40,7 @@
                 <td>{{personalCatalog.productDescription}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + personalCatalog.productType}}">{{personalCatalog.productType}}</td>
                 <td>
-                    <a *ngIf="personalCatalog.productImg" (click)="openFile(personalCatalog.productImgContentType, personalCatalog.productImg)">
+                    <a *ngIf="personalCatalog.productImg" [routerLink]="['/', { outlets: { popup: 'products/'+ personalCatalog.id + '/image-modal'} }]">
                         <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-height: 30px;" alt="personalCatalog image"/>
                     </a>
                 </td>

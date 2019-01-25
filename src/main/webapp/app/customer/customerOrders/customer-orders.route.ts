@@ -21,7 +21,7 @@ export class CustomerOrdersResolve implements Resolve<ICustomerOrders> {
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<CustomerOrders>) => response.ok),
-                map((orders: HttpResponse<CustomerOrders>) => orders.body)
+                map((customerOrders: HttpResponse<CustomerOrders>) => customerOrders.body)
             );
         }
         return of(new CustomerOrders());

@@ -44,7 +44,7 @@
                 <td>{{customerOrdersDet.productDescription}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + customerOrdersDet.productType}}">{{customerOrdersDet.productType}}</td>
                 <td>
-                    <a *ngIf="customerOrdersDet.productImg" (click)="openFile(customerOrdersDet.productImgContentType, customerOrdersDet.productImg)">
+                    <a *ngIf="customerOrdersDet.productImg" [routerLink]="['/', { outlets: { popup: 'products/'+ customerOrdersDet.productId + '/image-modal'} }]">
                         <img [src]="'data:' + customerOrdersDet.productImgContentType + ';base64,' + customerOrdersDet.productImg" style="max-height: 30px;" alt="customerOrdersDet image"/>
                     </a>
                 </td>

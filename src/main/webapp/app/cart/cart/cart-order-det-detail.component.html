@@ -18,8 +18,8 @@
                 <dt><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span></dt>
                 <dd>
                     <div *ngIf="cartOrderDet.productImg">
-                        <a (click)="openFile(cartOrderDet.productImgContentType, cartOrderDet.productImg)">
-                            <img [src]="'data:' + cartOrderDet.productImgContentType + ';base64,' + cartOrderDet.productImg" style="max-width: 100%;" alt="cartOrderDet image"/>
+                        <a [routerLink]="['/', { outlets: { popup: 'products/'+ cartOrderDet.productId + '/image-modal'} }]">
+                            <img [src]="'data:' + cartOrderDet.productImgContentType + ';base64,' + cartOrderDet.productImg" style="max-width: 250px; max-height: 250px;" alt="cartOrderDet image"/>
                         </a>
                     </div>
                 </dd>

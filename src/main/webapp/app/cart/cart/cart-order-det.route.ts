@@ -23,7 +23,7 @@ export class CartOrderDetResolve implements Resolve<ICart> {
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<Cart>) => response.ok),
-                map((orderDet: HttpResponse<Cart>) => orderDet.body)
+                map((cartOrderDet: HttpResponse<Cart>) => cartOrderDet.body)
             );
         }
         return of(new Cart());

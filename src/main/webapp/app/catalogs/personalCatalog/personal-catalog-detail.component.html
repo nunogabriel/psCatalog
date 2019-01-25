@@ -18,8 +18,8 @@
                 <dt><span jhiTranslate="psCatalogApp.personalCatalog.productImg">Product Img</span></dt>
                 <dd>
                     <div *ngIf="personalCatalog.productImg">
-                        <a (click)="openFile(personalCatalog.productImgContentType, personalCatalog.productImg)">
-                            <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-width: 100%;" alt="personalCatalog image"/>
+                        <a [routerLink]="['/', { outlets: { popup: 'products/'+ personalCatalog.id + '/image-modal'} }]">
+                            <img [src]="'data:' + personalCatalog.productImgContentType + ';base64,' + personalCatalog.productImg" style="max-width: 250px; max-height: 250px;" alt="personalCatalog image"/>
                         </a>
                     </div>
                 </dd>
