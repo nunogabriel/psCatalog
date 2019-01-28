@@ -32,13 +32,13 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="productProductName"><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.cartOrderDet.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.cartOrderDet.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product.productName"><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product.productDescription"><span jhiTranslate="psCatalogApp.cartOrderDet.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product.productType"><span jhiTranslate="psCatalogApp.cartOrderDet.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product.productImg"><span jhiTranslate="psCatalogApp.cartOrderDet.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="unitPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.unitPrice">Unit Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="orderQuantity"><span jhiTranslate="psCatalogApp.cartOrderDet.orderQuantity">Order Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="totalPrice"><span jhiTranslate="psCatalogApp.cartOrderDet.totalPrice">Total Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th><span jhiTranslate="psCatalogApp.cartOrderDet.totalPrice">Total Price</span></th>
             <th></th>
             </tr>
             </thead>

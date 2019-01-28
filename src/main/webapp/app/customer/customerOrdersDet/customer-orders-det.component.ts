@@ -112,7 +112,7 @@ export class CustomerOrdersDetComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/customer-orders-det'], {
+        this.router.navigate(['/customer-orders-det/' + this.currentOrderId + '/detail'], {
             queryParams: {
                 page: this.page,
                 size: this.itemsPerPage,

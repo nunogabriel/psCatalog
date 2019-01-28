@@ -26,11 +26,11 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.generalCatalog.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.generalCatalog.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.generalCatalog.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productImg"><span jhiTranslate="psCatalogApp.generalCatalog.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.generalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product_name"><span jhiTranslate="psCatalogApp.generalCatalog.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product_description"><span jhiTranslate="psCatalogApp.generalCatalog.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product_type"><span jhiTranslate="psCatalogApp.generalCatalog.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product_img"><span jhiTranslate="psCatalogApp.generalCatalog.productImg">Product Img</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="product_price"><span jhiTranslate="psCatalogApp.generalCatalog.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
