@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -110,11 +109,9 @@ public class CustomerOrdersResource {
         String login = SecurityUtils.getCurrentUserLogin().get();
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
+        if ( !optionalCustomersDTO.isPresent() ) {
             throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
@@ -122,6 +119,7 @@ public class CustomerOrdersResource {
         Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatus(login, pageable);
 
         List<OrdersDTO> listOrdersDTO = page.getContent();
+
 		List<CustomerOrdersDTO> listCustomerOrdersDTO = new ArrayList<CustomerOrdersDTO>();
 
 		for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
@@ -145,11 +143,9 @@ public class CustomerOrdersResource {
 			listCustomerOrdersDTO.add(customerOrdersDTO);
 		}
 
-		Page<CustomerOrdersDTO> pageAux = new PageImpl<CustomerOrdersDTO>(listCustomerOrdersDTO, pageable, listCustomerOrdersDTO.size());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/customer-orders");
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(pageAux, "/api/customer-orders");
-
-        return ResponseEntity.ok().headers(headers).body(pageAux.getContent());
+        return ResponseEntity.ok().headers(headers).body(listCustomerOrdersDTO);
     }
 
     /**

@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -206,17 +205,13 @@ public class CartOrderDetResource {
         log.debug("REST request to get a page of CartOrderDets");
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
-            throw new FirstCreateCustomerException(ENTITY_NAME);
+        if ( optionalCustomersDTO.isPresent() ) {
+        	log.debug("REST request to getAllCartOrderDets - customerId: {}", optionalCustomersDTO.get().getId());
+        } else {
+        	throw new FirstCreateCustomerException(ENTITY_NAME);
         }
-
-		Long customerId = customersDTO.getId();
-
-        log.debug("REST request to getAllCartOrderDets - customerId: {}", customerId);
 
         // 1 - Verify if there is any order created for customer (get Order by Customer identification)
         List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
@@ -255,9 +250,7 @@ public class CartOrderDetResource {
 			listCartOrderDetDTO.add(cartOrderDetDTO);
 		}
 
-		Page<CartOrderDetDTO> page = new PageImpl<CartOrderDetDTO>(listCartOrderDetDTO, pageable, listCartOrderDetDTO.size());
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cart-order-det");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(pageOrderDetDTO, "/api/cart-order-det");
 
         return ResponseEntity.ok().headers(headers).body(listCartOrderDetDTO);
     }

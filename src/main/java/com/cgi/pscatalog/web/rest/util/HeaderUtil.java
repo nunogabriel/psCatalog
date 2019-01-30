@@ -30,7 +30,7 @@ public final class HeaderUtil {
     public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".updated", param);
     }
-    
+
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deleted", param);
     }
@@ -42,27 +42,27 @@ public final class HeaderUtil {
         headers.add("X-" + APPLICATION_NAME + "-params", entityName);
         return headers;
     }
-    
+
     public static HttpHeaders createEntityAddBasketAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addBasket", param);
     }
-    
+
     public static HttpHeaders createEntityAddPersonalAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonal", param);
     }
-    
+
     public static HttpHeaders createEntityAddPersonalAlreadyAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".addPersonalAlready", param);
     }
-    
+
     public static HttpHeaders createEntityDeletePersonalDoesNotExistAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonalDoesNotExist", param);
     }
-    
+
     public static HttpHeaders createEntityDeletePersonalAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deletePersonal", param);
     }
-    
+
     public static HttpHeaders createEntityOrderAlert(String entityName, String param) {
         return createAlert(APPLICATION_NAME + "." + entityName + ".created", param);
     }

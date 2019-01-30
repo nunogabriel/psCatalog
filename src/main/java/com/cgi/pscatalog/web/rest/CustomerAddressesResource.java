@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -80,17 +79,21 @@ public class CustomerAddressesResource {
         }
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
-		Long customerId = customersDTO.getId();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customerId.longValue() == 0) {
-            throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
+        Long customerId = new Long(0);
+
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
+
+        	customerId = customersDTO.getId();
+
+        	log.debug("REST request to addBasket - customerId: {}", customerId);
+        } else {
+        	throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
         }
 
-        log.debug("REST request to getAllCustomerAddresses - customerId: {}", customerId);
-
+        //
         AddressesDTO addressesDTO = new AddressesDTO();
         addressesDTO.setAddressName(customerAddressesDTO.getAddressName());
         addressesDTO.setAddressReference(customerAddressesDTO.getAddressReference());
@@ -171,17 +174,16 @@ public class CustomerAddressesResource {
         String login = SecurityUtils.getCurrentUserLogin().get();
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
+        if ( !optionalCustomersDTO.isPresent() ) {
             throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
         // Get address identification by customer identification
-        Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, pageable);
-        List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
+        Page<AddressesDTO> page = addressesService.getAddressesByLogin(login, pageable);
+
+        List<AddressesDTO> listAddressesDTO = page.getContent();
 
         List<CustomerAddressesDTO> listCustomerAddressesDTO = new ArrayList<CustomerAddressesDTO>();
 
@@ -204,11 +206,9 @@ public class CustomerAddressesResource {
 			listCustomerAddressesDTO.add(customerAddressesDTO);
 		}
 
-        Page<CustomerAddressesDTO> page = new PageImpl<CustomerAddressesDTO>(listCustomerAddressesDTO, pageable, listCustomerAddressesDTO.size());
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/customerAddresses");
 
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(listCustomerAddressesDTO);
     }
 
     /**

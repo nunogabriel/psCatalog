@@ -139,4 +139,5 @@ public class ProductsServiceImpl implements ProductsService {
         log.debug("Request to get all products promotions by customer id {} and product id {}", customerId, productId);
         return productsRepository.findAllProductsWithPromotionsByCustomersIdAndProductId(customerId, productId, pageable);
 	}
+
 }

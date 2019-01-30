@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.products.productPrice" for="field_productPrice">Product Price</label>
-                    <input type="number" class="form-control" name="productPrice" id="field_productPrice" pattern="[0-9]{0,3}(\.\d{1,2})?"
+                    <input type="number" class="form-control" name="productPrice" id="field_productPrice" pattern="[0-9]{0,4}(\.\d{1,2})?"
                         [(ngModel)]="products.productPrice" required/>
                     <div [hidden]="!(editForm.controls.productPrice?.dirty && editForm.controls.productPrice?.invalid)">
                         <small class="form-text text-danger"
@@ -39,8 +39,8 @@
                             This field should be a number.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.productPrice?.errors?.pattern" jhiTranslate="entity.validation.patternDecimalNumber_3_2">
-                            This field should be a natural number between 0.01 and 999.99.
+                            [hidden]="!editForm.controls.productPrice?.errors?.pattern" jhiTranslate="entity.validation.patternDecimalNumber_4_2">
+                            This field should be a natural number between 0.01 and 9999.99.
                         </small>
                     </div>
                 </div>

@@ -4,16 +4,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,8 +33,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cgi.pscatalog.security.SecurityUtils;
+import com.cgi.pscatalog.service.AddressesService;
 import com.cgi.pscatalog.service.CustomersService;
+import com.cgi.pscatalog.service.OrderDetService;
+import com.cgi.pscatalog.service.OrdersService;
+import com.cgi.pscatalog.service.dto.AddressesDTO;
 import com.cgi.pscatalog.service.dto.CustomersDTO;
+import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.service.dto.PersonalDataDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
@@ -51,6 +61,15 @@ public class PersonalDataResource {
     private static final String ENTITY_NAME = "personalData";
 
     private final CustomersService customersService;
+
+    @Autowired
+    private OrderDetService orderDetService;
+
+    @Autowired
+    private AddressesService addressesService;
+
+    @Autowired
+    private OrdersService ordersService;
 
     public PersonalDataResource(CustomersService customersService) {
         this.customersService = customersService;
@@ -111,23 +130,121 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(personalDataDTO.getId());
+        String login = SecurityUtils.getCurrentUserLogin().get();
 
-		if (customersDTOOpt.isPresent()) {
-			CustomersDTO customersDTO = customersDTOOpt.get();
+        // Verify if already exists orders with PENDING Status
+        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
 
-	        customersDTO.setCustomerEmail(personalDataDTO.getCustomerEmail());
-	        customersDTO.setCustomerGender(personalDataDTO.getCustomerGender());
-	        customersDTO.setCustomerName(personalDataDTO.getCustomerName());
-	        customersDTO.setCustomerNif(personalDataDTO.getCustomerNif());
-	        customersDTO.setCustomerPhone(personalDataDTO.getCustomerPhone());
-	        customersDTO.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
-	        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
-	        customersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-	        customersDTO.setLastModifiedDate(Instant.now());
+        List<OrdersDTO> listOrdersDTO = page.getContent();
 
-	        customersService.save(customersDTO);
-		}
+        //
+        if ( listOrdersDTO.size() == 0 ) {
+        	// There are not PENDING orders
+	        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(personalDataDTO.getId());
+
+			if (customersDTOOpt.isPresent()) {
+				CustomersDTO customersDTO = customersDTOOpt.get();
+
+		        customersDTO.setCustomerEmail(personalDataDTO.getCustomerEmail());
+		        customersDTO.setCustomerGender(personalDataDTO.getCustomerGender());
+		        customersDTO.setCustomerName(personalDataDTO.getCustomerName());
+		        customersDTO.setCustomerNif(personalDataDTO.getCustomerNif());
+		        customersDTO.setCustomerPhone(personalDataDTO.getCustomerPhone());
+		        customersDTO.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
+		        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
+		        customersDTO.setLastModifiedBy(login);
+		        customersDTO.setLastModifiedDate(Instant.now());
+
+		        customersService.save(customersDTO);
+			}
+        } else {
+        	// Update all data related with PENDING orders
+
+        	// Create new customer with customer products associated
+            CustomersDTO customersDTONew = new CustomersDTO();
+            customersDTONew.setCustomerEmail(personalDataDTO.getCustomerEmail());
+            customersDTONew.setCustomerGender(personalDataDTO.getCustomerGender());
+            customersDTONew.setCustomerName(personalDataDTO.getCustomerName());
+            customersDTONew.setCustomerNif(personalDataDTO.getCustomerNif());
+            customersDTONew.setCustomerPhone(personalDataDTO.getCustomerPhone());
+            customersDTONew.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
+            customersDTONew.setCustomerEndDate(null);
+            customersDTONew.setLogin(SecurityUtils.getCurrentUserLogin().get());
+            customersDTONew.setCreatedBy(personalDataDTO.getCreatedBy());
+            customersDTONew.setCreatedDate(personalDataDTO.getCreatedDate());
+            customersDTONew.setProducts(personalDataDTO.getProducts());
+
+            customersDTONew = customersService.save(customersDTONew);
+
+			// Delete old customer and remove products from it (delete records from customer_products table)
+            Optional<CustomersDTO> customersDTOOptOld = customersService.findOne(personalDataDTO.getId());
+
+    		if (customersDTOOptOld.isPresent()) {
+    			CustomersDTO customersDTOOld = customersDTOOptOld.get();
+
+    			customersDTOOld.setCustomerEndDate(Instant.now());
+    			customersDTOOld.setLastModifiedBy(login);
+    			customersDTOOld.setLastModifiedDate(Instant.now());
+    			customersDTOOld.setProducts(null);
+
+    	        customersService.save(customersDTOOld);
+    		}
+
+        	// Update addresses with new customer data
+			Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, PageRequest.of(0, 1000));
+			List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
+
+			Map<Long,Long> mapOldNewAddresses = new HashMap<Long,Long>();
+
+			for (Iterator<AddressesDTO> iteratorAddressesDTO = listAddressesDTO.iterator(); iteratorAddressesDTO.hasNext();) {
+				AddressesDTO addressesDTO = iteratorAddressesDTO.next();
+
+		        // Add new addresses
+		        AddressesDTO addressesDTONew = new AddressesDTO();
+		        addressesDTONew.setAddressName(addressesDTO.getAddressName());
+		        addressesDTONew.setAddressReference(addressesDTO.getAddressReference());
+		        addressesDTONew.setCity(addressesDTO.getCity());
+		        addressesDTONew.setCountryCountryName(addressesDTO.getCountryCountryName());
+		        addressesDTONew.setCountryId(addressesDTO.getCountryId());
+		        addressesDTONew.setCustomerId(customersDTONew.getId());
+		        addressesDTONew.setPhoneNumber(addressesDTO.getPhoneNumber());
+		        addressesDTONew.setState(addressesDTO.getState());
+		        addressesDTONew.setStreetAddress(addressesDTO.getStreetAddress());
+		        addressesDTONew.setZipCode(addressesDTO.getZipCode());
+		        addressesDTONew.setCreatedBy(addressesDTO.getCreatedBy());
+		        addressesDTONew.setCreatedDate(addressesDTO.getCreatedDate());
+
+		        addressesDTONew = addressesService.save(addressesDTONew);
+
+		        mapOldNewAddresses.put(addressesDTO.getId(), addressesDTONew.getId());
+
+				// Delete old addresses = Update address_end_date
+				// TODO
+//		        addressesDTO.setAddressEndDate(Instant.now());
+//		        addressesDTO.setLastModifiedBy(login);
+//		        addressesDTO.setLastModifiedDate(Instant.now());
+
+		        addressesService.save(addressesDTO);
+			}
+
+			// Update PENDING orders with new customer data
+        	for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
+				OrdersDTO ordersDTO = iterator.next();
+
+				ordersDTO.setCustomerId(customersDTONew.getId());
+
+				if ( mapOldNewAddresses.containsKey(ordersDTO.getAddressId()) ) {
+					ordersDTO.setAddressId(mapOldNewAddresses.get(ordersDTO.getAddressId()));
+				}
+
+				if ( mapOldNewAddresses.containsKey(ordersDTO.getDeliveryAddressId()) ) {
+					ordersDTO.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTO.getDeliveryAddressId()));
+				}
+
+				ordersService.save(ordersDTO);
+				break;
+			}
+        }
 
         return ResponseEntity.ok()
 	            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
@@ -147,15 +264,13 @@ public class PersonalDataResource {
         log.debug("REST request to get a page of personal data");
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
         List<PersonalDataDTO> listPersonalDataDTO = new ArrayList<PersonalDataDTO>();
 
-        if (customersDTO == null) {
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
 
-        } else {
     		PersonalDataDTO personalDataDTO = new PersonalDataDTO();
     		personalDataDTO.setId(customersDTO.getId());
     		personalDataDTO.setCustomerEmail(customersDTO.getCustomerEmail());
@@ -219,7 +334,65 @@ public class PersonalDataResource {
     public ResponseEntity<Void> deletePersonalData(@PathVariable Long id) {
         log.debug("REST request to delete Customers : {}", id);
 
-        customersService.delete(id);
+        if ( id == null ) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
+        // Delete old customer and remove products from it (delete records from customer_products table)
+        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(id);
+
+		if (customersDTOOpt.isPresent()) {
+			CustomersDTO customersDTO = customersDTOOpt.get();
+
+			// Delete old customer and remove products from it (delete records from customer_products table)
+	        customersDTO.setCustomerEndDate(Instant.now());
+	        customersDTO.setLastModifiedBy(login);
+	        customersDTO.setLastModifiedDate(Instant.now());
+	        customersDTO.setProducts(null);
+
+	        customersService.save(customersDTO);
+		}
+
+		// Delete addresses = Update address_end_date
+		Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, PageRequest.of(0, 1000));
+		List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
+
+		for (Iterator<AddressesDTO> iteratorAddressesDTO = listAddressesDTO.iterator(); iteratorAddressesDTO.hasNext();) {
+			AddressesDTO addressesDTO = iteratorAddressesDTO.next();
+
+			// TODO
+//	        addressesDTO.setAddressEndDate(Instant.now());
+//	        addressesDTO.setLastModifiedBy(login);
+//	        addressesDTO.setLastModifiedDate(Instant.now());
+
+	        addressesService.save(addressesDTO);
+		}
+
+        // Verify if already exists orders with PENDING Status
+        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
+
+        List<OrdersDTO> listOrdersDTO = page.getContent();
+
+        for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
+			OrdersDTO ordersDTO = iterator.next();
+
+			// Delete all order details from PENDING order
+			Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByOrderId(ordersDTO.getId(), PageRequest.of(0, 1000));
+
+			List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+
+			for (Iterator<OrderDetDTO> iterator2 = listOrderDetDTO.iterator(); iterator2.hasNext();) {
+				OrderDetDTO orderDetDTO = iterator2.next();
+
+				orderDetService.delete(orderDetDTO.getId());
+			}
+
+			// Delete PENDING order
+			ordersService.delete(ordersDTO.getId());
+			break;
+		}
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, "")).build();
     }

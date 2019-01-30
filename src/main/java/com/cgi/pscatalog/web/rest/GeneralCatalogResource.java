@@ -149,16 +149,19 @@ public class GeneralCatalogResource {
         	// There is not any PENDING order created for customer
         	//
             // Get customer identification by login
-            CustomersResource customersResource = new CustomersResource(customersService);
-            ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
-            CustomersDTO customersDTO = responseCustomersDTO.getBody();
-    		Long customerId = customersDTO.getId();
+            Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(login);
 
-            if (customerId.longValue() == 0) {
-                throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
+            Long customerId = new Long(0);
+
+            if ( optionalCustomersDTO.isPresent() ) {
+            	CustomersDTO customersDTO = optionalCustomersDTO.get();
+
+            	customerId = customersDTO.getId();
+
+            	log.debug("REST request to addBasket - customerId: {}", customerId);
+            } else {
+            	throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
             }
-
-            log.debug("REST request to addBasket - customerId: {}", customerId);
 
             // Get default address identification by login
             Long addressId = new Long(0);
@@ -234,11 +237,9 @@ public class GeneralCatalogResource {
 		log.debug("REST request to get a page of General Catalog");
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
+        if ( !optionalCustomersDTO.isPresent() ) {
             throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
@@ -362,55 +363,61 @@ public class GeneralCatalogResource {
         log.debug("REST request to add personal catalog : {}", id);
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
-        Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        boolean productAlreadyInPersonalCatalog = false;
-        String productName = null;
-        for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = iterator.next();
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
 
-			if (productsDTO.getId().longValue() == id.longValue()) {
-				productName = productsDTO.getProductName();
-				productAlreadyInPersonalCatalog = true;
-				break;
-			}
-		}
+            Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
 
-        log.debug("REST request to add personal catalog productAlreadyInPersonalCatalog: {}", productName);
+            boolean productAlreadyInPersonalCatalog = false;
+            String productName = null;
 
-        if (productAlreadyInPersonalCatalog) {
-        	return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlreadyAlert(ENTITY_NAME, productName)).build();
+            for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
+    			ProductsDTO productsDTO = iterator.next();
+
+    			if (productsDTO.getId().longValue() == id.longValue()) {
+    				productName = productsDTO.getProductName();
+    				productAlreadyInPersonalCatalog = true;
+    				break;
+    			}
+    		}
+
+            log.debug("REST request to add personal catalog productAlreadyInPersonalCatalog: {}", productName);
+
+            if (productAlreadyInPersonalCatalog) {
+            	return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlreadyAlert(ENTITY_NAME, productName)).build();
+            }
+
+            // Find product
+            Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
+            Set<ProductsDTO> setProductsDTO = new HashSet<ProductsDTO>();
+
+            // Add new product
+    		if (productsDTOOpt.isPresent()) {
+    			ProductsDTO productsDTO = productsDTOOpt.get();
+    			productName = productsDTO.getProductName();
+    			setProductsDTO.add( productsDTO );
+    		}
+
+    		// Add old products
+    		for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
+    			ProductsDTO productsDTO = iterator.next();
+
+    			setProductsDTO.add( productsDTO );
+    		}
+
+            customersDTO.setProducts(setProductsDTO);
+
+            // Add product to Personal Catalog
+            CustomersResource customersResource = new CustomersResource(customersService);
+            customersResource.updateCustomers(customersDTO);
+
+            log.debug("REST request to add personal catalog updateCustomers: {}", productName);
+
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlert(ENTITY_NAME, productName)).build();
+        } else {
+        	throw new FirstCreateCustomerException(ENTITY_NAME);
         }
-
-        // Find product
-        Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
-        Set<ProductsDTO> setProductsDTO = new HashSet<ProductsDTO>();
-
-        // Add new product
-		if (productsDTOOpt.isPresent()) {
-			ProductsDTO productsDTO = productsDTOOpt.get();
-			productName = productsDTO.getProductName();
-			setProductsDTO.add( productsDTO );
-		}
-
-		// Add old products
-		for (Iterator<ProductsDTO> iterator = oldSetProductsDTO.iterator(); iterator.hasNext();) {
-			ProductsDTO productsDTO = iterator.next();
-
-			setProductsDTO.add( productsDTO );
-		}
-
-        customersDTO.setProducts(setProductsDTO);
-
-        // Add product to Personal Catalog
-        customersResource.updateCustomers(customersDTO);
-
-        log.debug("REST request to add personal catalog updateCustomers: {}", productName);
-
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityAddPersonalAlert(ENTITY_NAME, productName)).build();
     }
-
 }

@@ -148,16 +148,19 @@ public class PersonalCatalogResource {
         	// There is not any PENDING order created for customer
         	//
             // Get customer identification by login
-            CustomersResource customersResource = new CustomersResource(customersService);
-            ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(login);
-            CustomersDTO customersDTO = responseCustomersDTO.getBody();
-    		Long customerId = customersDTO.getId();
+            Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(login);
 
-            if (customerId.longValue() == 0) {
-                throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
+            Long customerId = new Long(0);
+
+            if ( optionalCustomersDTO.isPresent() ) {
+            	CustomersDTO customersDTO = optionalCustomersDTO.get();
+
+            	customerId = customersDTO.getId();
+
+            	log.debug("REST request to addBasket - customerId: {}", customerId);
+            } else {
+            	throw new BadRequestAlertException("You must create a customer first", ENTITY_NAME, "idnull");
             }
-
-            log.debug("REST request to addBasket - customerId: {}", customerId);
 
             // Get default address identification by login
             Long addressId = new Long(0);
@@ -233,16 +236,22 @@ public class PersonalCatalogResource {
 		log.debug("REST request to get a page of Personal Catalog");
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
-            throw new FirstCreateCustomerException(ENTITY_NAME);
+        Long customerId = new Long(0);
+
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
+
+        	customerId = customersDTO.getId();
+
+        	log.debug("REST request to getAllPersonalCatalog - customerId: {}", customerId);
+        } else {
+        	throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
         // Get all active products with or not with promotions by customer id
-        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersId(customersDTO.getId(), pageable);
+        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersId(customerId, pageable);
 
 		List<PersonalCatalogDTO> listPersonalCatalogDTO = new ArrayList<PersonalCatalogDTO>();
 
@@ -281,16 +290,22 @@ public class PersonalCatalogResource {
 		log.debug("REST request to get Personal Catalog : {}", id);
 
 		// Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        if (customersDTO == null) {
-            throw new FirstCreateCustomerException(ENTITY_NAME);
+        Long customerId = new Long(0);
+
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
+
+        	customerId = customersDTO.getId();
+
+        	log.debug("REST request to getPersonalCatalog - customerId: {}", customerId);
+        } else {
+        	throw new FirstCreateCustomerException(ENTITY_NAME);
         }
 
         // Get all active products with or not with promotions by customer id and product id
-        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersIdAndProductId(customersDTO.getId(), id, PageRequest.of(0, 1));
+        Page<Object[]> page = productsService.getAllProductsWithPromotionsByCustomersIdAndProductId(customerId, id, PageRequest.of(0, 1));
 
 		Optional<PersonalCatalogDTO> personalCatalogDTOOpt = Optional.empty();
 
@@ -370,30 +385,37 @@ public class PersonalCatalogResource {
         log.debug("REST request to delete personal catalog : {}", id);
 
         // Get customer identification by login
-        CustomersResource customersResource = new CustomersResource(customersService);
-        ResponseEntity<CustomersDTO> responseCustomersDTO = customersResource.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-        CustomersDTO customersDTO = responseCustomersDTO.getBody();
-        Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
 
-        // Find product
-        Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
-        ProductsDTO productsDTO = null;
+        if ( optionalCustomersDTO.isPresent() ) {
+        	CustomersDTO customersDTO = optionalCustomersDTO.get();
 
-        // Add new product
-		if (productsDTOOpt.isPresent()) {
-			productsDTO = productsDTOOpt.get();
-			oldSetProductsDTO.remove(productsDTO);
+            Set<ProductsDTO> oldSetProductsDTO = customersDTO.getProducts();
 
-	        customersDTO.setProducts(oldSetProductsDTO);
+            // Find product
+            Optional<ProductsDTO> productsDTOOpt = productsService.findOne(id);
+            ProductsDTO productsDTO = null;
 
-	        // Delete product from Personal Catalog
-	        customersResource.updateCustomers(customersDTO);
+            // Add new product
+    		if ( productsDTOOpt.isPresent() ) {
+    			productsDTO = productsDTOOpt.get();
 
-	        log.debug("REST request to delete personal catalog updateCustomers: {}", productsDTO.getId());
+    			oldSetProductsDTO.remove(productsDTO);
 
-	        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalAlert(ENTITY_NAME, productsDTO.getProductName())).build();
-		} else {
-			return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalDoesNotExistAlert(ENTITY_NAME, "")).build();
-		}
+    	        customersDTO.setProducts(oldSetProductsDTO);
+
+    	        // Delete product from Personal Catalog
+    	        CustomersResource customersResource = new CustomersResource(customersService);
+    	        customersResource.updateCustomers(customersDTO);
+
+    	        log.debug("REST request to delete personal catalog updateCustomers: {}", productsDTO.getId());
+
+    	        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalAlert(ENTITY_NAME, productsDTO.getProductName())).build();
+    		} else {
+    			return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletePersonalDoesNotExistAlert(ENTITY_NAME, "")).build();
+    		}
+        } else {
+        	throw new FirstCreateCustomerException(ENTITY_NAME);
+        }
     }
 }

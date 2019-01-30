@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -71,9 +70,9 @@ public class CustomerOrdersDetResource {
 		List<CustomerOrdersDetDTO> listCustomerOrdersDetDTO = new ArrayList<CustomerOrdersDetDTO>();
 
         // Get customer order details by order id and status different from PENDING
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        Page<OrderDetDTO> page = orderDetService.getAllByLoginAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), pageable);
 
-        List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+        List<OrderDetDTO> listOrderDetDTO = page.getContent();
 
 		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
 			OrderDetDTO orderDetDTO = iterator.next();
@@ -90,8 +89,6 @@ public class CustomerOrdersDetResource {
 
 			listCustomerOrdersDetDTO.add(customerOrdersDetDTO);
 		}
-
-		Page<CustomerOrdersDetDTO> page = new PageImpl<CustomerOrdersDetDTO>(listCustomerOrdersDetDTO, pageable, listCustomerOrdersDetDTO.size());
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/customer-orders-det");
 
@@ -112,9 +109,9 @@ public class CustomerOrdersDetResource {
 		List<CustomerOrdersDetDTO> listCustomerOrdersDetDTO = new ArrayList<CustomerOrdersDetDTO>();
 
         // Get customer order details by order id
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderIdAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), orderId, pageable);
+        Page<OrderDetDTO> page = orderDetService.getAllByLoginAndOrderIdAndOrderStatus(SecurityUtils.getCurrentUserLogin().get(), orderId, pageable);
 
-        List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+        List<OrderDetDTO> listOrderDetDTO = page.getContent();
 
 		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
 			OrderDetDTO orderDetDTO = iterator.next();
@@ -142,8 +139,6 @@ public class CustomerOrdersDetResource {
 
 			listCustomerOrdersDetDTO.add(customerOrdersDetDTO);
 		}
-
-		Page<CustomerOrdersDetDTO> page = new PageImpl<CustomerOrdersDetDTO>(listCustomerOrdersDetDTO, pageable, listCustomerOrdersDetDTO.size());
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/customer-orders-det");
 

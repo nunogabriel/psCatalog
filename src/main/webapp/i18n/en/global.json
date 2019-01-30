@@ -148,8 +148,8 @@
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time.",
             "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
-            "patternNaturalNumber_3": "This field should be a natural number between 1 and 999.",
-            "patternDecimalNumber_3_2": "This field should be a decimal number between 0.01 and 999.99."
+            "patternNaturalNumber_4": "This field should be a natural number between 1 and 9999.",
+            "patternDecimalNumber_4_2": "This field should be a decimal number between 0.01 and 9999.99."
         }
     },
     "error": {

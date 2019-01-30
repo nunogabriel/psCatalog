@@ -11,7 +11,7 @@
 <!--                 </div> -->
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.orderQuantity" for="field_orderQuantity">Order Quantity</label>
-                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity" pattern="[1-9][0-9]{0,2}"
+                    <input type="number" class="form-control" name="orderQuantity" id="field_orderQuantity" pattern="[1-9][0-9]{0,3}"
                         [(ngModel)]="orderDet.orderQuantity" required/>
                     <div [hidden]="!(editForm.controls.orderQuantity?.dirty && editForm.controls.orderQuantity?.invalid)">
                         <small class="form-text text-danger"
@@ -23,14 +23,14 @@
                             This field should be a number.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.orderQuantity?.errors?.pattern" jhiTranslate="entity.validation.patternNaturalNumber_3">
-                            This field should be a natural number between 1 and 999.
+                            [hidden]="!editForm.controls.orderQuantity?.errors?.pattern" jhiTranslate="entity.validation.patternNaturalNumber_4">
+                            This field should be a natural number between 1 and 9999.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.orderDet.unitPrice" for="field_unitPrice">Unit Price</label>
-                    <input type="number" class="form-control" name="unitPrice" id="field_unitPrice" pattern="[0-9]{0,3}(\.\d{1,2})?"
+                    <input type="number" class="form-control" name="unitPrice" id="field_unitPrice" pattern="[0-9]{0,4}(\.\d{1,2})?"
                         [(ngModel)]="orderDet.unitPrice" required/>
                     <div [hidden]="!(editForm.controls.unitPrice?.dirty && editForm.controls.unitPrice?.invalid)">
                         <small class="form-text text-danger"
@@ -42,8 +42,8 @@
                             This field should be a number.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.unitPrice?.errors?.pattern" jhiTranslate="entity.validation.patternDecimalNumber_3_2">
-                            This field should be a natural number between 0.01 and 999.99.
+                            [hidden]="!editForm.controls.unitPrice?.errors?.pattern" jhiTranslate="entity.validation.patternDecimalNumber_4_2">
+                            This field should be a natural number between 0.01 and 9999.99.
                         </small>
                     </div>
                 </div>
