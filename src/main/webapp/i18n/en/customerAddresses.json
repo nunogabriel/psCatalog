@@ -18,6 +18,7 @@
             },
             "addressReference": "Address Reference",
             "addressName": "Address Name",
+            "addressNif": "VAT",
             "streetAddress": "Street Address",
             "city": "City",
             "state": "State",

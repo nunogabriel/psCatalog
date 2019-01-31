@@ -45,6 +45,25 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.products.productQuantity" for="field_productQuantity">Product Quantity</label>
+                    <input type="number" class="form-control" name="productQuantity" id="field_productQuantity" pattern="[1-9][0-9]{0,3}"
+                        [(ngModel)]="products.productQuantity" required/>
+                    <div [hidden]="!(editForm.controls.productQuantity?.dirty && editForm.controls.productQuantity?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.productQuantity?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.productQuantity?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.productQuantity?.errors?.pattern" jhiTranslate="entity.validation.patternNaturalNumber_4">
+                            This field should be a natural number between 1 and 9999.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.products.productStartDate" for="field_productStartDate">Product Start Date</label>
                     <div class="d-flex">
                         <input id="field_productStartDate" type="datetime-local" class="form-control" name="productStartDate" [(ngModel)]="productStartDate"

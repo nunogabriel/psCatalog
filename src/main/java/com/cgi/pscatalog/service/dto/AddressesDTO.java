@@ -45,6 +45,8 @@ public class AddressesDTO implements Serializable {
 
     private Instant addressEndDate;
 
+    private String addressNif;
+
     private Long customerId;
 
     private String customerCustomerName;
@@ -169,6 +171,14 @@ public class AddressesDTO implements Serializable {
         this.addressEndDate = addressEndDate;
     }
 
+    public String getAddressNif() {
+        return addressNif;
+    }
+
+    public void setAddressNif(String addressNif) {
+        this.addressNif = addressNif;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -255,6 +265,7 @@ public class AddressesDTO implements Serializable {
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             ", addressBeginDate='" + getAddressBeginDate() + "'" +
             ", addressEndDate='" + getAddressEndDate() + "'" +
+            ", addressNif='" + getAddressNif() + "'" +
             ", customer=" + getCustomerId() +
             ", customer='" + getCustomerCustomerName() + "'" +
             ", supplier=" + getSupplierId() +

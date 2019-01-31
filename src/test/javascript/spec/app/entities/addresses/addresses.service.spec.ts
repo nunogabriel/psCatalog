@@ -39,7 +39,8 @@ describe('Service Tests', () => {
                 'AAAAAAA',
                 currentDate,
                 currentDate,
-                currentDate
+                currentDate,
+                'AAAAAAA'
             );
         });
 
@@ -106,7 +107,8 @@ describe('Service Tests', () => {
                         lastModifiedBy: 'BBBBBB',
                         lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
                         addressBeginDate: currentDate.format(DATE_TIME_FORMAT),
-                        addressEndDate: currentDate.format(DATE_TIME_FORMAT)
+                        addressEndDate: currentDate.format(DATE_TIME_FORMAT),
+                        addressNif: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -143,7 +145,8 @@ describe('Service Tests', () => {
                         lastModifiedBy: 'BBBBBB',
                         lastModifiedDate: currentDate.format(DATE_TIME_FORMAT),
                         addressBeginDate: currentDate.format(DATE_TIME_FORMAT),
-                        addressEndDate: currentDate.format(DATE_TIME_FORMAT)
+                        addressEndDate: currentDate.format(DATE_TIME_FORMAT),
+                        addressNif: 'BBBBBB'
                     },
                     elemDefault
                 );

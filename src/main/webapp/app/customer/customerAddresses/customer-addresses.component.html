@@ -34,6 +34,7 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="addressReference"><span jhiTranslate="psCatalogApp.customerAddresses.addressReference">Address Reference</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="addressName"><span jhiTranslate="psCatalogApp.customerAddresses.addressName">Address Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="addressNif"><span jhiTranslate="psCatalogApp.customerAddresses.addressNif">Address Nif</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="streetAddress"><span jhiTranslate="psCatalogApp.customerAddresses.streetAddress">Street Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="city"><span jhiTranslate="psCatalogApp.customerAddresses.city">City</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="state"><span jhiTranslate="psCatalogApp.customerAddresses.state">State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -47,6 +48,7 @@
             <tr *ngFor="let customerAddresses of customerAddresses ;trackBy: trackId">
                 <td>{{customerAddresses.addressReference}}</td>
                 <td>{{customerAddresses.addressName}}</td>
+                <td>{{customerAddresses.addressNif}}</td>
                 <td>{{customerAddresses.streetAddress}}</td>
                 <td>{{customerAddresses.city}}</td>
                 <td>{{customerAddresses.state}}</td>

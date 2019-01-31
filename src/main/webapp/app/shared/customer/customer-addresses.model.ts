@@ -5,6 +5,7 @@ export interface ICustomerAddresses {
     id?: number;
     addressReference?: string;
     addressName?: string;
+    addressNif?: string;
     streetAddress?: string;
     city?: string;
     state?: string;
@@ -28,6 +29,7 @@ export class CustomerAddresses implements ICustomerAddresses {
         public id?: number,
         public addressReference?: string,
         public addressName?: string,
+        public addressNif?: string,
         public streetAddress?: string,
         public city?: string,
         public state?: string,

@@ -19,6 +19,8 @@ public class CustomerAddressesDTO implements Serializable {
     @NotNull
     private String addressName;
 
+    private String addressNif;
+
     @NotNull
     private String streetAddress;
 
@@ -75,6 +77,14 @@ public class CustomerAddressesDTO implements Serializable {
 
     public void setAddressName(String addressName) {
         this.addressName = addressName;
+    }
+
+    public String getAddressNif() {
+        return addressNif;
+    }
+
+    public void setAddressNif(String addressNif) {
+        this.addressNif = addressNif;
     }
 
     public String getStreetAddress() {
@@ -224,6 +234,7 @@ public class CustomerAddressesDTO implements Serializable {
             "id=" + getId() +
             ", addressReference='" + getAddressReference() + "'" +
             ", addressName='" + getAddressName() + "'" +
+            ", addressNif='" + getAddressNif() + "'" +
             ", streetAddress='" + getStreetAddress() + "'" +
             ", city='" + getCity() + "'" +
             ", state='" + getState() + "'" +

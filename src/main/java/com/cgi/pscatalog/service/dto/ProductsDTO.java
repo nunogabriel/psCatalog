@@ -43,6 +43,9 @@ public class ProductsDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
+    @NotNull
+    private Integer productQuantity;
+
     private Long supplierId;
 
     private String supplierSupplierName;
@@ -151,6 +154,14 @@ public class ProductsDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public Integer getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
     public Long getSupplierId() {
         return supplierId;
     }
@@ -203,6 +214,7 @@ public class ProductsDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", productQuantity=" + getProductQuantity() +
             ", supplier=" + getSupplierId() +
             ", supplier='" + getSupplierSupplierName() + "'" +
             "}";

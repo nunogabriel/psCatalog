@@ -32,6 +32,7 @@
 <!--             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th> -->
             <th jhiSortBy="addressReference"><span jhiTranslate="psCatalogApp.addresses.addressReference">Address Reference</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="addressName"><span jhiTranslate="psCatalogApp.addresses.addressName">Address Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="addressNif"><span jhiTranslate="psCatalogApp.addresses.addressNif">Address Nif</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="streetAddress"><span jhiTranslate="psCatalogApp.addresses.streetAddress">Street Address</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="city"><span jhiTranslate="psCatalogApp.addresses.city">City</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="state"><span jhiTranslate="psCatalogApp.addresses.state">State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -54,6 +55,7 @@
 <!--                 <td><a [routerLink]="['/addresses', addresses.id, 'view' ]">{{addresses.id}}</a></td> -->
                 <td>{{addresses.addressReference}}</td>
                 <td>{{addresses.addressName}}</td>
+                <td>{{addresses.addressNif}}</td>
                 <td>{{addresses.streetAddress}}</td>
                 <td>{{addresses.city}}</td>
                 <td>{{addresses.state}}</td>

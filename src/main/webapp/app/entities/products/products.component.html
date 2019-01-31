@@ -33,6 +33,7 @@
             <th jhiSortBy="productName"><span jhiTranslate="psCatalogApp.products.productName">Product Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productDescription"><span jhiTranslate="psCatalogApp.products.productDescription">Product Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productPrice"><span jhiTranslate="psCatalogApp.products.productPrice">Product Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="productQuantity"><span jhiTranslate="psCatalogApp.products.productQuantity">Product Quantity</span> <fa-icon [icon]="'sort'"></fa-icon></th>            
             <th jhiSortBy="productStartDate"><span jhiTranslate="psCatalogApp.products.productStartDate">Product Start Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productEndDate"><span jhiTranslate="psCatalogApp.products.productEndDate">Product End Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="productType"><span jhiTranslate="psCatalogApp.products.productType">Product Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -51,6 +52,7 @@
                 <td>{{products.productName}}</td>
                 <td>{{products.productDescription}}</td>
                 <td>{{products.productPrice}}</td>
+                <td>{{products.productQuantity}}</td>
                 <td>{{products.productStartDate | date:'medium'}}</td>
                 <td>{{products.productEndDate | date:'medium'}}</td>
                 <td jhiTranslate="{{'psCatalogApp.ProductTypeEnum.' + products.productType}}">{{products.productType}}</td>

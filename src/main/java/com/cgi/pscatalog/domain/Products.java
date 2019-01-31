@@ -88,11 +88,15 @@ public class Products implements Serializable {
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate;
 
+    @NotNull
+    @Column(name = "product_quantity", nullable = false)
+    private Integer productQuantity;
+
     @OneToMany(mappedBy = "product")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<OrderDet> orderDets = new HashSet<>();
     @ManyToOne
-    @JsonIgnoreProperties("products")
+    @JsonIgnoreProperties("")
     private Suppliers supplier;
 
     @ManyToMany(mappedBy = "products")
@@ -265,6 +269,19 @@ public class Products implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public Integer getProductQuantity() {
+        return productQuantity;
+    }
+
+    public Products productQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
+        return this;
+    }
+
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
     public Set<OrderDet> getOrderDets() {
         return orderDets;
     }
@@ -365,6 +382,7 @@ public class Products implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", productQuantity=" + getProductQuantity() +
             "}";
     }
 }

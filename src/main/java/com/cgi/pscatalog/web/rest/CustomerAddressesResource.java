@@ -96,6 +96,7 @@ public class CustomerAddressesResource {
         //
         AddressesDTO addressesDTO = new AddressesDTO();
         addressesDTO.setAddressName(customerAddressesDTO.getAddressName());
+        addressesDTO.setAddressNif(customerAddressesDTO.getAddressNif());
         addressesDTO.setAddressReference(customerAddressesDTO.getAddressReference());
         addressesDTO.setCity(customerAddressesDTO.getCity());
         addressesDTO.setCountryCountryName(customerAddressesDTO.getCountryCountryName());
@@ -141,6 +142,7 @@ public class CustomerAddressesResource {
 			AddressesDTO addressesDTO = addressesDTOOpt.get();
 
 			addressesDTO.setAddressName(customerAddressesDTO.getAddressName());
+			addressesDTO.setAddressNif(customerAddressesDTO.getAddressNif());
 	        addressesDTO.setAddressReference(customerAddressesDTO.getAddressReference());
 	        addressesDTO.setCity(customerAddressesDTO.getCity());
 	        addressesDTO.setCountryCountryName(customerAddressesDTO.getCountryCountryName());
@@ -193,6 +195,7 @@ public class CustomerAddressesResource {
 			CustomerAddressesDTO customerAddressesDTO = new CustomerAddressesDTO();
 			customerAddressesDTO.setId(addressesDTO.getId());
 			customerAddressesDTO.setAddressName(addressesDTO.getAddressName());
+			customerAddressesDTO.setAddressNif(addressesDTO.getAddressNif());
 			customerAddressesDTO.setAddressReference(addressesDTO.getAddressReference());
 			customerAddressesDTO.setCity(addressesDTO.getCity());
 			customerAddressesDTO.setCountryCountryName(addressesDTO.getCountryCountryName());
@@ -232,6 +235,7 @@ public class CustomerAddressesResource {
 			CustomerAddressesDTO customerAddressesDTO = new CustomerAddressesDTO();
 			customerAddressesDTO.setId(addressesDTO.getId());
 			customerAddressesDTO.setAddressName(addressesDTO.getAddressName());
+			customerAddressesDTO.setAddressNif(addressesDTO.getAddressNif());
 			customerAddressesDTO.setAddressReference(addressesDTO.getAddressReference());
 			customerAddressesDTO.setCity(addressesDTO.getCity());
 			customerAddressesDTO.setCountryCountryName(addressesDTO.getCountryCountryName());
@@ -288,6 +292,7 @@ public class CustomerAddressesResource {
 			CustomerAddressesDTO customerAddressesDTO = new CustomerAddressesDTO();
 			customerAddressesDTO.setId(addressesDTO.getId());
 			customerAddressesDTO.setAddressName(addressesDTO.getAddressName());
+			customerAddressesDTO.setAddressNif(addressesDTO.getAddressNif());
 			customerAddressesDTO.setAddressReference(addressesDTO.getAddressReference());
 			customerAddressesDTO.setCity(addressesDTO.getCity());
 			customerAddressesDTO.setCountryCountryName(addressesDTO.getCountryCountryName());

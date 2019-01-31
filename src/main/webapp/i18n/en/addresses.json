@@ -29,6 +29,7 @@
             "lastModifiedDate": "Last Modified Date",
             "addressBeginDate": "Address Begin Date",
             "addressEndDate": "Address End Date",
+            "addressNif": "Address Nif",
             "orders": "Orders",
             "customer": "Customer",
             "supplier": "Supplier",

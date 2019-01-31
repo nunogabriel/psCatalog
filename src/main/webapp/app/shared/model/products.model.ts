@@ -21,6 +21,7 @@ export interface IProducts {
     createdDate?: Moment;
     lastModifiedBy?: string;
     lastModifiedDate?: Moment;
+    productQuantity?: number;
     orderDets?: IOrderDet[];
     supplierSupplierName?: string;
     supplierId?: number;
@@ -42,6 +43,7 @@ export class Products implements IProducts {
         public createdDate?: Moment,
         public lastModifiedBy?: string,
         public lastModifiedDate?: Moment,
+        public productQuantity?: number,
         public orderDets?: IOrderDet[],
         public supplierSupplierName?: string,
         public supplierId?: number,

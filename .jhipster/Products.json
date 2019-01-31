@@ -1,5 +1,27 @@
 {
-    "name": "Products",
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "orderDet",
+            "otherEntityName": "orderDet",
+            "otherEntityRelationshipName": "product"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "supplier",
+            "otherEntityName": "suppliers",
+            "otherEntityField": "supplierName"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "relationshipName": "customers",
+            "otherEntityName": "customers",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "products"
+        }
+    ],
     "fields": [
         {
             "fieldName": "productName",
@@ -58,37 +80,20 @@
         {
             "fieldName": "lastModifiedDate",
             "fieldType": "Instant"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "orderDet",
-            "otherEntityName": "orderDet",
-            "otherEntityRelationshipName": "product"
         },
         {
-            "relationshipType": "many-to-one",
-            "relationshipName": "supplier",
-            "otherEntityName": "suppliers",
-            "otherEntityField": "supplierName"
-        },
-        {
-            "relationshipType": "many-to-many",
-            "relationshipName": "customers",
-            "otherEntityName": "customers",
-            "ownerSide": false,
-            "otherEntityRelationshipName": "products"
+            "fieldName": "productQuantity",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "changelogDate": "20181203151039",
-    "entityTableName": "products",
     "dto": "mapstruct",
-    "pagination": "pagination",
+    "searchEngine": "elasticsearch",
     "service": "serviceImpl",
+    "entityTableName": "products",
     "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*",
-    "searchEngine": "elasticsearch"
+    "pagination": "pagination"
 }

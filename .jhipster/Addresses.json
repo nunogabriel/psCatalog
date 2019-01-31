@@ -101,6 +101,10 @@
         {
             "fieldName": "addressEndDate",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "addressNif",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20181203151041",

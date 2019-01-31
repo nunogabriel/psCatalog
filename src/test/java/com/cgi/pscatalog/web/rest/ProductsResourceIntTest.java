@@ -1,14 +1,27 @@
 package com.cgi.pscatalog.web.rest;
 
-import com.cgi.pscatalog.PsCatalogApp;
+import static com.cgi.pscatalog.web.rest.TestUtil.createFormattingConversionService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.cgi.pscatalog.domain.Products;
-import com.cgi.pscatalog.repository.ProductsRepository;
-import com.cgi.pscatalog.repository.search.ProductsSearchRepository;
-import com.cgi.pscatalog.service.ProductsService;
-import com.cgi.pscatalog.service.dto.ProductsDTO;
-import com.cgi.pscatalog.service.mapper.ProductsMapper;
-import com.cgi.pscatalog.web.rest.errors.ExceptionTranslator;
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,24 +40,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
-import javax.persistence.EntityManager;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
-
-
-import static com.cgi.pscatalog.web.rest.TestUtil.createFormattingConversionService;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import com.cgi.pscatalog.PsCatalogApp;
+import com.cgi.pscatalog.domain.Products;
 import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
+import com.cgi.pscatalog.repository.ProductsRepository;
+import com.cgi.pscatalog.repository.search.ProductsSearchRepository;
+import com.cgi.pscatalog.service.ProductsService;
+import com.cgi.pscatalog.service.dto.ProductsDTO;
+import com.cgi.pscatalog.service.mapper.ProductsMapper;
+import com.cgi.pscatalog.web.rest.errors.ExceptionTranslator;
 /**
  * Test class for the ProductsResource REST controller.
  *
@@ -60,8 +64,8 @@ public class ProductsResourceIntTest {
     private static final String DEFAULT_PRODUCT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_PRODUCT_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_PRODUCT_PRICE = new BigDecimal("1");
-    private static final BigDecimal UPDATED_PRODUCT_PRICE = new BigDecimal("2");
+    private static final BigDecimal DEFAULT_PRODUCT_PRICE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PRODUCT_PRICE = new BigDecimal(2);
 
     private static final Instant DEFAULT_PRODUCT_START_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_PRODUCT_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -88,6 +92,9 @@ public class ProductsResourceIntTest {
 
     private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Integer DEFAULT_PRODUCT_QUANTITY = 1;
+    private static final Integer UPDATED_PRODUCT_QUANTITY = 2;
 
     @Autowired
     private ProductsRepository productsRepository;
@@ -152,7 +159,8 @@ public class ProductsResourceIntTest {
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE)
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
-            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
+            .productQuantity(DEFAULT_PRODUCT_QUANTITY);
         return products;
     }
 
@@ -189,6 +197,7 @@ public class ProductsResourceIntTest {
         assertThat(testProducts.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testProducts.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testProducts.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testProducts.getProductQuantity()).isEqualTo(DEFAULT_PRODUCT_QUANTITY);
 
         // Validate the Products in Elasticsearch
         verify(mockProductsSearchRepository, times(1)).save(testProducts);
@@ -295,6 +304,25 @@ public class ProductsResourceIntTest {
 
     @Test
     @Transactional
+    public void checkProductQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = productsRepository.findAll().size();
+        // set the field null
+        products.setProductQuantity(null);
+
+        // Create the Products, which fails.
+        ProductsDTO productsDTO = productsMapper.toDto(products);
+
+        restProductsMockMvc.perform(post("/api/products")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(productsDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Products> productsList = productsRepository.findAll();
+        assertThat(productsList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllProducts() throws Exception {
         // Initialize the database
         productsRepository.saveAndFlush(products);
@@ -315,9 +343,10 @@ public class ProductsResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY.toString())))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].productQuantity").value(hasItem(DEFAULT_PRODUCT_QUANTITY)));
     }
-    
+
     @Test
     @Transactional
     public void getProducts() throws Exception {
@@ -340,7 +369,8 @@ public class ProductsResourceIntTest {
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY.toString()))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY.toString()))
-            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
+            .andExpect(jsonPath("$.productQuantity").value(DEFAULT_PRODUCT_QUANTITY));
     }
 
     @Test
@@ -375,7 +405,8 @@ public class ProductsResourceIntTest {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .productQuantity(UPDATED_PRODUCT_QUANTITY);
         ProductsDTO productsDTO = productsMapper.toDto(updatedProducts);
 
         restProductsMockMvc.perform(put("/api/products")
@@ -399,6 +430,7 @@ public class ProductsResourceIntTest {
         assertThat(testProducts.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testProducts.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testProducts.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testProducts.getProductQuantity()).isEqualTo(UPDATED_PRODUCT_QUANTITY);
 
         // Validate the Products in Elasticsearch
         verify(mockProductsSearchRepository, times(1)).save(testProducts);
@@ -470,7 +502,8 @@ public class ProductsResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].productQuantity").value(hasItem(DEFAULT_PRODUCT_QUANTITY)));
     }
 
     @Test

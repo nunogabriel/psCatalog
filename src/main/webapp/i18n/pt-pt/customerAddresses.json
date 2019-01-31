@@ -18,6 +18,7 @@
             },
             "addressReference": "Referência",
             "addressName": "Nome",
+            "addressNif": "NIF",
             "streetAddress": "Rua",
             "city": "Cidade",
             "state": "Distrito",

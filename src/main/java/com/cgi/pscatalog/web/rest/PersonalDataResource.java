@@ -159,36 +159,41 @@ public class PersonalDataResource {
 		        customersDTO.setCustomerName(personalDataDTO.getCustomerName());
 		        customersDTO.setCustomerNif(personalDataDTO.getCustomerNif());
 		        customersDTO.setCustomerPhone(personalDataDTO.getCustomerPhone());
-		        customersDTO.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
-		        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
+//		        customersDTO.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
+//		        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
 		        customersDTO.setLastModifiedBy(login);
 		        customersDTO.setLastModifiedDate(Instant.now());
 
 		        customersService.save(customersDTO);
 			}
         } else {
-        	// Create new customer with customer products associated
-            CustomersDTO customersDTONew = new CustomersDTO();
-            customersDTONew.setCustomerEmail(personalDataDTO.getCustomerEmail());
-            customersDTONew.setCustomerGender(personalDataDTO.getCustomerGender());
-            customersDTONew.setCustomerName(personalDataDTO.getCustomerName());
-            customersDTONew.setCustomerNif(personalDataDTO.getCustomerNif());
-            customersDTONew.setCustomerPhone(personalDataDTO.getCustomerPhone());
-            customersDTONew.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
-            customersDTONew.setCustomerEndDate(null);
-            customersDTONew.setLogin(SecurityUtils.getCurrentUserLogin().get());
-            customersDTONew.setCreatedBy(personalDataDTO.getCreatedBy());
-            customersDTONew.setCreatedDate(personalDataDTO.getCreatedDate());
-            customersDTONew.setProducts(personalDataDTO.getProducts());
-
-            customersDTONew = customersService.save(customersDTONew);
-
-			// Delete old customer and remove products from it (delete records from customer_products table)
+        	// There are orders for that customer
             Optional<CustomersDTO> customersDTOOptOld = customersService.findOne(customerId);
 
-    		if (customersDTOOptOld.isPresent()) {
-    			CustomersDTO customersDTOOld = customersDTOOptOld.get();
+            CustomersDTO customersDTOOld = customersDTOOptOld.get();
 
+            CustomersDTO customersDTONew = null;
+
+    		if (customersDTOOptOld.isPresent()) {
+	        	// Create new customer with customer products associated
+	            customersDTONew = new CustomersDTO();
+	            customersDTONew.setCustomerEmail(personalDataDTO.getCustomerEmail());
+	            customersDTONew.setCustomerGender(personalDataDTO.getCustomerGender());
+	            customersDTONew.setCustomerName(personalDataDTO.getCustomerName());
+	            customersDTONew.setCustomerNif(personalDataDTO.getCustomerNif());
+	            customersDTONew.setCustomerPhone(personalDataDTO.getCustomerPhone());
+	            customersDTONew.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
+	            customersDTONew.setCustomerEndDate(null);
+	            customersDTONew.setLogin(login);
+	            customersDTONew.setCreatedBy(customersDTOOld.getCreatedBy());
+	            customersDTONew.setCreatedDate(customersDTOOld.getCreatedDate());
+	            customersDTONew.setLastModifiedBy(login);
+	            customersDTONew.setLastModifiedDate(Instant.now());
+	            customersDTONew.setProducts(customersDTOOld.getProducts());
+
+	            customersDTONew = customersService.save(customersDTONew);
+
+	            // Delete old customer and remove products from it (delete records from customer_products table)
     			customersDTOOld.setCustomerEndDate(Instant.now());
     			customersDTOOld.setLastModifiedBy(login);
     			customersDTOOld.setLastModifiedDate(Instant.now());
@@ -202,57 +207,69 @@ public class PersonalDataResource {
     		}
 
         	// Add new addresses with new customer data
-			Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLoginAndCustomerId(login, customerId, PageRequest.of(0, 1000));
-			List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
+			Page<AddressesDTO> pageAddressesDTOOld = addressesService.getAddressesByLoginAndCustomerId(login, customerId, PageRequest.of(0, 1000));
+			List<AddressesDTO> listAddressesDTOOld = pageAddressesDTOOld.getContent();
 
 			Map<Long,Long> mapOldNewAddresses = new HashMap<Long,Long>();
 
-			for (Iterator<AddressesDTO> iteratorAddressesDTO = listAddressesDTO.iterator(); iteratorAddressesDTO.hasNext();) {
-				AddressesDTO addressesDTO = iteratorAddressesDTO.next();
+			for (Iterator<AddressesDTO> iteratorAddressesDTOOld = listAddressesDTOOld.iterator(); iteratorAddressesDTOOld.hasNext();) {
+				AddressesDTO addressesDTOOld = iteratorAddressesDTOOld.next();
 
 		        // Add new addresses
 		        AddressesDTO addressesDTONew = new AddressesDTO();
-		        addressesDTONew.setAddressName(addressesDTO.getAddressName());
-		        addressesDTONew.setAddressReference(addressesDTO.getAddressReference());
-		        addressesDTONew.setCity(addressesDTO.getCity());
-		        addressesDTONew.setCountryCountryName(addressesDTO.getCountryCountryName());
-		        addressesDTONew.setCountryId(addressesDTO.getCountryId());
+		        addressesDTONew.setAddressName(addressesDTOOld.getAddressName());
+		        addressesDTONew.setAddressReference(addressesDTOOld.getAddressReference());
+		        addressesDTONew.setCity(addressesDTOOld.getCity());
+		        addressesDTONew.setCountryCountryName(addressesDTOOld.getCountryCountryName());
+		        addressesDTONew.setCountryId(addressesDTOOld.getCountryId());
+		        addressesDTONew.setPhoneNumber(addressesDTOOld.getPhoneNumber());
+		        addressesDTONew.setState(addressesDTOOld.getState());
+		        addressesDTONew.setStreetAddress(addressesDTOOld.getStreetAddress());
+		        addressesDTONew.setZipCode(addressesDTOOld.getZipCode());
+		        addressesDTONew.setCreatedBy(addressesDTOOld.getCreatedBy());
+		        addressesDTONew.setCreatedDate(addressesDTOOld.getCreatedDate());
+		        addressesDTONew.setLastModifiedBy(login);
+		        addressesDTONew.setLastModifiedDate(Instant.now());
+		        addressesDTONew.setAddressBeginDate(addressesDTOOld.getAddressBeginDate());
+		        addressesDTONew.setAddressNif(addressesDTOOld.getAddressNif());
 		        addressesDTONew.setCustomerId(customersDTONew.getId());
-		        addressesDTONew.setPhoneNumber(addressesDTO.getPhoneNumber());
-		        addressesDTONew.setState(addressesDTO.getState());
-		        addressesDTONew.setStreetAddress(addressesDTO.getStreetAddress());
-		        addressesDTONew.setZipCode(addressesDTO.getZipCode());
-		        addressesDTONew.setCreatedBy(addressesDTO.getCreatedBy());
-		        addressesDTONew.setCreatedDate(addressesDTO.getCreatedDate());
 
 		        addressesDTONew = addressesService.save(addressesDTONew);
 
-		        mapOldNewAddresses.put(addressesDTO.getId(), addressesDTONew.getId());
+		        mapOldNewAddresses.put(addressesDTOOld.getId(), addressesDTONew.getId());
+
+		        log.debug("REST request to update personal data : addressesDTOOld {}", addressesDTOOld.getId());
+		        log.debug("REST request to update personal data : addressesDTONew {}", addressesDTONew.getId());
 
 				// Delete old addresses = Update address_end_date
-		        addressesDTO.setAddressEndDate(Instant.now());
-		        addressesDTO.setLastModifiedBy(login);
-		        addressesDTO.setLastModifiedDate(Instant.now());
+		        addressesDTOOld.setAddressEndDate(Instant.now());
+		        addressesDTOOld.setLastModifiedBy(login);
+		        addressesDTOOld.setLastModifiedDate(Instant.now());
 
-		        addressesService.save(addressesDTO);
+		        addressesService.save(addressesDTOOld);
 			}
 
         	if ( listOrdersDTOPending.size() != 0 ) {
         		// Update PENDING orders with new customer data
 	        	for (Iterator<OrdersDTO> iterator = listOrdersDTOPending.iterator(); iterator.hasNext();) {
-					OrdersDTO ordersDTO = iterator.next();
+					OrdersDTO ordersDTOPending = iterator.next();
 
-					ordersDTO.setCustomerId(customersDTONew.getId());
+					ordersDTOPending.setCustomerId(customersDTONew.getId());
 
-					if ( mapOldNewAddresses.containsKey(ordersDTO.getAddressId()) ) {
-						ordersDTO.setAddressId(mapOldNewAddresses.get(ordersDTO.getAddressId()));
+					if ( mapOldNewAddresses.containsKey(ordersDTOPending.getAddressId()) ) {
+						log.debug("REST request to update personal data : setAddressId {}", mapOldNewAddresses.get(ordersDTOPending.getAddressId()));
+						ordersDTOPending.setAddressId(mapOldNewAddresses.get(ordersDTOPending.getAddressId()));
 					}
 
-					if ( mapOldNewAddresses.containsKey(ordersDTO.getDeliveryAddressId()) ) {
-						ordersDTO.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTO.getDeliveryAddressId()));
+					if ( mapOldNewAddresses.containsKey(ordersDTOPending.getDeliveryAddressId()) ) {
+						log.debug("REST request to update personal data : setDeliveryAddressId {}", mapOldNewAddresses.get(ordersDTOPending.getDeliveryAddressId()));
+						ordersDTOPending.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTOPending.getDeliveryAddressId()));
 					}
 
-					ordersService.save(ordersDTO);
+					ordersDTOPending.setLastModifiedBy(login);
+					ordersDTOPending.setLastModifiedDate(Instant.now());
+
+					ordersService.save(ordersDTOPending);
 					break;
 				}
         	}

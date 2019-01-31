@@ -90,6 +90,9 @@ public class AddressesResourceIntTest {
     private static final Instant DEFAULT_ADDRESS_END_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_ADDRESS_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final String DEFAULT_ADDRESS_NIF = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_NIF = "BBBBBBBBBB";
+
     @Autowired
     private AddressesRepository addressesRepository;
 
@@ -154,7 +157,8 @@ public class AddressesResourceIntTest {
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
             .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
             .addressBeginDate(DEFAULT_ADDRESS_BEGIN_DATE)
-            .addressEndDate(DEFAULT_ADDRESS_END_DATE);
+            .addressEndDate(DEFAULT_ADDRESS_END_DATE)
+            .addressNif(DEFAULT_ADDRESS_NIF);
         // Add required entity
         Countries countries = CountriesResourceIntTest.createEntity(em);
         em.persist(countries);
@@ -197,6 +201,7 @@ public class AddressesResourceIntTest {
         assertThat(testAddresses.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
         assertThat(testAddresses.getAddressBeginDate()).isEqualTo(DEFAULT_ADDRESS_BEGIN_DATE);
         assertThat(testAddresses.getAddressEndDate()).isEqualTo(DEFAULT_ADDRESS_END_DATE);
+        assertThat(testAddresses.getAddressNif()).isEqualTo(DEFAULT_ADDRESS_NIF);
 
         // Validate the Addresses in Elasticsearch
         verify(mockAddressesSearchRepository, times(1)).save(testAddresses);
@@ -381,7 +386,8 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
             .andExpect(jsonPath("$.[*].addressBeginDate").value(hasItem(DEFAULT_ADDRESS_BEGIN_DATE.toString())))
-            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressNif").value(hasItem(DEFAULT_ADDRESS_NIF.toString())));
     }
     
     @Test
@@ -407,7 +413,8 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY.toString()))
             .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
             .andExpect(jsonPath("$.addressBeginDate").value(DEFAULT_ADDRESS_BEGIN_DATE.toString()))
-            .andExpect(jsonPath("$.addressEndDate").value(DEFAULT_ADDRESS_END_DATE.toString()));
+            .andExpect(jsonPath("$.addressEndDate").value(DEFAULT_ADDRESS_END_DATE.toString()))
+            .andExpect(jsonPath("$.addressNif").value(DEFAULT_ADDRESS_NIF.toString()));
     }
 
     @Test
@@ -443,7 +450,8 @@ public class AddressesResourceIntTest {
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
             .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
             .addressBeginDate(UPDATED_ADDRESS_BEGIN_DATE)
-            .addressEndDate(UPDATED_ADDRESS_END_DATE);
+            .addressEndDate(UPDATED_ADDRESS_END_DATE)
+            .addressNif(UPDATED_ADDRESS_NIF);
         AddressesDTO addressesDTO = addressesMapper.toDto(updatedAddresses);
 
         restAddressesMockMvc.perform(put("/api/addresses")
@@ -468,6 +476,7 @@ public class AddressesResourceIntTest {
         assertThat(testAddresses.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
         assertThat(testAddresses.getAddressBeginDate()).isEqualTo(UPDATED_ADDRESS_BEGIN_DATE);
         assertThat(testAddresses.getAddressEndDate()).isEqualTo(UPDATED_ADDRESS_END_DATE);
+        assertThat(testAddresses.getAddressNif()).isEqualTo(UPDATED_ADDRESS_NIF);
 
         // Validate the Addresses in Elasticsearch
         verify(mockAddressesSearchRepository, times(1)).save(testAddresses);
@@ -540,7 +549,8 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
             .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
             .andExpect(jsonPath("$.[*].addressBeginDate").value(hasItem(DEFAULT_ADDRESS_BEGIN_DATE.toString())))
-            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressNif").value(hasItem(DEFAULT_ADDRESS_NIF)));
     }
 
     @Test

@@ -77,6 +77,9 @@ public class Addresses implements Serializable {
     @Column(name = "address_end_date")
     private Instant addressEndDate;
 
+    @Column(name = "address_nif")
+    private String addressNif;
+
     @OneToMany(mappedBy = "address")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Orders> orders = new HashSet<>();
@@ -271,6 +274,19 @@ public class Addresses implements Serializable {
         this.addressEndDate = addressEndDate;
     }
 
+    public String getAddressNif() {
+        return addressNif;
+    }
+
+    public Addresses addressNif(String addressNif) {
+        this.addressNif = addressNif;
+        return this;
+    }
+
+    public void setAddressNif(String addressNif) {
+        this.addressNif = addressNif;
+    }
+
     public Set<Orders> getOrders() {
         return orders;
     }
@@ -373,6 +389,7 @@ public class Addresses implements Serializable {
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             ", addressBeginDate='" + getAddressBeginDate() + "'" +
             ", addressEndDate='" + getAddressEndDate() + "'" +
+            ", addressNif='" + getAddressNif() + "'" +
             "}";
     }
 }
