@@ -130,17 +130,26 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
+        // Get login
         String login = SecurityUtils.getCurrentUserLogin().get();
 
-        // Verify if already exists orders with PENDING Status
-        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
+        // Get customer id
+        Long customerId = personalDataDTO.getId();
 
-        List<OrdersDTO> listOrdersDTO = page.getContent();
+        // Verify if already exists orders with PENDING Status
+        Page<OrdersDTO> pageOrdersPending = ordersService.getAllByLoginAndCustomerIdAndOrderStatusPending(login, customerId, PageRequest.of(0, 1));
+
+        List<OrdersDTO> listOrdersDTOPending = pageOrdersPending.getContent();
+
+        // Verify if already exists orders with status different from PENDING
+        Page<OrdersDTO> pageOrders = ordersService.getAllByLoginAndCustomerIdAndOrderStatus(login, customerId, PageRequest.of(0, 1000));
+
+        List<OrdersDTO> listOrdersDTO = pageOrders.getContent();
 
         //
-        if ( listOrdersDTO.size() == 0 ) {
-        	// There are not PENDING orders
-	        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(personalDataDTO.getId());
+        if ( listOrdersDTOPending.size() == 0 && listOrdersDTO.size() == 0 ) {
+        	// There are not orders
+	        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(customerId);
 
 			if (customersDTOOpt.isPresent()) {
 				CustomersDTO customersDTO = customersDTOOpt.get();
@@ -158,8 +167,6 @@ public class PersonalDataResource {
 		        customersService.save(customersDTO);
 			}
         } else {
-        	// Update all data related with PENDING orders
-
         	// Create new customer with customer products associated
             CustomersDTO customersDTONew = new CustomersDTO();
             customersDTONew.setCustomerEmail(personalDataDTO.getCustomerEmail());
@@ -177,7 +184,7 @@ public class PersonalDataResource {
             customersDTONew = customersService.save(customersDTONew);
 
 			// Delete old customer and remove products from it (delete records from customer_products table)
-            Optional<CustomersDTO> customersDTOOptOld = customersService.findOne(personalDataDTO.getId());
+            Optional<CustomersDTO> customersDTOOptOld = customersService.findOne(customerId);
 
     		if (customersDTOOptOld.isPresent()) {
     			CustomersDTO customersDTOOld = customersDTOOptOld.get();
@@ -185,13 +192,17 @@ public class PersonalDataResource {
     			customersDTOOld.setCustomerEndDate(Instant.now());
     			customersDTOOld.setLastModifiedBy(login);
     			customersDTOOld.setLastModifiedDate(Instant.now());
-    			customersDTOOld.setProducts(null);
+
+    			if ( listOrdersDTO.size() == 0 ) {
+    				// If the are not orders with status different from PENDING
+    				customersDTOOld.setProducts(null);
+    			}
 
     	        customersService.save(customersDTOOld);
     		}
 
-        	// Update addresses with new customer data
-			Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, PageRequest.of(0, 1000));
+        	// Add new addresses with new customer data
+			Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLoginAndCustomerId(login, customerId, PageRequest.of(0, 1000));
 			List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
 
 			Map<Long,Long> mapOldNewAddresses = new HashMap<Long,Long>();
@@ -219,31 +230,32 @@ public class PersonalDataResource {
 		        mapOldNewAddresses.put(addressesDTO.getId(), addressesDTONew.getId());
 
 				// Delete old addresses = Update address_end_date
-				// TODO
-//		        addressesDTO.setAddressEndDate(Instant.now());
-//		        addressesDTO.setLastModifiedBy(login);
-//		        addressesDTO.setLastModifiedDate(Instant.now());
+		        addressesDTO.setAddressEndDate(Instant.now());
+		        addressesDTO.setLastModifiedBy(login);
+		        addressesDTO.setLastModifiedDate(Instant.now());
 
 		        addressesService.save(addressesDTO);
 			}
 
-			// Update PENDING orders with new customer data
-        	for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
-				OrdersDTO ordersDTO = iterator.next();
+        	if ( listOrdersDTOPending.size() != 0 ) {
+        		// Update PENDING orders with new customer data
+	        	for (Iterator<OrdersDTO> iterator = listOrdersDTOPending.iterator(); iterator.hasNext();) {
+					OrdersDTO ordersDTO = iterator.next();
 
-				ordersDTO.setCustomerId(customersDTONew.getId());
+					ordersDTO.setCustomerId(customersDTONew.getId());
 
-				if ( mapOldNewAddresses.containsKey(ordersDTO.getAddressId()) ) {
-					ordersDTO.setAddressId(mapOldNewAddresses.get(ordersDTO.getAddressId()));
+					if ( mapOldNewAddresses.containsKey(ordersDTO.getAddressId()) ) {
+						ordersDTO.setAddressId(mapOldNewAddresses.get(ordersDTO.getAddressId()));
+					}
+
+					if ( mapOldNewAddresses.containsKey(ordersDTO.getDeliveryAddressId()) ) {
+						ordersDTO.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTO.getDeliveryAddressId()));
+					}
+
+					ordersService.save(ordersDTO);
+					break;
 				}
-
-				if ( mapOldNewAddresses.containsKey(ordersDTO.getDeliveryAddressId()) ) {
-					ordersDTO.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTO.getDeliveryAddressId()));
-				}
-
-				ordersService.save(ordersDTO);
-				break;
-			}
+        	}
         }
 
         return ResponseEntity.ok()
@@ -338,59 +350,68 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
+        // Get login
         String login = SecurityUtils.getCurrentUserLogin().get();
+
+        // Verify if already exists orders with status different from PENDING
+        Page<OrdersDTO> pageOrders = ordersService.getAllByLoginAndCustomerIdAndOrderStatus(login, id, PageRequest.of(0, 1000));
+
+        List<OrdersDTO> listOrdersDTO = pageOrders.getContent();
 
         // Delete old customer and remove products from it (delete records from customer_products table)
         Optional<CustomersDTO> customersDTOOpt = customersService.findOne(id);
 
 		if (customersDTOOpt.isPresent()) {
-			CustomersDTO customersDTO = customersDTOOpt.get();
+			CustomersDTO customersDTOOld = customersDTOOpt.get();
 
 			// Delete old customer and remove products from it (delete records from customer_products table)
-	        customersDTO.setCustomerEndDate(Instant.now());
-	        customersDTO.setLastModifiedBy(login);
-	        customersDTO.setLastModifiedDate(Instant.now());
-	        customersDTO.setProducts(null);
+			customersDTOOld.setCustomerEndDate(Instant.now());
+			customersDTOOld.setLastModifiedBy(login);
+			customersDTOOld.setLastModifiedDate(Instant.now());
 
-	        customersService.save(customersDTO);
+	        if ( listOrdersDTO.size() == 0 ) {
+				// If the are not orders with status different from PENDING
+				customersDTOOld.setProducts(null);
+			}
+
+	        customersService.save(customersDTOOld);
 		}
 
 		// Delete addresses = Update address_end_date
-		Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLogin(login, PageRequest.of(0, 1000));
+		Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLoginAndCustomerId(login, id, PageRequest.of(0, 1000));
 		List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
 
 		for (Iterator<AddressesDTO> iteratorAddressesDTO = listAddressesDTO.iterator(); iteratorAddressesDTO.hasNext();) {
 			AddressesDTO addressesDTO = iteratorAddressesDTO.next();
 
-			// TODO
-//	        addressesDTO.setAddressEndDate(Instant.now());
-//	        addressesDTO.setLastModifiedBy(login);
-//	        addressesDTO.setLastModifiedDate(Instant.now());
+	        addressesDTO.setAddressEndDate(Instant.now());
+	        addressesDTO.setLastModifiedBy(login);
+	        addressesDTO.setLastModifiedDate(Instant.now());
 
 	        addressesService.save(addressesDTO);
 		}
 
         // Verify if already exists orders with PENDING Status
-        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
+        Page<OrdersDTO> pageOrdersDTOPending = ordersService.getAllByLoginAndCustomerIdAndOrderStatusPending(login, id, PageRequest.of(0, 1));
 
-        List<OrdersDTO> listOrdersDTO = page.getContent();
+        List<OrdersDTO> listOrdersDTOPending = pageOrdersDTOPending.getContent();
 
-        for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
-			OrdersDTO ordersDTO = iterator.next();
+        for (Iterator<OrdersDTO> iterator = listOrdersDTOPending.iterator(); iterator.hasNext();) {
+			OrdersDTO ordersDTOPending = iterator.next();
 
 			// Delete all order details from PENDING order
-			Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByOrderId(ordersDTO.getId(), PageRequest.of(0, 1000));
+			Page<OrderDetDTO> pageOrderDetDTOPending = orderDetService.getAllByOrderId(ordersDTOPending.getId(), PageRequest.of(0, 1000));
 
-			List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
+			List<OrderDetDTO> listOrderDetDTOPending = pageOrderDetDTOPending.getContent();
 
-			for (Iterator<OrderDetDTO> iterator2 = listOrderDetDTO.iterator(); iterator2.hasNext();) {
-				OrderDetDTO orderDetDTO = iterator2.next();
+			for (Iterator<OrderDetDTO> iterator2 = listOrderDetDTOPending.iterator(); iterator2.hasNext();) {
+				OrderDetDTO orderDetDTOPending = iterator2.next();
 
-				orderDetService.delete(orderDetDTO.getId());
+				orderDetService.delete(orderDetDTOPending.getId());
 			}
 
 			// Delete PENDING order
-			ordersService.delete(ordersDTO.getId());
+			ordersService.delete(ordersDTOPending.getId());
 			break;
 		}
 

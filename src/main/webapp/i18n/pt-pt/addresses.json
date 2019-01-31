@@ -27,6 +27,8 @@
             "createdDate": "Criado em",
             "lastModifiedBy": "Alterado por",
             "lastModifiedDate": "Alterado em",
+            "addressBeginDate": "Data Início",
+            "addressEndDate": "Data Fim",            
             "orders": "Encomendas",
             "customer": "Cliente",
             "supplier": "Fornecedor",

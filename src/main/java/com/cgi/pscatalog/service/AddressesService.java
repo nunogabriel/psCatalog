@@ -55,4 +55,6 @@ public interface AddressesService {
     Page<AddressesDTO> search(String query, Pageable pageable);
 
 	Page<AddressesDTO> getAddressesByLogin(String login, Pageable pageable);
+
+	Page<AddressesDTO> getAddressesByLoginAndCustomerId(String login, Long customerId, Pageable pageable);
 }

@@ -119,4 +119,12 @@ public class AddressesServiceImpl implements AddressesService {
         return addressesRepository.findAllByLogin(login, pageable)
             .map(addressesMapper::toDto);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<AddressesDTO> getAddressesByLoginAndCustomerId(String login, Long customerId, Pageable pageable) {
+        log.debug("Request to get all Addresses by login {} and customer id {}", login, customerId);
+        return addressesRepository.findAllByLoginAndCustomerId(login, customerId, pageable)
+            .map(addressesMapper::toDto);
+	}
 }

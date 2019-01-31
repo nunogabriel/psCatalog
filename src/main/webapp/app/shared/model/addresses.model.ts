@@ -14,6 +14,8 @@ export interface IAddresses {
     createdDate?: Moment;
     lastModifiedBy?: string;
     lastModifiedDate?: Moment;
+    addressBeginDate?: Moment;
+    addressEndDate?: Moment;
     orders?: IOrders[];
     customerCustomerName?: string;
     customerId?: number;
@@ -37,6 +39,8 @@ export class Addresses implements IAddresses {
         public createdDate?: Moment,
         public lastModifiedBy?: string,
         public lastModifiedDate?: Moment,
+        public addressBeginDate?: Moment,
+        public addressEndDate?: Moment,
         public orders?: IOrders[],
         public customerCustomerName?: string,
         public customerId?: number,

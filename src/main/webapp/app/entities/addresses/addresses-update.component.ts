@@ -30,6 +30,8 @@ export class AddressesUpdateComponent implements OnInit {
     countries: ICountries[];
     createdDate: string;
     lastModifiedDate: string;
+    addressBeginDate: string;
+    addressEndDate: string;
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -47,6 +49,9 @@ export class AddressesUpdateComponent implements OnInit {
             this.createdDate = this.addresses.createdDate != null ? this.addresses.createdDate.format(DATE_TIME_FORMAT) : null;
             this.lastModifiedDate =
                 this.addresses.lastModifiedDate != null ? this.addresses.lastModifiedDate.format(DATE_TIME_FORMAT) : null;
+            this.addressBeginDate =
+                this.addresses.addressBeginDate != null ? this.addresses.addressBeginDate.format(DATE_TIME_FORMAT) : null;
+            this.addressEndDate = this.addresses.addressEndDate != null ? this.addresses.addressEndDate.format(DATE_TIME_FORMAT) : null;
         });
         this.customersService.query().subscribe(
             (res: HttpResponse<ICustomers[]>) => {
@@ -76,6 +81,8 @@ export class AddressesUpdateComponent implements OnInit {
         this.isSaving = true;
         this.addresses.createdDate = this.createdDate != null ? moment(this.createdDate, DATE_TIME_FORMAT) : null;
         this.addresses.lastModifiedDate = this.lastModifiedDate != null ? moment(this.lastModifiedDate, DATE_TIME_FORMAT) : null;
+        this.addresses.addressBeginDate = this.addressBeginDate != null ? moment(this.addressBeginDate, DATE_TIME_FORMAT) : null;
+        this.addresses.addressEndDate = this.addressEndDate != null ? moment(this.addressEndDate, DATE_TIME_FORMAT) : null;
         if (this.addresses.id !== undefined) {
             this.subscribeToSaveResponse(this.addressesService.update(this.addresses));
         } else {

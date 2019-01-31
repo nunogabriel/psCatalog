@@ -61,7 +61,11 @@ export class AddressesService {
         const copy: IAddresses = Object.assign({}, addresses, {
             createdDate: addresses.createdDate != null && addresses.createdDate.isValid() ? addresses.createdDate.toJSON() : null,
             lastModifiedDate:
-                addresses.lastModifiedDate != null && addresses.lastModifiedDate.isValid() ? addresses.lastModifiedDate.toJSON() : null
+                addresses.lastModifiedDate != null && addresses.lastModifiedDate.isValid() ? addresses.lastModifiedDate.toJSON() : null,
+            addressBeginDate:
+                addresses.addressBeginDate != null && addresses.addressBeginDate.isValid() ? addresses.addressBeginDate.toJSON() : null,
+            addressEndDate:
+                addresses.addressEndDate != null && addresses.addressEndDate.isValid() ? addresses.addressEndDate.toJSON() : null
         });
         return copy;
     }
@@ -70,6 +74,8 @@ export class AddressesService {
         if (res.body) {
             res.body.createdDate = res.body.createdDate != null ? moment(res.body.createdDate) : null;
             res.body.lastModifiedDate = res.body.lastModifiedDate != null ? moment(res.body.lastModifiedDate) : null;
+            res.body.addressBeginDate = res.body.addressBeginDate != null ? moment(res.body.addressBeginDate) : null;
+            res.body.addressEndDate = res.body.addressEndDate != null ? moment(res.body.addressEndDate) : null;
         }
         return res;
     }
@@ -79,6 +85,8 @@ export class AddressesService {
             res.body.forEach((addresses: IAddresses) => {
                 addresses.createdDate = addresses.createdDate != null ? moment(addresses.createdDate) : null;
                 addresses.lastModifiedDate = addresses.lastModifiedDate != null ? moment(addresses.lastModifiedDate) : null;
+                addresses.addressBeginDate = addresses.addressBeginDate != null ? moment(addresses.addressBeginDate) : null;
+                addresses.addressEndDate = addresses.addressEndDate != null ? moment(addresses.addressEndDate) : null;
             });
         }
         return res;

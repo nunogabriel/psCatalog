@@ -84,6 +84,12 @@ public class AddressesResourceIntTest {
     private static final Instant DEFAULT_LAST_MODIFIED_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_LAST_MODIFIED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final Instant DEFAULT_ADDRESS_BEGIN_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_ADDRESS_BEGIN_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_ADDRESS_END_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_ADDRESS_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
     @Autowired
     private AddressesRepository addressesRepository;
 
@@ -146,7 +152,9 @@ public class AddressesResourceIntTest {
             .createdBy(DEFAULT_CREATED_BY)
             .createdDate(DEFAULT_CREATED_DATE)
             .lastModifiedBy(DEFAULT_LAST_MODIFIED_BY)
-            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE);
+            .lastModifiedDate(DEFAULT_LAST_MODIFIED_DATE)
+            .addressBeginDate(DEFAULT_ADDRESS_BEGIN_DATE)
+            .addressEndDate(DEFAULT_ADDRESS_END_DATE);
         // Add required entity
         Countries countries = CountriesResourceIntTest.createEntity(em);
         em.persist(countries);
@@ -187,6 +195,8 @@ public class AddressesResourceIntTest {
         assertThat(testAddresses.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testAddresses.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testAddresses.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testAddresses.getAddressBeginDate()).isEqualTo(DEFAULT_ADDRESS_BEGIN_DATE);
+        assertThat(testAddresses.getAddressEndDate()).isEqualTo(DEFAULT_ADDRESS_END_DATE);
 
         // Validate the Addresses in Elasticsearch
         verify(mockAddressesSearchRepository, times(1)).save(testAddresses);
@@ -331,6 +341,25 @@ public class AddressesResourceIntTest {
 
     @Test
     @Transactional
+    public void checkAddressBeginDateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = addressesRepository.findAll().size();
+        // set the field null
+        addresses.setAddressBeginDate(null);
+
+        // Create the Addresses, which fails.
+        AddressesDTO addressesDTO = addressesMapper.toDto(addresses);
+
+        restAddressesMockMvc.perform(post("/api/addresses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(addressesDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Addresses> addressesList = addressesRepository.findAll();
+        assertThat(addressesList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllAddresses() throws Exception {
         // Initialize the database
         addressesRepository.saveAndFlush(addresses);
@@ -350,7 +379,9 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY.toString())))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY.toString())))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressBeginDate").value(hasItem(DEFAULT_ADDRESS_BEGIN_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())));
     }
     
     @Test
@@ -374,7 +405,9 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.createdBy").value(DEFAULT_CREATED_BY.toString()))
             .andExpect(jsonPath("$.createdDate").value(DEFAULT_CREATED_DATE.toString()))
             .andExpect(jsonPath("$.lastModifiedBy").value(DEFAULT_LAST_MODIFIED_BY.toString()))
-            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()));
+            .andExpect(jsonPath("$.lastModifiedDate").value(DEFAULT_LAST_MODIFIED_DATE.toString()))
+            .andExpect(jsonPath("$.addressBeginDate").value(DEFAULT_ADDRESS_BEGIN_DATE.toString()))
+            .andExpect(jsonPath("$.addressEndDate").value(DEFAULT_ADDRESS_END_DATE.toString()));
     }
 
     @Test
@@ -408,7 +441,9 @@ public class AddressesResourceIntTest {
             .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE)
+            .addressBeginDate(UPDATED_ADDRESS_BEGIN_DATE)
+            .addressEndDate(UPDATED_ADDRESS_END_DATE);
         AddressesDTO addressesDTO = addressesMapper.toDto(updatedAddresses);
 
         restAddressesMockMvc.perform(put("/api/addresses")
@@ -431,6 +466,8 @@ public class AddressesResourceIntTest {
         assertThat(testAddresses.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testAddresses.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
         assertThat(testAddresses.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testAddresses.getAddressBeginDate()).isEqualTo(UPDATED_ADDRESS_BEGIN_DATE);
+        assertThat(testAddresses.getAddressEndDate()).isEqualTo(UPDATED_ADDRESS_END_DATE);
 
         // Validate the Addresses in Elasticsearch
         verify(mockAddressesSearchRepository, times(1)).save(testAddresses);
@@ -501,7 +538,9 @@ public class AddressesResourceIntTest {
             .andExpect(jsonPath("$.[*].createdBy").value(hasItem(DEFAULT_CREATED_BY)))
             .andExpect(jsonPath("$.[*].createdDate").value(hasItem(DEFAULT_CREATED_DATE.toString())))
             .andExpect(jsonPath("$.[*].lastModifiedBy").value(hasItem(DEFAULT_LAST_MODIFIED_BY)))
-            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lastModifiedDate").value(hasItem(DEFAULT_LAST_MODIFIED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressBeginDate").value(hasItem(DEFAULT_ADDRESS_BEGIN_DATE.toString())))
+            .andExpect(jsonPath("$.[*].addressEndDate").value(hasItem(DEFAULT_ADDRESS_END_DATE.toString())));
     }
 
     @Test

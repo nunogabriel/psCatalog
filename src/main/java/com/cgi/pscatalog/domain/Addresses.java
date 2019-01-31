@@ -70,20 +70,27 @@ public class Addresses implements Serializable {
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate;
 
+    @NotNull
+    @Column(name = "address_begin_date", nullable = false)
+    private Instant addressBeginDate;
+
+    @Column(name = "address_end_date")
+    private Instant addressEndDate;
+
     @OneToMany(mappedBy = "address")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Orders> orders = new HashSet<>();
     @ManyToOne
-    @JsonIgnoreProperties("addresses")
+    @JsonIgnoreProperties("")
     private Customers customer;
 
     @ManyToOne
-    @JsonIgnoreProperties("addresses")
+    @JsonIgnoreProperties("")
     private Suppliers supplier;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("addresses")
+    @JsonIgnoreProperties("")
     private Countries country;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -238,6 +245,32 @@ public class Addresses implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public Instant getAddressBeginDate() {
+        return addressBeginDate;
+    }
+
+    public Addresses addressBeginDate(Instant addressBeginDate) {
+        this.addressBeginDate = addressBeginDate;
+        return this;
+    }
+
+    public void setAddressBeginDate(Instant addressBeginDate) {
+        this.addressBeginDate = addressBeginDate;
+    }
+
+    public Instant getAddressEndDate() {
+        return addressEndDate;
+    }
+
+    public Addresses addressEndDate(Instant addressEndDate) {
+        this.addressEndDate = addressEndDate;
+        return this;
+    }
+
+    public void setAddressEndDate(Instant addressEndDate) {
+        this.addressEndDate = addressEndDate;
+    }
+
     public Set<Orders> getOrders() {
         return orders;
     }
@@ -338,6 +371,8 @@ public class Addresses implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", addressBeginDate='" + getAddressBeginDate() + "'" +
+            ", addressEndDate='" + getAddressEndDate() + "'" +
             "}";
     }
 }

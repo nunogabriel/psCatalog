@@ -106,6 +106,31 @@
 <!--                 </div> -->
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.addressBeginDate" for="field_addressBeginDate">Address Begin Date</label>
+                    <div class="d-flex">
+                        <input id="field_addressBeginDate" type="datetime-local" class="form-control" name="addressBeginDate" [(ngModel)]="addressBeginDate"
+                        required/>
+                    </div>
+                    <div [hidden]="!(editForm.controls.addressBeginDate?.dirty && editForm.controls.addressBeginDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.addressBeginDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.addressBeginDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.addressEndDate" for="field_addressEndDate">Address End Date</label>
+                    <div class="d-flex">
+                        <input id="field_addressEndDate" type="datetime-local" class="form-control" name="addressEndDate" [(ngModel)]="addressEndDate"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.addresses.customer" for="field_customer">Customer</label>
                     <select class="form-control" id="field_customer" name="customer" [(ngModel)]="addresses.customerId" >
                         <option [ngValue]="null"></option>

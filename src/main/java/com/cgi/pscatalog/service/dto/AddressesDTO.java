@@ -40,6 +40,11 @@ public class AddressesDTO implements Serializable {
 
     private Instant lastModifiedDate;
 
+    @NotNull
+    private Instant addressBeginDate;
+
+    private Instant addressEndDate;
+
     private Long customerId;
 
     private String customerCustomerName;
@@ -148,6 +153,22 @@ public class AddressesDTO implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public Instant getAddressBeginDate() {
+        return addressBeginDate;
+    }
+
+    public void setAddressBeginDate(Instant addressBeginDate) {
+        this.addressBeginDate = addressBeginDate;
+    }
+
+    public Instant getAddressEndDate() {
+        return addressEndDate;
+    }
+
+    public void setAddressEndDate(Instant addressEndDate) {
+        this.addressEndDate = addressEndDate;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -232,6 +253,8 @@ public class AddressesDTO implements Serializable {
             ", createdDate='" + getCreatedDate() + "'" +
             ", lastModifiedBy='" + getLastModifiedBy() + "'" +
             ", lastModifiedDate='" + getLastModifiedDate() + "'" +
+            ", addressBeginDate='" + getAddressBeginDate() + "'" +
+            ", addressEndDate='" + getAddressEndDate() + "'" +
             ", customer=" + getCustomerId() +
             ", customer='" + getCustomerCustomerName() + "'" +
             ", supplier=" + getSupplierId() +
