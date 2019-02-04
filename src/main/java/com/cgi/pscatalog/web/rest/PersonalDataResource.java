@@ -2,22 +2,15 @@ package com.cgi.pscatalog.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,16 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cgi.pscatalog.security.SecurityUtils;
-import com.cgi.pscatalog.service.AddressesService;
-import com.cgi.pscatalog.service.CustomersService;
-import com.cgi.pscatalog.service.OrderDetService;
-import com.cgi.pscatalog.service.OrdersService;
-import com.cgi.pscatalog.service.dto.AddressesDTO;
+import com.cgi.pscatalog.service.PersonalDataService;
 import com.cgi.pscatalog.service.dto.CustomersDTO;
-import com.cgi.pscatalog.service.dto.OrderDetDTO;
-import com.cgi.pscatalog.service.dto.OrdersDTO;
 import com.cgi.pscatalog.service.dto.PersonalDataDTO;
+import com.cgi.pscatalog.service.util.PageDataUtil;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
@@ -60,19 +47,10 @@ public class PersonalDataResource {
 
     private static final String ENTITY_NAME = "personalData";
 
-    private final CustomersService customersService;
+    private final PersonalDataService personalDataService;
 
-    @Autowired
-    private OrderDetService orderDetService;
-
-    @Autowired
-    private AddressesService addressesService;
-
-    @Autowired
-    private OrdersService ordersService;
-
-    public PersonalDataResource(CustomersService customersService) {
-        this.customersService = customersService;
+    public PersonalDataResource(PersonalDataService personalDataService) {
+        this.personalDataService = personalDataService;
     }
 
     /**
@@ -91,23 +69,10 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("A new personal data cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        CustomersDTO customersDTO = new CustomersDTO();
-        customersDTO.setCustomerEmail(personalDataDTO.getCustomerEmail());
-        customersDTO.setCustomerGender(personalDataDTO.getCustomerGender());
-        customersDTO.setCustomerName(personalDataDTO.getCustomerName());
-        customersDTO.setCustomerNif(personalDataDTO.getCustomerNif());
-        customersDTO.setCustomerPhone(personalDataDTO.getCustomerPhone());
-        customersDTO.setCustomerBeginDate(Instant.now());
-        customersDTO.setCustomerEndDate(null);
-        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
-        customersDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-        customersDTO.setCreatedDate(Instant.now());
+        // Create personal data
+        personalDataService.createPersonalData(personalDataDTO);
 
-        CustomersDTO customersDTOAux = customersService.save(customersDTO);
-
-        personalDataDTO.setId(customersDTOAux.getId());
-
-        return ResponseEntity.created(new URI("/api/personalData/" + personalDataDTO.getId()))
+        return ResponseEntity.created(new URI("/api/personalData/"))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, ""))
             .body(personalDataDTO);
     }
@@ -130,150 +95,8 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        // Get login
-        String login = SecurityUtils.getCurrentUserLogin().get();
-
-        // Get customer id
-        Long customerId = personalDataDTO.getId();
-
-        // Verify if already exists orders with PENDING Status
-        Page<OrdersDTO> pageOrdersPending = ordersService.getAllByLoginAndCustomerIdAndOrderStatusPending(login, customerId, PageRequest.of(0, 1));
-
-        List<OrdersDTO> listOrdersDTOPending = pageOrdersPending.getContent();
-
-        // Verify if already exists orders with status different from PENDING
-        Page<OrdersDTO> pageOrders = ordersService.getAllByLoginAndCustomerIdAndOrderStatus(login, customerId, PageRequest.of(0, 1000));
-
-        List<OrdersDTO> listOrdersDTO = pageOrders.getContent();
-
-        //
-        if ( listOrdersDTOPending.size() == 0 && listOrdersDTO.size() == 0 ) {
-        	// There are not orders
-	        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(customerId);
-
-			if (customersDTOOpt.isPresent()) {
-				CustomersDTO customersDTO = customersDTOOpt.get();
-
-		        customersDTO.setCustomerEmail(personalDataDTO.getCustomerEmail());
-		        customersDTO.setCustomerGender(personalDataDTO.getCustomerGender());
-		        customersDTO.setCustomerName(personalDataDTO.getCustomerName());
-		        customersDTO.setCustomerNif(personalDataDTO.getCustomerNif());
-		        customersDTO.setCustomerPhone(personalDataDTO.getCustomerPhone());
-//		        customersDTO.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
-//		        customersDTO.setLogin(SecurityUtils.getCurrentUserLogin().get());
-		        customersDTO.setLastModifiedBy(login);
-		        customersDTO.setLastModifiedDate(Instant.now());
-
-		        customersService.save(customersDTO);
-			}
-        } else {
-        	// There are orders for that customer
-            Optional<CustomersDTO> customersDTOOptOld = customersService.findOne(customerId);
-
-            CustomersDTO customersDTOOld = customersDTOOptOld.get();
-
-            CustomersDTO customersDTONew = null;
-
-    		if (customersDTOOptOld.isPresent()) {
-	        	// Create new customer with customer products associated
-	            customersDTONew = new CustomersDTO();
-	            customersDTONew.setCustomerEmail(personalDataDTO.getCustomerEmail());
-	            customersDTONew.setCustomerGender(personalDataDTO.getCustomerGender());
-	            customersDTONew.setCustomerName(personalDataDTO.getCustomerName());
-	            customersDTONew.setCustomerNif(personalDataDTO.getCustomerNif());
-	            customersDTONew.setCustomerPhone(personalDataDTO.getCustomerPhone());
-	            customersDTONew.setCustomerBeginDate(personalDataDTO.getCustomerBeginDate());
-	            customersDTONew.setCustomerEndDate(null);
-	            customersDTONew.setLogin(login);
-	            customersDTONew.setCreatedBy(customersDTOOld.getCreatedBy());
-	            customersDTONew.setCreatedDate(customersDTOOld.getCreatedDate());
-	            customersDTONew.setLastModifiedBy(login);
-	            customersDTONew.setLastModifiedDate(Instant.now());
-	            customersDTONew.setProducts(customersDTOOld.getProducts());
-
-	            customersDTONew = customersService.save(customersDTONew);
-
-	            // Delete old customer and remove products from it (delete records from customer_products table)
-    			customersDTOOld.setCustomerEndDate(Instant.now());
-    			customersDTOOld.setLastModifiedBy(login);
-    			customersDTOOld.setLastModifiedDate(Instant.now());
-
-    			if ( listOrdersDTO.size() == 0 ) {
-    				// If the are not orders with status different from PENDING
-    				customersDTOOld.setProducts(null);
-    			}
-
-    	        customersService.save(customersDTOOld);
-    		}
-
-        	// Add new addresses with new customer data
-			Page<AddressesDTO> pageAddressesDTOOld = addressesService.getAddressesByLoginAndCustomerId(login, customerId, PageRequest.of(0, 1000));
-			List<AddressesDTO> listAddressesDTOOld = pageAddressesDTOOld.getContent();
-
-			Map<Long,Long> mapOldNewAddresses = new HashMap<Long,Long>();
-
-			for (Iterator<AddressesDTO> iteratorAddressesDTOOld = listAddressesDTOOld.iterator(); iteratorAddressesDTOOld.hasNext();) {
-				AddressesDTO addressesDTOOld = iteratorAddressesDTOOld.next();
-
-		        // Add new addresses
-		        AddressesDTO addressesDTONew = new AddressesDTO();
-		        addressesDTONew.setAddressName(addressesDTOOld.getAddressName());
-		        addressesDTONew.setAddressReference(addressesDTOOld.getAddressReference());
-		        addressesDTONew.setCity(addressesDTOOld.getCity());
-		        addressesDTONew.setCountryCountryName(addressesDTOOld.getCountryCountryName());
-		        addressesDTONew.setCountryId(addressesDTOOld.getCountryId());
-		        addressesDTONew.setPhoneNumber(addressesDTOOld.getPhoneNumber());
-		        addressesDTONew.setState(addressesDTOOld.getState());
-		        addressesDTONew.setStreetAddress(addressesDTOOld.getStreetAddress());
-		        addressesDTONew.setZipCode(addressesDTOOld.getZipCode());
-		        addressesDTONew.setCreatedBy(addressesDTOOld.getCreatedBy());
-		        addressesDTONew.setCreatedDate(addressesDTOOld.getCreatedDate());
-		        addressesDTONew.setLastModifiedBy(login);
-		        addressesDTONew.setLastModifiedDate(Instant.now());
-		        addressesDTONew.setAddressBeginDate(addressesDTOOld.getAddressBeginDate());
-		        addressesDTONew.setAddressNif(addressesDTOOld.getAddressNif());
-		        addressesDTONew.setCustomerId(customersDTONew.getId());
-
-		        addressesDTONew = addressesService.save(addressesDTONew);
-
-		        mapOldNewAddresses.put(addressesDTOOld.getId(), addressesDTONew.getId());
-
-		        log.debug("REST request to update personal data : addressesDTOOld {}", addressesDTOOld.getId());
-		        log.debug("REST request to update personal data : addressesDTONew {}", addressesDTONew.getId());
-
-				// Delete old addresses = Update address_end_date
-		        addressesDTOOld.setAddressEndDate(Instant.now());
-		        addressesDTOOld.setLastModifiedBy(login);
-		        addressesDTOOld.setLastModifiedDate(Instant.now());
-
-		        addressesService.save(addressesDTOOld);
-			}
-
-        	if ( listOrdersDTOPending.size() != 0 ) {
-        		// Update PENDING orders with new customer data
-	        	for (Iterator<OrdersDTO> iterator = listOrdersDTOPending.iterator(); iterator.hasNext();) {
-					OrdersDTO ordersDTOPending = iterator.next();
-
-					ordersDTOPending.setCustomerId(customersDTONew.getId());
-
-					if ( mapOldNewAddresses.containsKey(ordersDTOPending.getAddressId()) ) {
-						log.debug("REST request to update personal data : setAddressId {}", mapOldNewAddresses.get(ordersDTOPending.getAddressId()));
-						ordersDTOPending.setAddressId(mapOldNewAddresses.get(ordersDTOPending.getAddressId()));
-					}
-
-					if ( mapOldNewAddresses.containsKey(ordersDTOPending.getDeliveryAddressId()) ) {
-						log.debug("REST request to update personal data : setDeliveryAddressId {}", mapOldNewAddresses.get(ordersDTOPending.getDeliveryAddressId()));
-						ordersDTOPending.setDeliveryAddressId(mapOldNewAddresses.get(ordersDTOPending.getDeliveryAddressId()));
-					}
-
-					ordersDTOPending.setLastModifiedBy(login);
-					ordersDTOPending.setLastModifiedDate(Instant.now());
-
-					ordersService.save(ordersDTOPending);
-					break;
-				}
-        	}
-        }
+        // Update personal data
+        personalDataService.updatePersonalData(personalDataDTO);
 
         return ResponseEntity.ok()
 	            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
@@ -292,25 +115,8 @@ public class PersonalDataResource {
     public ResponseEntity<List<PersonalDataDTO>> getAllPersonalData(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of personal data");
 
-        // Get customer identification by login
-        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
-
-        List<PersonalDataDTO> listPersonalDataDTO = new ArrayList<PersonalDataDTO>();
-
-        if ( optionalCustomersDTO.isPresent() ) {
-        	CustomersDTO customersDTO = optionalCustomersDTO.get();
-
-    		PersonalDataDTO personalDataDTO = new PersonalDataDTO();
-    		personalDataDTO.setId(customersDTO.getId());
-    		personalDataDTO.setCustomerEmail(customersDTO.getCustomerEmail());
-    		personalDataDTO.setCustomerGender(customersDTO.getCustomerGender());
-    		personalDataDTO.setCustomerName(customersDTO.getCustomerName());
-    		personalDataDTO.setCustomerNif(customersDTO.getCustomerNif());
-    		personalDataDTO.setCustomerPhone(customersDTO.getCustomerPhone());
-    		personalDataDTO.setCustomerBeginDate(customersDTO.getCustomerBeginDate());
-
-    		listPersonalDataDTO.add(personalDataDTO);
-        }
+        // Get all personal data by login
+        List<PersonalDataDTO> listPersonalDataDTO = personalDataService.getAllPersonalData(pageable);
 
 		Page<PersonalDataDTO> page = new PageImpl<PersonalDataDTO>(listPersonalDataDTO, pageable, listPersonalDataDTO.size());
 
@@ -330,24 +136,8 @@ public class PersonalDataResource {
     public ResponseEntity<PersonalDataDTO> getPersonalData(@PathVariable Long id) {
         log.debug("REST request to get personal data : {}", id);
 
-        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(id);
-
-        Optional<PersonalDataDTO> personalDataDTOOpt = Optional.empty();
-
-		if (customersDTOOpt.isPresent()) {
-			CustomersDTO customersDTO = customersDTOOpt.get();
-
-			PersonalDataDTO personalDataDTO = new PersonalDataDTO();
-			personalDataDTO.setId(customersDTO.getId());
-			personalDataDTO.setCustomerEmail(customersDTO.getCustomerEmail());
-			personalDataDTO.setCustomerGender(customersDTO.getCustomerGender());
-			personalDataDTO.setCustomerName(customersDTO.getCustomerName());
-			personalDataDTO.setCustomerNif(customersDTO.getCustomerNif());
-			personalDataDTO.setCustomerPhone(customersDTO.getCustomerPhone());
-			personalDataDTO.setCustomerBeginDate(customersDTO.getCustomerBeginDate());
-
-			personalDataDTOOpt = Optional.of(personalDataDTO);
-		}
+        // Get personal data by id
+        Optional<PersonalDataDTO> personalDataDTOOpt = personalDataService.getPersonalData(id);
 
         return ResponseUtil.wrapOrNotFound(personalDataDTOOpt);
     }
@@ -367,70 +157,8 @@ public class PersonalDataResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        // Get login
-        String login = SecurityUtils.getCurrentUserLogin().get();
-
-        // Verify if already exists orders with status different from PENDING
-        Page<OrdersDTO> pageOrders = ordersService.getAllByLoginAndCustomerIdAndOrderStatus(login, id, PageRequest.of(0, 1000));
-
-        List<OrdersDTO> listOrdersDTO = pageOrders.getContent();
-
-        // Delete old customer and remove products from it (delete records from customer_products table)
-        Optional<CustomersDTO> customersDTOOpt = customersService.findOne(id);
-
-		if (customersDTOOpt.isPresent()) {
-			CustomersDTO customersDTOOld = customersDTOOpt.get();
-
-			// Delete old customer and remove products from it (delete records from customer_products table)
-			customersDTOOld.setCustomerEndDate(Instant.now());
-			customersDTOOld.setLastModifiedBy(login);
-			customersDTOOld.setLastModifiedDate(Instant.now());
-
-	        if ( listOrdersDTO.size() == 0 ) {
-				// If the are not orders with status different from PENDING
-				customersDTOOld.setProducts(null);
-			}
-
-	        customersService.save(customersDTOOld);
-		}
-
-		// Delete addresses = Update address_end_date
-		Page<AddressesDTO> pageAddressesDTO = addressesService.getAddressesByLoginAndCustomerId(login, id, PageRequest.of(0, 1000));
-		List<AddressesDTO> listAddressesDTO = pageAddressesDTO.getContent();
-
-		for (Iterator<AddressesDTO> iteratorAddressesDTO = listAddressesDTO.iterator(); iteratorAddressesDTO.hasNext();) {
-			AddressesDTO addressesDTO = iteratorAddressesDTO.next();
-
-	        addressesDTO.setAddressEndDate(Instant.now());
-	        addressesDTO.setLastModifiedBy(login);
-	        addressesDTO.setLastModifiedDate(Instant.now());
-
-	        addressesService.save(addressesDTO);
-		}
-
-        // Verify if already exists orders with PENDING Status
-        Page<OrdersDTO> pageOrdersDTOPending = ordersService.getAllByLoginAndCustomerIdAndOrderStatusPending(login, id, PageRequest.of(0, 1));
-
-        List<OrdersDTO> listOrdersDTOPending = pageOrdersDTOPending.getContent();
-
-        for (Iterator<OrdersDTO> iterator = listOrdersDTOPending.iterator(); iterator.hasNext();) {
-			OrdersDTO ordersDTOPending = iterator.next();
-
-			// Delete all order details from PENDING order
-			Page<OrderDetDTO> pageOrderDetDTOPending = orderDetService.getAllByOrderId(ordersDTOPending.getId(), PageRequest.of(0, 1000));
-
-			List<OrderDetDTO> listOrderDetDTOPending = pageOrderDetDTOPending.getContent();
-
-			for (Iterator<OrderDetDTO> iterator2 = listOrderDetDTOPending.iterator(); iterator2.hasNext();) {
-				OrderDetDTO orderDetDTOPending = iterator2.next();
-
-				orderDetService.delete(orderDetDTOPending.getId());
-			}
-
-			// Delete PENDING order
-			ordersService.delete(ordersDTOPending.getId());
-			break;
-		}
+        // Delete personal data
+        personalDataService.deletePersonalData(id);
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, "")).build();
     }
@@ -448,28 +176,11 @@ public class PersonalDataResource {
     public ResponseEntity<List<PersonalDataDTO>> searchPersonalData(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of personal data for query {}", query);
 
-        Page<CustomersDTO> page = customersService.search(query, pageable);
+        // Search
+        PageDataUtil<CustomersDTO, PersonalDataDTO> pageInformation = personalDataService.searchPersonalData(query, pageable);
 
-		List<CustomersDTO> listCustomersDTO = page.getContent();
-		List<PersonalDataDTO> listPersonalDataDTO = new ArrayList<PersonalDataDTO>();
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, pageInformation.getPageInformation(), "/api/_search/personalData");
 
-		for (Iterator<CustomersDTO> iterator = listCustomersDTO.iterator(); iterator.hasNext();) {
-			CustomersDTO customersDTO = iterator.next();
-
-			PersonalDataDTO personalDataDTO = new PersonalDataDTO();
-			personalDataDTO.setId(customersDTO.getId());
-			personalDataDTO.setCustomerEmail(customersDTO.getCustomerEmail());
-			personalDataDTO.setCustomerGender(customersDTO.getCustomerGender());
-			personalDataDTO.setCustomerName(customersDTO.getCustomerName());
-			personalDataDTO.setCustomerNif(customersDTO.getCustomerNif());
-			personalDataDTO.setCustomerPhone(customersDTO.getCustomerPhone());
-			personalDataDTO.setCustomerBeginDate(customersDTO.getCustomerBeginDate());
-
-			listPersonalDataDTO.add(personalDataDTO);
-		}
-
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/personalData");
-
-        return new ResponseEntity<>(listPersonalDataDTO, headers, HttpStatus.OK);
+        return new ResponseEntity<>(pageInformation.getContent(), headers, HttpStatus.OK);
     }
 }

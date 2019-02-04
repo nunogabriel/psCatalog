@@ -1,11 +1,11 @@
 package com.cgi.pscatalog.service;
 
-import com.cgi.pscatalog.service.dto.CustomersDTO;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import com.cgi.pscatalog.service.dto.CustomersDTO;
 
 /**
  * Service Interface for managing Customers.
@@ -34,7 +34,7 @@ public interface CustomersService {
      * @return the list of entities
      */
     Page<CustomersDTO> findAllWithEagerRelationships(Pageable pageable);
-    
+
     /**
      * Get the "id" customers.
      *
@@ -54,11 +54,11 @@ public interface CustomersService {
      * Search for the customers corresponding to the query.
      *
      * @param query the query of the search
-     * 
+     *
      * @param pageable the pagination information
      * @return the list of entities
      */
     Page<CustomersDTO> search(String query, Pageable pageable);
 
-	Optional<CustomersDTO> getCustomersByLogin(String login);
+    Optional<CustomersDTO> getCustomersByLogin(String login);
 }

@@ -127,4 +127,5 @@ public class AddressesServiceImpl implements AddressesService {
         return addressesRepository.findAllByLoginAndCustomerId(login, customerId, pageable)
             .map(addressesMapper::toDto);
 	}
+
 }

@@ -1,13 +1,13 @@
 package com.cgi.pscatalog.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.cgi.pscatalog.security.SecurityUtils;
-import com.cgi.pscatalog.service.OrderDetService;
-import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
-import com.cgi.pscatalog.web.rest.util.HeaderUtil;
-import com.cgi.pscatalog.web.rest.util.PaginationUtil;
-import com.cgi.pscatalog.service.dto.OrderDetDTO;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,14 +15,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import com.cgi.pscatalog.security.SecurityUtils;
+import com.cgi.pscatalog.service.OrderDetService;
+import com.cgi.pscatalog.service.dto.OrderDetDTO;
+import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
+import com.cgi.pscatalog.web.rest.util.HeaderUtil;
+import com.cgi.pscatalog.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
+
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing OrderDet.
@@ -52,16 +63,16 @@ public class OrderDetResource {
     @Timed
     public ResponseEntity<OrderDetDTO> createOrderDet(@Valid @RequestBody OrderDetDTO orderDetDTO) throws URISyntaxException {
         log.debug("REST request to save OrderDet : {}", orderDetDTO);
-        
+
         if (orderDetDTO.getId() != null) {
             throw new BadRequestAlertException("A new orderDet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         orderDetDTO.setCreatedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         orderDetDTO.setCreatedDate(Instant.now());
-        
+
         OrderDetDTO result = orderDetService.save(orderDetDTO);
-        
+
         return ResponseEntity.created(new URI("/api/order-dets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -80,16 +91,16 @@ public class OrderDetResource {
     @Timed
     public ResponseEntity<OrderDetDTO> updateOrderDet(@Valid @RequestBody OrderDetDTO orderDetDTO) throws URISyntaxException {
         log.debug("REST request to update OrderDet : {}", orderDetDTO);
-        
+
         if (orderDetDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        
+
         orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         orderDetDTO.setLastModifiedDate(Instant.now());
-        
+
         OrderDetDTO result = orderDetService.save(orderDetDTO);
-        
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, orderDetDTO.getId().toString()))
             .body(result);
@@ -153,21 +164,6 @@ public class OrderDetResource {
         Page<OrderDetDTO> page = orderDetService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/order-dets");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-    
-    /**
-     * GET  /order-dets/orderId/:orderId/productId/:productId : get the "id" orderDet.
-     *
-     * @param orderId the orderId of the orderDetDTO to retrieve
-     * @param productId the productId of the orderDetDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the orderDetDTO, or with status 404 (Not Found)
-     */
-    @GetMapping("/order-dets/orderId/{orderId}/productId/{productId}")
-    @Timed
-    public ResponseEntity<OrderDetDTO> getOrderDetByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
-        log.debug("REST request to get OrderDet by Order Id {} And Product Id: {}", orderId, productId);
-        Optional<OrderDetDTO> orderDetDTO = orderDetService.getOrderDetByOrderIdAndProductId(orderId, productId);
-        return ResponseUtil.wrapOrNotFound(orderDetDTO);
     }
 
 }

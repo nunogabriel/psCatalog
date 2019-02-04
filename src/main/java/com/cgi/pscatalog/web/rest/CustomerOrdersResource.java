@@ -1,9 +1,6 @@
 package com.cgi.pscatalog.web.rest;
 
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,8 +8,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cgi.pscatalog.security.SecurityUtils;
-import com.cgi.pscatalog.service.CustomersService;
-import com.cgi.pscatalog.service.OrdersService;
+import com.cgi.pscatalog.service.CustomerOrdersService;
 import com.cgi.pscatalog.service.dto.CustomerOrdersDTO;
-import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
+import com.cgi.pscatalog.service.util.PageDataUtil;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
-import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -50,13 +42,10 @@ public class CustomerOrdersResource {
 
     private static final String ENTITY_NAME = "customerOrders";
 
-    private final OrdersService ordersService;
+    private final CustomerOrdersService customerOrdersService;
 
-    @Autowired
-	private CustomersService customersService;
-
-    public CustomerOrdersResource(OrdersService ordersService) {
-        this.ordersService = ordersService;
+    public CustomerOrdersResource(CustomerOrdersService customerOrdersService) {
+        this.customerOrdersService = customerOrdersService;
     }
 
     /**
@@ -77,18 +66,8 @@ public class CustomerOrdersResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        Optional<OrdersDTO> ordersDTOOpt = ordersService.findOne(customerOrdersDTO.getId());
-
-		if (ordersDTOOpt.isPresent()) {
-			OrdersDTO ordersDTO = ordersDTOOpt.get();
-
-			ordersDTO.setOrderStatusId(customerOrdersDTO.getOrderStatusId());
-			ordersDTO.setDeliveryDate(customerOrdersDTO.getDeliveryDate());
-			ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-			ordersDTO.setLastModifiedDate(Instant.now());
-
-			ordersService.save(ordersDTO);
-		}
+        // Update customer order
+        customerOrdersService.updateCustomerOrders(customerOrdersDTO);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, customerOrdersDTO.getOrderReference()))
@@ -106,46 +85,12 @@ public class CustomerOrdersResource {
     public ResponseEntity<List<CustomerOrdersDTO>> getAllCustomerOrders(Pageable pageable) {
         log.debug("REST request to get a page of Customer Orders");
 
-        String login = SecurityUtils.getCurrentUserLogin().get();
+        // Get all customer orders
+        PageDataUtil<OrdersDTO, CustomerOrdersDTO> pageDataUtil = customerOrdersService.getAllCustomerOrders(pageable, ENTITY_NAME);
 
-        // Get customer identification by login
-        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(pageDataUtil.getPageInformation(), "/api/customer-orders");
 
-        if ( !optionalCustomersDTO.isPresent() ) {
-            throw new FirstCreateCustomerException(ENTITY_NAME);
-        }
-
-        // Get all orders with status different from PENDING by login
-        Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatus(login, pageable);
-
-        List<OrdersDTO> listOrdersDTO = page.getContent();
-
-		List<CustomerOrdersDTO> listCustomerOrdersDTO = new ArrayList<CustomerOrdersDTO>();
-
-		for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
-			OrdersDTO ordersDTO = iterator.next();
-
-			CustomerOrdersDTO customerOrdersDTO = new CustomerOrdersDTO();
-			customerOrdersDTO.setId(ordersDTO.getId());
-			customerOrdersDTO.setAddressAddressReference(ordersDTO.getAddressAddressReference());
-			customerOrdersDTO.setAddressId(ordersDTO.getAddressId());
-			customerOrdersDTO.setCustomerCustomerName(ordersDTO.getCustomerCustomerName());
-			customerOrdersDTO.setCustomerId(ordersDTO.getCustomerId());
-			customerOrdersDTO.setDeliveryAddressAddressReference(ordersDTO.getDeliveryAddressAddressReference());
-			customerOrdersDTO.setDeliveryAddressId(ordersDTO.getDeliveryAddressId());
-			customerOrdersDTO.setCreatedDate(ordersDTO.getCreatedDate());
-			customerOrdersDTO.setDeliveryDate(ordersDTO.getDeliveryDate());
-			customerOrdersDTO.setOrderDate(ordersDTO.getOrderDate());
-			customerOrdersDTO.setOrderReference(ordersDTO.getOrderReference());
-			customerOrdersDTO.setOrderStatusId(ordersDTO.getOrderStatusId());
-			customerOrdersDTO.setOrderStatusOrderStatusDescription(ordersDTO.getOrderStatusOrderStatusDescription());
-
-			listCustomerOrdersDTO.add(customerOrdersDTO);
-		}
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/customer-orders");
-
-        return ResponseEntity.ok().headers(headers).body(listCustomerOrdersDTO);
+        return ResponseEntity.ok().headers(headers).body(pageDataUtil.getContent());
     }
 
     /**
@@ -159,30 +104,8 @@ public class CustomerOrdersResource {
     public ResponseEntity<CustomerOrdersDTO> getCustomerOrders(@PathVariable Long id) {
         log.debug("REST request to get Orders : {}", id);
 
-        Optional<OrdersDTO> ordersDTOOpt = ordersService.findOne(id);
-
-        Optional<CustomerOrdersDTO> customerOrdersDTOopt = Optional.empty();
-
-		if (ordersDTOOpt.isPresent()) {
-			OrdersDTO ordersDTO = ordersDTOOpt.get();
-
-			CustomerOrdersDTO customerOrdersDTO = new CustomerOrdersDTO();
-			customerOrdersDTO.setId(ordersDTO.getId());
-			customerOrdersDTO.setAddressAddressReference(ordersDTO.getAddressAddressReference());
-			customerOrdersDTO.setAddressId(ordersDTO.getAddressId());
-			customerOrdersDTO.setCustomerCustomerName(ordersDTO.getCustomerCustomerName());
-			customerOrdersDTO.setCustomerId(ordersDTO.getCustomerId());
-			customerOrdersDTO.setDeliveryAddressAddressReference(ordersDTO.getDeliveryAddressAddressReference());
-			customerOrdersDTO.setDeliveryAddressId(ordersDTO.getDeliveryAddressId());
-			customerOrdersDTO.setCreatedDate(ordersDTO.getCreatedDate());
-			customerOrdersDTO.setDeliveryDate(ordersDTO.getDeliveryDate());
-			customerOrdersDTO.setOrderDate(ordersDTO.getOrderDate());
-			customerOrdersDTO.setOrderReference(ordersDTO.getOrderReference());
-			customerOrdersDTO.setOrderStatusId(ordersDTO.getOrderStatusId());
-			customerOrdersDTO.setOrderStatusOrderStatusDescription(ordersDTO.getOrderStatusOrderStatusDescription());
-
-			customerOrdersDTOopt = Optional.of(customerOrdersDTO);
-		}
+        // Get customer orders by id
+        Optional<CustomerOrdersDTO> customerOrdersDTOopt = customerOrdersService.getCustomerOrders(id);
 
         return ResponseUtil.wrapOrNotFound(customerOrdersDTOopt);
     }
@@ -200,35 +123,12 @@ public class CustomerOrdersResource {
     public ResponseEntity<List<CustomerOrdersDTO>> searchCustomerOrders(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Customer Orders for query {}", query);
 
-        Page<OrdersDTO> page = ordersService.search(query, pageable);
+        // Search customer orders
+        PageDataUtil<OrdersDTO, CustomerOrdersDTO> pageDataUtil = customerOrdersService.searchCustomerOrders(query, pageable);
 
-        List<OrdersDTO> listOrdersDTO = page.getContent();
-		List<CustomerOrdersDTO> listCustomerOrdersDTO = new ArrayList<CustomerOrdersDTO>();
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, pageDataUtil.getPageInformation(), "/api/_search/customer-orders");
 
-		for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
-			OrdersDTO ordersDTO = iterator.next();
-
-			CustomerOrdersDTO customerOrdersDTO = new CustomerOrdersDTO();
-			customerOrdersDTO.setId(ordersDTO.getId());
-			customerOrdersDTO.setAddressAddressReference(ordersDTO.getAddressAddressReference());
-			customerOrdersDTO.setAddressId(ordersDTO.getAddressId());
-			customerOrdersDTO.setCustomerCustomerName(ordersDTO.getCustomerCustomerName());
-			customerOrdersDTO.setCustomerId(ordersDTO.getCustomerId());
-			customerOrdersDTO.setDeliveryAddressAddressReference(ordersDTO.getDeliveryAddressAddressReference());
-			customerOrdersDTO.setDeliveryAddressId(ordersDTO.getDeliveryAddressId());
-			customerOrdersDTO.setCreatedDate(ordersDTO.getCreatedDate());
-			customerOrdersDTO.setDeliveryDate(ordersDTO.getDeliveryDate());
-			customerOrdersDTO.setOrderDate(ordersDTO.getOrderDate());
-			customerOrdersDTO.setOrderReference(ordersDTO.getOrderReference());
-			customerOrdersDTO.setOrderStatusId(ordersDTO.getOrderStatusId());
-			customerOrdersDTO.setOrderStatusOrderStatusDescription(ordersDTO.getOrderStatusOrderStatusDescription());
-
-			listCustomerOrdersDTO.add(customerOrdersDTO);
-		}
-
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/customer-orders");
-
-        return new ResponseEntity<>(listCustomerOrdersDTO, headers, HttpStatus.OK);
+        return new ResponseEntity<>(pageDataUtil.getContent(), headers, HttpStatus.OK);
     }
 
 }

@@ -1,22 +1,22 @@
 package com.cgi.pscatalog.service.impl;
 
-import com.cgi.pscatalog.service.CustomersService;
-import com.cgi.pscatalog.domain.Customers;
-import com.cgi.pscatalog.repository.CustomersRepository;
-import com.cgi.pscatalog.repository.search.CustomersSearchRepository;
-import com.cgi.pscatalog.service.dto.CustomersDTO;
-import com.cgi.pscatalog.service.mapper.CustomersMapper;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import com.cgi.pscatalog.domain.Customers;
+import com.cgi.pscatalog.repository.CustomersRepository;
+import com.cgi.pscatalog.repository.search.CustomersSearchRepository;
+import com.cgi.pscatalog.service.CustomersService;
+import com.cgi.pscatalog.service.dto.CustomersDTO;
+import com.cgi.pscatalog.service.mapper.CustomersMapper;
 
 /**
  * Service Implementation for managing Customers.
@@ -75,10 +75,11 @@ public class CustomersServiceImpl implements CustomersService {
      *
      * @return the list of entities
      */
-    public Page<CustomersDTO> findAllWithEagerRelationships(Pageable pageable) {
+    @Override
+	public Page<CustomersDTO> findAllWithEagerRelationships(Pageable pageable) {
         return customersRepository.findAllWithEagerRelationships(pageable).map(customersMapper::toDto);
     }
-    
+
 
     /**
      * Get one customers by id.

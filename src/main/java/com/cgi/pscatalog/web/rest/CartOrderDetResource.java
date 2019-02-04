@@ -1,10 +1,6 @@
 package com.cgi.pscatalog.web.rest;
 
-import java.math.BigDecimal;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +8,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,22 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cgi.pscatalog.config.Constants;
-import com.cgi.pscatalog.domain.enumeration.ProductTypeEnum;
-import com.cgi.pscatalog.security.SecurityUtils;
-import com.cgi.pscatalog.service.CustomersService;
-import com.cgi.pscatalog.service.OrderDetService;
-import com.cgi.pscatalog.service.OrderStatusService;
-import com.cgi.pscatalog.service.OrdersService;
-import com.cgi.pscatalog.service.ProductsService;
+import com.cgi.pscatalog.service.CartOrderDetService;
 import com.cgi.pscatalog.service.dto.CartOrderDetDTO;
-import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
-import com.cgi.pscatalog.service.dto.OrderStatusDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
-import com.cgi.pscatalog.service.dto.ProductsDTO;
+import com.cgi.pscatalog.service.util.PageDataUtil;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
-import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
 import com.cgi.pscatalog.web.rest.util.HeaderUtil;
 import com.cgi.pscatalog.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -61,22 +44,10 @@ public class CartOrderDetResource {
 
     private static final String ENTITY_NAME = "cartOrderDet";
 
-    private final OrderDetService orderDetService;
+    private final CartOrderDetService cartOrderDetService;
 
-    @Autowired
-	private CustomersService customersService;
-
-    @Autowired
-	private OrdersService ordersService;
-
-    @Autowired
-    private OrderStatusService orderStatusService;
-
-    @Autowired
-	private ProductsService productsService;
-
-    public CartOrderDetResource(OrderDetService orderDetService) {
-        this.orderDetService = orderDetService;
+    public CartOrderDetResource(CartOrderDetService cartOrderDetService) {
+        this.cartOrderDetService = cartOrderDetService;
     }
 
     /**
@@ -91,70 +62,10 @@ public class CartOrderDetResource {
     public ResponseEntity<Void> createCartOrderDet(@PathVariable Long addressId, @PathVariable Long deliveryAddressId) throws URISyntaxException {
         log.debug("REST request to save CartOrderDet");
 
-        // 1 - Verify if there is any pending order created for customer
-        Page<OrdersDTO> pageOrdersDTO = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+        // Create cart order detail
+        OrdersDTO ordersDTO = cartOrderDetService.createCartOrderDet(addressId, deliveryAddressId, ENTITY_NAME);
 
-        List<OrdersDTO> listOrdersDTO = pageOrdersDTO.getContent();
-
-        OrdersDTO ordersDTOAux = new OrdersDTO();
-
-        if (listOrdersDTO.size() == 0) {
-        	// There is no need to create the order because already exists
-        } else {
-	        // The order already exists in status PENDING, change his status to NEW
-        	// Get Order Status Id of NEW status
-        	OrderStatusResource orderStatusResource = new OrderStatusResource(orderStatusService);
-	        ResponseEntity<OrderStatusDTO> responseOrderStatusDTO = orderStatusResource.getOrderStatusByDescription(Constants.ORDER_STATUS_NEW);
-	        OrderStatusDTO orderStatusDTO = responseOrderStatusDTO.getBody();
-			Long orderStatusId = orderStatusDTO.getId();
-
-	        if (orderStatusId.longValue() == 0) {
-	            throw new BadRequestAlertException("Bad configuration, configure order status first", ENTITY_NAME, "idnull");
-	        }
-
-	        log.debug("REST request to createCartOrderDet - orderStatusId: {}", orderStatusId);
-
-	        // Change order status from PENDING to NEW
-	        OrdersDTO ordersDTO = listOrdersDTO.get(0);
-
-			ordersDTO.setOrderStatusId(orderStatusId);
-			ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-			ordersDTO.setLastModifiedDate(Instant.now());
-			ordersDTO.setOrderDate(Instant.now());
-			ordersDTO.setAddressId(addressId);
-			ordersDTO.setDeliveryAddressId(deliveryAddressId);
-
-			ordersDTOAux = ordersService.save(ordersDTO);
-
-			// Get all order details from order
-			Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByOrderId(ordersDTO.getId(), PageRequest.of(0, 1000));
-
-			List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
-
-			for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
-				OrderDetDTO orderDetDTO = iterator.next();
-
-				// Get all active products with or not with promotions by product id
-				Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
-
-				for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
-					Object[] products = iteratorProducts.next();
-
-					// Update unit price because of promotions
-					orderDetDTO.setUnitPrice((BigDecimal)products[6]);
-			        orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-			        orderDetDTO.setLastModifiedDate(Instant.now());
-					break;
-				}
-
-				if ( page.getSize() != 0) {
-					// Update order detail with unit price
-					orderDetService.save(orderDetDTO);
-				}
-			}
-        }
-
-		return ResponseEntity.ok().headers(HeaderUtil.createEntityOrderAlert(ENTITY_NAME, ordersDTOAux.getOrderReference())).build();
+		return ResponseEntity.ok().headers(HeaderUtil.createEntityOrderAlert(ENTITY_NAME, ordersDTO.getOrderReference())).build();
     }
 
     /**
@@ -175,18 +86,8 @@ public class CartOrderDetResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        OrderDetDTO orderDetDTO = new OrderDetDTO();
-        orderDetDTO.setId(cartOrderDetDTO.getId());
-        orderDetDTO.setOrderId(cartOrderDetDTO.getOrderId());
-        orderDetDTO.setOrderOrderReference(cartOrderDetDTO.getOrderOrderReference());
-        orderDetDTO.setOrderQuantity(cartOrderDetDTO.getOrderQuantity());
-        orderDetDTO.setProductId(cartOrderDetDTO.getProductId());
-        orderDetDTO.setProductProductName(cartOrderDetDTO.getProductProductName());
-        orderDetDTO.setUnitPrice(cartOrderDetDTO.getUnitPrice());
-        orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-        orderDetDTO.setLastModifiedDate(Instant.now());
-
-        orderDetService.save(orderDetDTO);
+        // Update cart order detail
+        cartOrderDetService.updateCartOrderDet(cartOrderDetDTO);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cartOrderDetDTO.getProductProductName()))
@@ -204,55 +105,12 @@ public class CartOrderDetResource {
     public ResponseEntity<List<CartOrderDetDTO>> getAllCartOrderDets(Pageable pageable) throws URISyntaxException {
         log.debug("REST request to get a page of CartOrderDets");
 
-        // Get customer identification by login
-        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        // Get all cart order detail
+        PageDataUtil<OrderDetDTO, CartOrderDetDTO> pageDataUtil = cartOrderDetService.getAllCartOrderDets(pageable, ENTITY_NAME);
 
-        if ( optionalCustomersDTO.isPresent() ) {
-        	log.debug("REST request to getAllCartOrderDets - customerId: {}", optionalCustomersDTO.get().getId());
-        } else {
-        	throw new FirstCreateCustomerException(ENTITY_NAME);
-        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(pageDataUtil.getPageInformation(), "/api/cart-order-det");
 
-        // 1 - Verify if there is any order created for customer (get Order by Customer identification)
-        List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
-
-        // Get customer order details by order id and status different from PENDING
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), pageable);
-
-        List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
-
-		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
-			OrderDetDTO orderDetDTO = iterator.next();
-
-			CartOrderDetDTO cartOrderDetDTO = new CartOrderDetDTO();
-			cartOrderDetDTO.setId(orderDetDTO.getId());
-			cartOrderDetDTO.setOrderId(orderDetDTO.getOrderId());
-			cartOrderDetDTO.setOrderOrderReference(orderDetDTO.getOrderOrderReference());
-			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
-			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
-			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-
-			// Get all active products with or not with promotions by product id
-			Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
-
-			for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
-				Object[] products = iteratorProducts.next();
-
-				cartOrderDetDTO.setProductDescription((String)products[2]);
-				cartOrderDetDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
-				cartOrderDetDTO.setProductImg((byte[])products[4]);
-				cartOrderDetDTO.setProductImgContentType((String)products[5]);
-				cartOrderDetDTO.setUnitPrice((BigDecimal)products[6]);
-				cartOrderDetDTO.setTotalPrice(((BigDecimal)products[6]).multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
-				break;
-			}
-
-			listCartOrderDetDTO.add(cartOrderDetDTO);
-		}
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(pageOrderDetDTO, "/api/cart-order-det");
-
-        return ResponseEntity.ok().headers(headers).body(listCartOrderDetDTO);
+        return ResponseEntity.ok().headers(headers).body(pageDataUtil.getContent());
     }
 
     /**
@@ -266,38 +124,8 @@ public class CartOrderDetResource {
     public ResponseEntity<CartOrderDetDTO> getCartOrderDet(@PathVariable Long id) {
         log.debug("REST request to get CartOrderDet : {}", id);
 
-        Optional<OrderDetDTO> orderDetDTOOpt = orderDetService.findOne(id);
-
-        Optional<CartOrderDetDTO> cartOrderDetDTOOpt = Optional.empty();
-
-		if (orderDetDTOOpt.isPresent()) {
-			OrderDetDTO orderDetDTO = orderDetDTOOpt.get();
-
-			CartOrderDetDTO cartOrderDetDTO = new CartOrderDetDTO();
-			cartOrderDetDTO.setId(orderDetDTO.getId());
-			cartOrderDetDTO.setOrderId(orderDetDTO.getOrderId());
-			cartOrderDetDTO.setOrderOrderReference(orderDetDTO.getOrderOrderReference());
-			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
-			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
-			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-
-			// Get all active products with or not with promotions by product id
-			Page<Object[]> page = productsService.getAllProductsWithPromotionsByProductId(orderDetDTO.getProductId(), PageRequest.of(0, 1));
-
-			for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
-				Object[] products = iteratorProducts.next();
-
-				cartOrderDetDTO.setProductDescription((String)products[2]);
-				cartOrderDetDTO.setProductType(ProductTypeEnum.valueOf((String)products[3]));
-				cartOrderDetDTO.setProductImg((byte[])products[4]);
-				cartOrderDetDTO.setProductImgContentType((String)products[5]);
-				cartOrderDetDTO.setUnitPrice((BigDecimal)products[6]);
-				cartOrderDetDTO.setTotalPrice(((BigDecimal)products[6]).multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
-				break;
-			}
-
-			cartOrderDetDTOOpt = Optional.of(cartOrderDetDTO);
-		}
+        // Get cart order detail by id
+        Optional<CartOrderDetDTO> cartOrderDetDTOOpt = cartOrderDetService.getCartOrderDet(id);
 
         return ResponseUtil.wrapOrNotFound(cartOrderDetDTOOpt);
     }
@@ -313,27 +141,8 @@ public class CartOrderDetResource {
     public ResponseEntity<Void> deleteCartOrderDet(@PathVariable Long id) {
         log.debug("REST request to delete CatOrderDet : {}", id);
 
-        orderDetService.delete(id);
-
-        // Get customer order details by order id and status different from PENDING
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
-
-        List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
-
-		// Delete Order if there are not more products associated with it
-		if (listOrderDetDTO.size() == 0) {
-			// Get PENDING order
-			Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
-
-	        List<OrdersDTO> listOrdersDTO = page.getContent();
-
-	        if (listOrdersDTO.size() != 0) {
-	        	OrdersDTO ordersDTO = listOrdersDTO.get(0);
-
-	        	// Delete PENDING ORDER
-	        	ordersService.delete(ordersDTO.getId());
-	        }
-		}
+        // Delete cart order detail
+        cartOrderDetService.deleteCartOrderDet(id);
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, "")).build();
     }
@@ -351,40 +160,11 @@ public class CartOrderDetResource {
     public ResponseEntity<List<CartOrderDetDTO>> searchCatOrderDets(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of CatOrderDets for query {}", query);
 
-        Page<OrderDetDTO> page = orderDetService.search(query, pageable);
+        // Search cart order detail
+        PageDataUtil<OrderDetDTO, CartOrderDetDTO> pageDataUtil = cartOrderDetService.searchCatOrderDets(query, pageable);
 
-		List<OrderDetDTO> listOrderDetDTO = page.getContent();
-		List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, pageDataUtil.getPageInformation(), "/api/_search/cart-order-det");
 
-		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
-			OrderDetDTO orderDetDTO = iterator.next();
-
-			CartOrderDetDTO cartOrderDetDTO = new CartOrderDetDTO();
-			cartOrderDetDTO.setId(orderDetDTO.getId());
-			cartOrderDetDTO.setOrderId(orderDetDTO.getOrderId());
-			cartOrderDetDTO.setOrderOrderReference(orderDetDTO.getOrderOrderReference());
-			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
-			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
-			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
-			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
-
-			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
-
-			if (productsDTOopt.isPresent()) {
-				ProductsDTO productsDTO = productsDTOopt.get();
-
-				cartOrderDetDTO.setProductDescription(productsDTO.getProductDescription());
-				cartOrderDetDTO.setProductType(productsDTO.getProductType());
-				cartOrderDetDTO.setProductImg(productsDTO.getProductImg());
-				cartOrderDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			}
-
-			listCartOrderDetDTO.add(cartOrderDetDTO);
-		}
-
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/cart-order-det");
-
-        return new ResponseEntity<>(listCartOrderDetDTO, headers, HttpStatus.OK);
+        return new ResponseEntity<>(pageDataUtil.getContent(), headers, HttpStatus.OK);
     }
 }
