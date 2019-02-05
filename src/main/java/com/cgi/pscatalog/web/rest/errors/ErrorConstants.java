@@ -17,6 +17,7 @@ public final class ErrorConstants {
     public static final URI EMAIL_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-found");
     public static final URI FIRST_CREATE_CUSTOMER = URI.create(PROBLEM_BASE_URL + "/first-create-customer");
     public static final URI FIRST_CREATE_ADDRESS = URI.create(PROBLEM_BASE_URL + "/first-create-address");
+    public static final URI INSUFFICIENT_PRODUCT_QUANTITY = URI.create(PROBLEM_BASE_URL + "/insufficient-product-quantity");
 
     private ErrorConstants() {
     }

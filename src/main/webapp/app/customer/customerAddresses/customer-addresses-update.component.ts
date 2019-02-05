@@ -22,11 +22,8 @@ import { CountriesService } from 'app/entities/countries';
 export class CustomerAddressesUpdateComponent implements OnInit {
     customerAddresses: ICustomerAddresses;
     isSaving: boolean;
-
     customers: ICustomers[];
-
     suppliers: ISuppliers[];
-
     countries: ICountries[];
     createdDate: string;
     lastModifiedDate: string;

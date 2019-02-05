@@ -215,7 +215,7 @@ public class CustomerAddressesServiceImpl implements CustomerAddressesService {
     }
 
 	@Override
-	public Map<Long,Long> updateCustomerAddresses(Long oldCustomerId, Long newCustomerId) {
+	public Map<Long,Long> updateAllCustomerAddresses(Long oldCustomerId, Long newCustomerId) {
 		 // Get login
         String login = SecurityUtils.getCurrentUserLogin().get();
 
@@ -255,6 +255,57 @@ public class CustomerAddressesServiceImpl implements CustomerAddressesService {
 	        log.debug("REST request to update customer addresses : addressesDTONew {}", addressesDTONew.getId());
 
 			// Delete old addresses = Update address_end_date
+	        addressesDTOOld.setAddressEndDate(Instant.now());
+	        addressesDTOOld.setLastModifiedBy(login);
+	        addressesDTOOld.setLastModifiedDate(Instant.now());
+
+	        addressesService.save(addressesDTOOld);
+		}
+
+		return mapOldNewAddresses;
+	}
+
+	@Override
+	public Map<Long,Long> updateCustomerAddress(CustomerAddressesDTO customerAddressesDTO) {
+		 // Get login
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
+		// Get old customer address
+        Optional<AddressesDTO> addressesDTOOpt = addressesService.findOne(customerAddressesDTO.getId());
+
+        Map<Long,Long> mapOldNewAddresses = new HashMap<Long,Long>();
+
+		if ( addressesDTOOpt.isPresent() ) {
+			// Get old address
+	        AddressesDTO addressesDTOOld = addressesDTOOpt.get();
+
+			// Add new address
+	        AddressesDTO addressesDTONew = new AddressesDTO();
+	        addressesDTONew.setAddressName(customerAddressesDTO.getAddressName());
+	        addressesDTONew.setAddressReference(customerAddressesDTO.getAddressReference());
+	        addressesDTONew.setCity(customerAddressesDTO.getCity());
+	        addressesDTONew.setCountryCountryName(customerAddressesDTO.getCountryCountryName());
+	        addressesDTONew.setCountryId(customerAddressesDTO.getCountryId());
+	        addressesDTONew.setPhoneNumber(customerAddressesDTO.getPhoneNumber());
+	        addressesDTONew.setState(customerAddressesDTO.getState());
+	        addressesDTONew.setStreetAddress(customerAddressesDTO.getStreetAddress());
+	        addressesDTONew.setZipCode(customerAddressesDTO.getZipCode());
+	        addressesDTONew.setAddressNif(customerAddressesDTO.getAddressNif());
+	        addressesDTONew.setCustomerId(customerAddressesDTO.getCustomerId());
+	        addressesDTONew.setLastModifiedBy(login);
+	        addressesDTONew.setLastModifiedDate(Instant.now());
+	        addressesDTONew.setCreatedBy(login);
+	        addressesDTONew.setCreatedDate(addressesDTOOld.getCreatedDate());
+	        addressesDTONew.setAddressBeginDate(addressesDTOOld.getAddressBeginDate());
+
+	        addressesDTONew = addressesService.save(addressesDTONew);
+
+	        mapOldNewAddresses.put(addressesDTOOld.getId(), addressesDTONew.getId());
+
+	        log.debug("REST request to update customer address : addressesDTOOld {}", addressesDTOOld.getId());
+	        log.debug("REST request to update customer address : addressesDTONew {}", addressesDTONew.getId());
+
+			// Delete old address = Update address_end_date
 	        addressesDTOOld.setAddressEndDate(Instant.now());
 	        addressesDTOOld.setLastModifiedBy(login);
 	        addressesDTOOld.setLastModifiedDate(Instant.now());
@@ -312,8 +363,8 @@ public class CustomerAddressesServiceImpl implements CustomerAddressesService {
         } else {
         	// There are orders for that customer
 
-        	// Add new addresses with customer data
-    		Map<Long,Long> mapOldNewAddresses = updateCustomerAddresses(customerId, customerId);
+        	// Add new address with customer data
+    		Map<Long,Long> mapOldNewAddresses = updateCustomerAddress(customerAddressesDTO);
 
     		// Update PENDING orders with new customer data
     		customerOrdersService.updatePendingOrders(listOrdersDTOPending, mapOldNewAddresses, customerId);

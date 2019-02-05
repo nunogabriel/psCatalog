@@ -97,6 +97,7 @@ public class CustomersResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
+        customersDTO.setLogin(customersDTO.getLogin());
         customersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
         customersDTO.setLastModifiedDate(Instant.now());
 

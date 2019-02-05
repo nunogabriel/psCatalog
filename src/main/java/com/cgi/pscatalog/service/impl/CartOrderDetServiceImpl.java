@@ -34,6 +34,7 @@ import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.service.util.PageDataUtil;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.errors.FirstCreateCustomerException;
+import com.cgi.pscatalog.web.rest.errors.InsufficientProductQuantityException;
 
 /**
  * Service Implementation for managing OrderDet.
@@ -59,66 +60,16 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
     @Autowired
     private CustomersService customersService;
 
-    /**
-     * Search for the orderDet corresponding to the query.
-     *
-     * @param query the query of the search
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public PageDataUtil<OrderDetDTO, CartOrderDetDTO> searchCatOrderDets(String query, Pageable pageable) {
-        log.debug("Request to search for a page of searchCatOrderDets for query {}", query);
-
-        Page<OrderDetDTO> page = orderDetService.search(query, pageable);
-
-		List<OrderDetDTO> listOrderDetDTO = page.getContent();
-		List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
-
-		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
-			OrderDetDTO orderDetDTO = iterator.next();
-
-			CartOrderDetDTO cartOrderDetDTO = new CartOrderDetDTO();
-			cartOrderDetDTO.setId(orderDetDTO.getId());
-			cartOrderDetDTO.setOrderId(orderDetDTO.getOrderId());
-			cartOrderDetDTO.setOrderOrderReference(orderDetDTO.getOrderOrderReference());
-			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
-			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
-			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
-			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
-			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
-
-			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
-
-			if (productsDTOopt.isPresent()) {
-				ProductsDTO productsDTO = productsDTOopt.get();
-
-				cartOrderDetDTO.setProductDescription(productsDTO.getProductDescription());
-				cartOrderDetDTO.setProductType(productsDTO.getProductType());
-				cartOrderDetDTO.setProductImg(productsDTO.getProductImg());
-				cartOrderDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
-			}
-
-			listCartOrderDetDTO.add(cartOrderDetDTO);
-		}
-
-		// Set page information
-		PageDataUtil<OrderDetDTO, CartOrderDetDTO> pageDataUtil = new PageDataUtil<OrderDetDTO, CartOrderDetDTO>();
-		pageDataUtil.setPageInformation(page);
-		pageDataUtil.setContent(listCartOrderDetDTO);
-
-		return pageDataUtil;
-
-    }
-
 	@Override
 	@Transactional(readOnly = true)
     public PageDataUtil<OrderDetDTO, CartOrderDetDTO> getAllCartOrderDets(Pageable pageable, String entityName) {
         log.debug("REST request to get a page of CartOrderDets");
 
+        // Get login
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
         // Get customer identification by login
-        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(SecurityUtils.getCurrentUserLogin().get());
+        Optional<CustomersDTO> optionalCustomersDTO = customersService.getCustomersByLogin(login);
 
         if ( !optionalCustomersDTO.isPresent() ) {
         	throw new FirstCreateCustomerException(entityName);
@@ -130,7 +81,7 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
         List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
 
         // Get customer order details by order id and status different from PENDING
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), pageable);
+        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(login, pageable);
 
         List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
 
@@ -210,18 +161,74 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
         return cartOrderDetDTOOpt;
     }
 
+    /**
+     * Search for the orderDet corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public PageDataUtil<OrderDetDTO, CartOrderDetDTO> searchCatOrderDets(String query, Pageable pageable) {
+        log.debug("Request to search for a page of searchCatOrderDets for query {}", query);
+
+        Page<OrderDetDTO> page = orderDetService.search(query, pageable);
+
+		List<OrderDetDTO> listOrderDetDTO = page.getContent();
+		List<CartOrderDetDTO> listCartOrderDetDTO = new ArrayList<CartOrderDetDTO>();
+
+		for (Iterator<OrderDetDTO> iterator = listOrderDetDTO.iterator(); iterator.hasNext();) {
+			OrderDetDTO orderDetDTO = iterator.next();
+
+			CartOrderDetDTO cartOrderDetDTO = new CartOrderDetDTO();
+			cartOrderDetDTO.setId(orderDetDTO.getId());
+			cartOrderDetDTO.setOrderId(orderDetDTO.getOrderId());
+			cartOrderDetDTO.setOrderOrderReference(orderDetDTO.getOrderOrderReference());
+			cartOrderDetDTO.setOrderQuantity(orderDetDTO.getOrderQuantity());
+			cartOrderDetDTO.setProductId(orderDetDTO.getProductId());
+			cartOrderDetDTO.setProductProductName(orderDetDTO.getProductProductName());
+			cartOrderDetDTO.setUnitPrice(orderDetDTO.getUnitPrice());
+			cartOrderDetDTO.setTotalPrice(orderDetDTO.getUnitPrice().multiply(new BigDecimal(orderDetDTO.getOrderQuantity())));
+
+			Optional<ProductsDTO> productsDTOopt = productsService.findOne(orderDetDTO.getProductId());
+
+			if (productsDTOopt.isPresent()) {
+				ProductsDTO productsDTO = productsDTOopt.get();
+
+				cartOrderDetDTO.setProductDescription(productsDTO.getProductDescription());
+				cartOrderDetDTO.setProductType(productsDTO.getProductType());
+				cartOrderDetDTO.setProductImg(productsDTO.getProductImg());
+				cartOrderDetDTO.setProductImgContentType(productsDTO.getProductImgContentType());
+			}
+
+			listCartOrderDetDTO.add(cartOrderDetDTO);
+		}
+
+		// Set page information
+		PageDataUtil<OrderDetDTO, CartOrderDetDTO> pageDataUtil = new PageDataUtil<OrderDetDTO, CartOrderDetDTO>();
+		pageDataUtil.setPageInformation(page);
+		pageDataUtil.setContent(listCartOrderDetDTO);
+
+		return pageDataUtil;
+
+    }
+
 	@Override
     public OrdersDTO createCartOrderDet(Long addressId, Long deliveryAddressId, String entityName) {
         log.debug("REST request to save CartOrderDet");
 
+        // Get login
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
         // 1 - Verify if there is any pending order created for customer
-        Page<OrdersDTO> pageOrdersDTO = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+        Page<OrdersDTO> pageOrdersDTO = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
 
         List<OrdersDTO> listOrdersDTO = pageOrdersDTO.getContent();
 
         OrdersDTO ordersDTOAux = new OrdersDTO();
 
-        if (listOrdersDTO.size() == 0) {
+        if ( listOrdersDTO.size() == 0 ) {
         	// There is no need to create the order because already exists
         } else {
 	        // The order already exists in status PENDING, change his status to NEW
@@ -246,7 +253,7 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
 	        OrdersDTO ordersDTO = listOrdersDTO.get(0);
 
 			ordersDTO.setOrderStatusId(orderStatusId);
-			ordersDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+			ordersDTO.setLastModifiedBy(login);
 			ordersDTO.setLastModifiedDate(Instant.now());
 			ordersDTO.setOrderDate(Instant.now());
 			ordersDTO.setAddressId(addressId);
@@ -268,10 +275,28 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
 				for (Iterator<Object[]> iteratorProducts = page.iterator(); iteratorProducts.hasNext();) {
 					Object[] products = iteratorProducts.next();
 
+	        		// Validate product quantity
+	        		if ( orderDetDTO.getOrderQuantity().intValue() > ((Integer)products[7]).intValue()) {
+	        			throw new InsufficientProductQuantityException(entityName);
+	        		}
+
 					// Update unit price because of promotions
 					orderDetDTO.setUnitPrice((BigDecimal)products[6]);
-			        orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
+			        orderDetDTO.setLastModifiedBy(login);
 			        orderDetDTO.setLastModifiedDate(Instant.now());
+
+			        // Get Product to decrease product quantity
+			        Optional<ProductsDTO> optionalProductsDTO = productsService.findOne(orderDetDTO.getProductId());
+
+			        if ( optionalProductsDTO.isPresent() ) {
+			        	ProductsDTO productsDTO = optionalProductsDTO.get();
+
+			        	// Decrease product quantity
+			        	productsDTO.setProductQuantity(productsDTO.getProductQuantity() - orderDetDTO.getOrderQuantity());
+
+			        	productsService.save(productsDTO);
+			        }
+
 					break;
 				}
 
@@ -286,35 +311,54 @@ public class CartOrderDetServiceImpl implements CartOrderDetService {
     }
 
 	@Override
-    public void updateCartOrderDet(CartOrderDetDTO cartOrderDetDTO) {
-        OrderDetDTO orderDetDTO = new OrderDetDTO();
-        orderDetDTO.setId(cartOrderDetDTO.getId());
-        orderDetDTO.setOrderId(cartOrderDetDTO.getOrderId());
-        orderDetDTO.setOrderOrderReference(cartOrderDetDTO.getOrderOrderReference());
-        orderDetDTO.setOrderQuantity(cartOrderDetDTO.getOrderQuantity());
-        orderDetDTO.setProductId(cartOrderDetDTO.getProductId());
-        orderDetDTO.setProductProductName(cartOrderDetDTO.getProductProductName());
-        orderDetDTO.setUnitPrice(cartOrderDetDTO.getUnitPrice());
-        orderDetDTO.setLastModifiedBy((SecurityUtils.getCurrentUserLogin().isPresent())?(SecurityUtils.getCurrentUserLogin().get()):"anonymousUser");
-        orderDetDTO.setLastModifiedDate(Instant.now());
+    public void updateCartOrderDet(CartOrderDetDTO cartOrderDetDTO, String entityName) {
+    	// Get available product quantity
+    	Optional<ProductsDTO> optionalProductsDTO = productsService.findOne(cartOrderDetDTO.getProductId());
 
-        orderDetService.save(orderDetDTO);
+        Integer productQuantity = new Integer(0);
+
+    	if ( optionalProductsDTO.isPresent() ) {
+    		ProductsDTO productsDTO = optionalProductsDTO.get();
+
+    		productQuantity = productsDTO.getProductQuantity();
+    	}
+
+		// Validate product quantity
+		if ( cartOrderDetDTO.getOrderQuantity().intValue() > productQuantity.intValue()) {
+			throw new InsufficientProductQuantityException(entityName);
+		}
+
+		// Update cart order detail
+		Optional<OrderDetDTO> optionalOrderDetDTO = orderDetService.findOne(cartOrderDetDTO.getId());
+
+		if ( optionalOrderDetDTO.isPresent() ) {
+			OrderDetDTO orderDetDTO = optionalOrderDetDTO.get();
+
+	        orderDetDTO.setOrderQuantity(cartOrderDetDTO.getOrderQuantity());
+	        orderDetDTO.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+	        orderDetDTO.setLastModifiedDate(Instant.now());
+
+	        orderDetService.save(orderDetDTO);
+		}
     }
 
 	@Override
     public void deleteCartOrderDet(Long id) {
+        // Get login
+        String login = SecurityUtils.getCurrentUserLogin().get();
+
 		// Delete cart order detail
 		orderDetService.delete(id);
 
         // Get customer order details by order id and status different from PENDING
-        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+        Page<OrderDetDTO> pageOrderDetDTO = orderDetService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
 
         List<OrderDetDTO> listOrderDetDTO = pageOrderDetDTO.getContent();
 
 		// Delete Order if there are not more products associated with it
 		if (listOrderDetDTO.size() == 0) {
 			// Get PENDING order
-			Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(SecurityUtils.getCurrentUserLogin().get(), PageRequest.of(0, 1));
+			Page<OrdersDTO> page = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
 
 	        List<OrdersDTO> listOrdersDTO = page.getContent();
 

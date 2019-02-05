@@ -6,6 +6,8 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 
+import { INSUFFICIENT_PRODUCT_QUANTITY } from 'app/shared';
+
 import { ICart } from 'app/shared/cart/cart.model';
 import { CartOrderDetService } from './cart-order-det.service';
 import { IOrders } from 'app/shared/model/orders.model';
@@ -20,12 +22,11 @@ import { ProductsService } from 'app/entities/products';
 export class CartOrderDetUpdateComponent implements OnInit {
     cartOrderDet: ICart;
     isSaving: boolean;
-
     orders: IOrders[];
-
     products: IProducts[];
     createdDate: string;
     lastModifiedDate: string;
+    insufficientProductQuantity: string;
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -62,6 +63,7 @@ export class CartOrderDetUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.insufficientProductQuantity = null;
         this.cartOrderDet.createdDate = this.createdDate != null ? moment(this.createdDate, DATE_TIME_FORMAT) : null;
         this.cartOrderDet.lastModifiedDate = this.lastModifiedDate != null ? moment(this.lastModifiedDate, DATE_TIME_FORMAT) : null;
         if (this.cartOrderDet.id !== undefined) {
@@ -72,7 +74,7 @@ export class CartOrderDetUpdateComponent implements OnInit {
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<ICart>>) {
-        result.subscribe((res: HttpResponse<ICart>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe((res: HttpResponse<ICart>) => this.onSaveSuccess(), response => this.onSaveError(response));
     }
 
     private onSaveSuccess() {
@@ -80,8 +82,14 @@ export class CartOrderDetUpdateComponent implements OnInit {
         this.previousState();
     }
 
-    private onSaveError() {
+    private onSaveError(response: HttpErrorResponse) {
         this.isSaving = false;
+
+        if (response.status === 400 && response.error.type === INSUFFICIENT_PRODUCT_QUANTITY) {
+           this.insufficientProductQuantity = 'ERROR';
+        } else {
+            this.jhiAlertService.error(response.message, null, null);
+        }
     }
 
     private onError(errorMessage: string) {

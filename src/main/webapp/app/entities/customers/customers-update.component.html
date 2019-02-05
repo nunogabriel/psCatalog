@@ -49,6 +49,17 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="psCatalogApp.customers.login" for="field_login">login</label>
+                    <input type="text" class="form-control" name="login" id="field_login"
+                        [(ngModel)]="customers.login" required/>
+                    <div [hidden]="!(editForm.controls.login?.dirty && editForm.controls.login?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.login?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>                
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.customerBeginDate" for="field_customerBeginDate">Customer Begin Date</label>
                     <div class="d-flex">
                         <input id="field_customerBeginDate" type="datetime-local" class="form-control" name="customerBeginDate" [(ngModel)]="customerBeginDate"
@@ -78,18 +89,6 @@
                         <option [ngValue]="getSelected(customers.products, productsOption)" *ngFor="let productsOption of products; trackBy: trackProductsById">{{productsOption.productName}}</option>
                     </select>
                 </div>
-                
-<!--                 <div class="form-group"> -->
-<!--                     <label class="form-control-label" jhiTranslate="psCatalogApp.customers.login" for="field_login">login</label> -->
-<!--                     <input type="text" class="form-control" name="login" id="field_login" -->
-<!--                         [(ngModel)]="customers.login" required/> -->
-<!--                     <div [hidden]="!(editForm.controls.login?.dirty && editForm.controls.login?.invalid)"> -->
-<!--                         <small class="form-text text-danger" -->
-<!--                         [hidden]="!editForm.controls.login?.errors?.required" jhiTranslate="entity.validation.required"> -->
-<!--                         This field is required. -->
-<!--                         </small> -->
-<!--                     </div> -->
-<!--                 </div> -->
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

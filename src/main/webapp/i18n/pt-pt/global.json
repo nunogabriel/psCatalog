@@ -163,7 +163,8 @@
         "idexists": "Um(a) novo(a) {{entityName}} não pode já ter um ID",
         "idnull": "ID Inválido",
         "firstcreatecustomer": "<strong>O seus dados de cliente não existem!</strong> Por favor preencha-os.",
-        "firstcreateaddress": "<strong>As suas moradas não existem!</strong> Por favor preencha-as."
+        "firstcreateaddress": "<strong>As suas moradas não existem!</strong> Por favor preencha-as.",
+        "insufficientproductquantity": "<strong>Quantidade do produto insuficiente!</strong>"
     },
     "footer": "Este é o seu rodapé"
 }

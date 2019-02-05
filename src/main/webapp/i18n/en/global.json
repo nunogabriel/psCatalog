@@ -163,7 +163,8 @@
         "idexists": "A new {{ entityName }} cannot already have an ID",
         "idnull": "Invalid ID",
         "firstcreatecustomer": "<strong>Your customer data doesn´t exist!</strong> Please create it.",
-        "firstcreateaddress": "<strong>Your addresses data doesn´t exist!</strong> Please create it."
+        "firstcreateaddress": "<strong>Your addresses data doesn´t exist!</strong> Please create it.",
+        "insufficientproductquantity": "<strong>Insufficient product quantity!</strong>"
     },
     "footer": "This is your footer"
 }

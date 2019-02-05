@@ -5,7 +5,11 @@
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert></jhi-alert>
+        <div class="alert alert-danger" *ngIf="insufficientProductQuantity" jhiTranslate="error.insufficientproductquantity">
+			<strong>Insufficient product quantity!</strong>
+		</div>			    
+        
         <p id="jhi-order-cartOrderDet-heading" jhiTranslate="psCatalogApp.cartOrderDet.ordered.question" translateValues="{pendingOrderTotalValue: '{{pendingOrderTotalValue}}'}">Are you sure you want to realize the Order?</p>
 
 	    <div class="form-group">

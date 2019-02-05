@@ -22,13 +22,16 @@ import com.cgi.pscatalog.service.CustomersService;
 import com.cgi.pscatalog.service.OrderDetService;
 import com.cgi.pscatalog.service.OrderStatusService;
 import com.cgi.pscatalog.service.OrdersService;
+import com.cgi.pscatalog.service.ProductsService;
 import com.cgi.pscatalog.service.dto.AddressesDTO;
 import com.cgi.pscatalog.service.dto.CustomersDTO;
 import com.cgi.pscatalog.service.dto.OrderDetDTO;
 import com.cgi.pscatalog.service.dto.OrderStatusDTO;
 import com.cgi.pscatalog.service.dto.OrdersDTO;
+import com.cgi.pscatalog.service.dto.ProductsDTO;
 import com.cgi.pscatalog.web.rest.errors.BadRequestAlertException;
 import com.cgi.pscatalog.web.rest.errors.FirstCreateAddressException;
+import com.cgi.pscatalog.web.rest.errors.InsufficientProductQuantityException;
 
 /**
  * Service Implementation for managing OrderDet.
@@ -54,17 +57,33 @@ public class CatalogServiceImpl implements CatalogService {
     @Autowired
     private OrderStatusService orderStatusService;
 
+    @Autowired
+    private ProductsService productsService;
+
     @Override
 	public void addBasket(Long productId, Integer orderQuantity, BigDecimal productPrice, String entityName) {
     	// Get login
     	String login = SecurityUtils.getCurrentUserLogin().get();
 
-        // 1 - Verify if there is any PENDING order created for customer
+    	// Get available product quantity
+    	Optional<ProductsDTO> optionalProductsDTO = productsService.findOne(productId);
+
+        Integer productQuantity = new Integer(0);
+
+    	if ( optionalProductsDTO.isPresent() ) {
+    		ProductsDTO productsDTO = optionalProductsDTO.get();
+
+    		productQuantity = productsDTO.getProductQuantity();
+    	}
+
+    	// 1 - Verify if there is any PENDING order created for customer
         Page<OrdersDTO> pageOrdersDTO = ordersService.getAllByLoginAndOrderStatusPending(login, PageRequest.of(0, 1));
 
         List<OrdersDTO> listOrdersDTO = pageOrdersDTO.getContent();
 
         Long orderId = new Long(0);
+
+        Integer newOrderQuantity = new Integer(0);
 
         for (Iterator<OrdersDTO> iterator = listOrdersDTO.iterator(); iterator.hasNext();) {
         	OrdersDTO oldOrdersDTO = iterator.next();
@@ -77,17 +96,31 @@ public class CatalogServiceImpl implements CatalogService {
         	if ( optionalOrderDetDTO.isPresent() ) {
         		OrderDetDTO orderDetDTO = optionalOrderDetDTO.get();
 
+        		// Validate product quantity
+        		newOrderQuantity = orderQuantity + orderDetDTO.getOrderQuantity();
+
+        		if ( newOrderQuantity.intValue() > productQuantity.intValue()) {
+        			throw new InsufficientProductQuantityException(entityName);
+        		}
+
             	// Update quantity in Order Detail
-            	orderDetDTO.setOrderQuantity(orderQuantity + orderDetDTO.getOrderQuantity());
+            	orderDetDTO.setOrderQuantity(newOrderQuantity);
                 orderDetDTO.setLastModifiedBy(login);
                 orderDetDTO.setLastModifiedDate(Instant.now());
 
                 orderDetService.save(orderDetDTO);
         	} else {
+        		// Validate product quantity
+        		newOrderQuantity = orderQuantity;
+
+        		if ( newOrderQuantity.intValue() > productQuantity.intValue()) {
+        			throw new InsufficientProductQuantityException(entityName);
+        		}
+
     	        // Add Order Detail to the Order
             	OrderDetDTO newOrderDetDTO = new OrderDetDTO();
             	newOrderDetDTO.setOrderId(orderId);
-            	newOrderDetDTO.setOrderQuantity(orderQuantity);
+            	newOrderDetDTO.setOrderQuantity(newOrderQuantity);
             	newOrderDetDTO.setUnitPrice(productPrice);
             	newOrderDetDTO.setProductId(productId);
             	newOrderDetDTO.setCreatedBy(login);
@@ -100,7 +133,7 @@ public class CatalogServiceImpl implements CatalogService {
         	break;
         }
 
-        if (orderId.longValue() == 0) {
+        if ( orderId.longValue() == 0 ) {
         	// There is not any PENDING order created for customer
         	//
             // Get customer identification by login
@@ -126,7 +159,7 @@ public class CatalogServiceImpl implements CatalogService {
     			break;
     		}
 
-            if (addressId.longValue() == 0) {
+            if ( addressId.longValue() == 0 ) {
             	throw new FirstCreateAddressException(entityName);
             }
 
@@ -164,10 +197,17 @@ public class CatalogServiceImpl implements CatalogService {
 	        OrdersDTO newOrdersDTOAux = ordersService.save(newOrdersDTO);
 	        // End Create Order
 
+	        // Validate product quantity
+	        newOrderQuantity = orderQuantity;
+
+    		if ( newOrderQuantity.intValue() > productQuantity.intValue()) {
+    			throw new InsufficientProductQuantityException(entityName);
+    		}
+
 	        // Add Order Detail to the Order
         	OrderDetDTO newOrderDetDTO = new OrderDetDTO();
         	newOrderDetDTO.setOrderId(newOrdersDTOAux.getId());
-        	newOrderDetDTO.setOrderQuantity(orderQuantity);
+        	newOrderDetDTO.setOrderQuantity(newOrderQuantity);
         	newOrderDetDTO.setUnitPrice(productPrice);
         	newOrderDetDTO.setProductId(productId);
         	newOrderDetDTO.setCreatedBy(login);

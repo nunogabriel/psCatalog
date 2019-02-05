@@ -87,7 +87,7 @@ public class CartOrderDetResource {
         }
 
         // Update cart order detail
-        cartOrderDetService.updateCartOrderDet(cartOrderDetDTO);
+        cartOrderDetService.updateCartOrderDet(cartOrderDetDTO, ENTITY_NAME);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cartOrderDetDTO.getProductProductName()))

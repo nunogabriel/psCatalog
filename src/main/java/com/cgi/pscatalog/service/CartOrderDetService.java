@@ -18,7 +18,7 @@ public interface CartOrderDetService {
 
 	OrdersDTO createCartOrderDet(Long addressId, Long deliveryAddressId, String entityName);
 
-	void updateCartOrderDet(CartOrderDetDTO cartOrderDetDTO);
+	void updateCartOrderDet(CartOrderDetDTO cartOrderDetDTO, String entityName);
 
 	PageDataUtil<OrderDetDTO, CartOrderDetDTO> getAllCartOrderDets(Pageable pageable, String entityName);
 

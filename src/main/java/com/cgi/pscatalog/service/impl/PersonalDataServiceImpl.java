@@ -243,8 +243,8 @@ public class PersonalDataServiceImpl implements PersonalDataService {
     			customersService.save(customersDTOOld);
     		}
 
-        	// Add new addresses with new customer data
-    		Map<Long,Long> mapOldNewAddresses = customerAddressesService.updateCustomerAddresses(customerId, customersDTONew.getId());
+        	// Add all new addresses with new customer data
+    		Map<Long,Long> mapOldNewAddresses = customerAddressesService.updateAllCustomerAddresses(customerId, customersDTONew.getId());
 
     		// Update PENDING orders with new customer data
     		customerOrdersService.updatePendingOrders(listOrdersDTOPending, mapOldNewAddresses, customersDTONew.getId());

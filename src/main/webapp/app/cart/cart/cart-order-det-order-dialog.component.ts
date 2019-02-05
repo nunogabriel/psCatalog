@@ -5,6 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 
+import { INSUFFICIENT_PRODUCT_QUANTITY } from 'app/shared';
+
 import { ICustomerAddresses } from 'app/shared/customer/customer-addresses.model';
 import { CartOrderDetService } from './cart-order-det.service';
 import { CustomerAddressesService } from 'app/customer/customerAddresses';
@@ -15,8 +17,10 @@ import { CustomerOrdersDetService } from 'app/customer/customerOrdersDet';
     templateUrl: './cart-order-det-order-dialog.component.html'
 })
 export class CartOrderDetOrderDialogComponent {
+    insufficientProductQuantity: string;
 
     constructor(
+            private jhiAlertService: JhiAlertService,
             private cartOrderDetService: CartOrderDetService,
             public activeModal: NgbActiveModal,
             private eventManager: JhiEventManager
@@ -27,13 +31,22 @@ export class CartOrderDetOrderDialogComponent {
     }
 
     confirmOrder(addressId: number, deliveryAddressId: number) {
+        this.insufficientProductQuantity = null;
         this.cartOrderDetService.order(addressId, deliveryAddressId).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'cartOrderDetListModification',
                 content: 'Ordered an cartOrderDet'
             });
             this.activeModal.dismiss(true);
-        });
+        }, response => this.onSaveError(response));
+    }
+
+    private onSaveError(response: HttpErrorResponse) {
+        if (response.status === 400 && response.error.type === INSUFFICIENT_PRODUCT_QUANTITY) {
+           this.insufficientProductQuantity = 'ERROR';
+        } else {
+            this.jhiAlertService.error(response.message, null, null);
+        }
     }
 }
 

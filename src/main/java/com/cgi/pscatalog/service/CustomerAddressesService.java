@@ -21,7 +21,9 @@ public interface CustomerAddressesService {
 
 	CustomerAddressesDTO createCustomerAddresses(CustomerAddressesDTO customerAddressesDTO, String entityName);
 
-	Map<Long,Long> updateCustomerAddresses(Long oldCustomerId, Long newCustomerId);
+	Map<Long,Long> updateAllCustomerAddresses(Long oldCustomerId, Long newCustomerId);
+
+	Map<Long,Long> updateCustomerAddress(CustomerAddressesDTO customerAddressesDTO);
 
 	void updateCustomerAddresses(CustomerAddressesDTO customerAddressesDTO);
 

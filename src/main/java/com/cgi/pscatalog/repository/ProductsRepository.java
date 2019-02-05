@@ -17,14 +17,14 @@ import com.cgi.pscatalog.domain.Products;
 public interface ProductsRepository extends JpaRepository<Products, Long> {
 
 	@Query(
-			value = "select a.id, a.product_name, a.product_description, a.product_type, a.product_img, a.product_img_content_type, CASE WHEN b.new_product_price is null THEN a.product_price ELSE b.new_product_price END as product_price from products a left join promotions b on a.id = b.products_id and ((now() between a.product_start_date and a.product_end_date) or a.product_end_date is null) and ((now() between b.promotion_start_date and b.promotion_expiry_date) or b.promotion_expiry_date is null)",
-		    countQuery = "select count(*) from products a left join promotions b on a.id = b.products_id and ((now() between a.product_start_date and a.product_end_date) or a.product_end_date is null) and ((now() between b.promotion_start_date and b.promotion_expiry_date) or b.promotion_expiry_date is null)",
+			value = "select a.id, a.product_name, a.product_description, a.product_type, a.product_img, a.product_img_content_type, CASE WHEN b.new_product_price is null THEN a.product_price ELSE b.new_product_price END as product_price from products a left join promotions b on a.id = b.products_id and ((now() between a.product_start_date and a.product_end_date) or a.product_end_date is null) and ((now() between b.promotion_start_date and b.promotion_expiry_date) or b.promotion_expiry_date is null) where a.product_quantity > 0",
+		    countQuery = "select count(*) from products a left join promotions b on a.id = b.products_id and ((now() between a.product_start_date and a.product_end_date) or a.product_end_date is null) and ((now() between b.promotion_start_date and b.promotion_expiry_date) or b.promotion_expiry_date is null) where a.product_quantity > 0",
 			nativeQuery = true)
 	Page<Object[]> findAllProductsWithPromotions(Pageable pageable);
 
 	@Query(
-			value = "select a.id, a.product_name, a.product_description, a.product_type, a.product_img, a.product_img_content_type, CASE WHEN b.new_product_price is null THEN a.product_price ELSE b.new_product_price END as product_price from products a left join promotions b on a.id = b.products_id and ((now() between b.promotion_Start_Date and b.promotion_Expiry_Date) or b.promotion_Expiry_Date is null) where a.id = ?1",
-			countQuery = "select count(*) from products a left join promotions b on a.id = b.products_id and ((now() between b.promotion_Start_Date and b.promotion_Expiry_Date) or b.promotion_Expiry_Date is null) where a.id = ?1",
+			value = "select a.id, a.product_name, a.product_description, a.product_type, a.product_img, a.product_img_content_type, CASE WHEN b.new_product_price is null THEN a.product_price ELSE b.new_product_price END as product_price, a.product_quantity from products a left join promotions b on a.id = b.products_id and ((now() between b.promotion_Start_Date and b.promotion_Expiry_Date) or b.promotion_Expiry_Date is null) where a.id = ?1 and a.product_quantity > 0",
+			countQuery = "select count(*) from products a left join promotions b on a.id = b.products_id and ((now() between b.promotion_Start_Date and b.promotion_Expiry_Date) or b.promotion_Expiry_Date is null) where a.id = ?1 and a.product_quantity > 0",
 			nativeQuery = true)
 	Page<Object[]> findAllProductsWithPromotionsByProductId(Long productId, Pageable pageable);
 

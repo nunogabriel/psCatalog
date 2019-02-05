@@ -3,7 +3,10 @@
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
             <h2 id="jhi-cart-order-det-heading" jhiTranslate="psCatalogApp.cartOrderDet.home.createOrEditLabel">Create or edit a Order Det</h2>
             <div>
-                <jhi-alert-error></jhi-alert-error>
+                <jhi-alert></jhi-alert>
+			    <div class="alert alert-danger" *ngIf="insufficientProductQuantity" jhiTranslate="error.insufficientproductquantity">
+			        <strong>Insufficient product quantity!</strong>
+			    </div>			    
                 <dl class="row-md jh-entity-details">
 	                <dt><span jhiTranslate="psCatalogApp.cartOrderDet.product">Product</span></dt>
 	                <dd>

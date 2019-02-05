@@ -7,6 +7,9 @@
 			    <div class="alert alert-danger" *ngIf="firstCreateAddress" jhiTranslate="error.firstcreateaddress">
 			        <strong>Your addresses data doesn´t exist!</strong> Please create it.
 			    </div>
+			    <div class="alert alert-danger" *ngIf="insufficientProductQuantity" jhiTranslate="error.insufficientproductquantity">
+			        <strong>Insufficient product quantity!</strong>
+			    </div>
                 <dl class="row-md jh-entity-details">
 	                <dt><span jhiTranslate="psCatalogApp.generalCatalog.productName">Product Name</span></dt>
 	                <dd>
