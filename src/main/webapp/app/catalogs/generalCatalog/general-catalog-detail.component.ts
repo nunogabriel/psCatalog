@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 
@@ -11,23 +12,19 @@ import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 export class GeneralCatalogDetailComponent implements OnInit {
     generalCatalog: IGeneralCatalog;
 
-    constructor(private dataUtils: JhiDataUtils, private activatedRoute: ActivatedRoute) {}
+    constructor(private dataUtils: JhiDataUtils, private activatedRoute: ActivatedRoute, private spinner: NgxSpinnerService) {}
 
     ngOnInit() {
+        this.spinner.show();
         this.activatedRoute.data.subscribe(({ generalCatalog }) => {
             this.generalCatalog = generalCatalog;
         });
-    }
-
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
-    }
-
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
+        this.spinner.hide();
     }
 
     previousState() {
+        this.spinner.show();
         window.history.back();
+        this.spinner.hide();
     }
 }

@@ -4,6 +4,9 @@
             <h2 id="jhi-general-catalog-heading" jhiTranslate="psCatalogApp.generalCatalog.home.addBasket">Add Product to Shopping Cart</h2>
             <div>
                 <jhi-alert></jhi-alert>
+            	<ngx-spinner bdColor="rgba(51,51,51,0.4)" size="medium" color="#fff" type="ball-scale-multiple"> 
+	    			<p style="font-size: 20px; color: white">Loading...</p>
+				</ngx-spinner>
 			    <div class="alert alert-danger" *ngIf="firstCreateAddress" jhiTranslate="error.firstcreateaddress">
 			        <strong>Your addresses data doesn´t exist!</strong> Please create it.
 			    </div>

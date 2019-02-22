@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { FIRST_CREATE_ADDRESS, INSUFFICIENT_PRODUCT_QUANTITY } from 'app/shared';
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
@@ -25,14 +26,17 @@ export class GeneralCatalogAddBasketComponent implements OnInit {
         private jhiAlertService: JhiAlertService,
         private generalCatalogService: GeneralCatalogService,
         private elementRef: ElementRef,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private spinner: NgxSpinnerService
     ) {}
 
     ngOnInit() {
+        this.spinner.show();
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ generalCatalog }) => {
             this.generalCatalog = generalCatalog;
         });
+        this.spinner.hide();
     }
 
     byteSize(field) {
@@ -52,16 +56,20 @@ export class GeneralCatalogAddBasketComponent implements OnInit {
     }
 
     previousState() {
+        this.spinner.show();
         window.history.back();
+        this.spinner.hide();
     }
 
     save() {
+        this.spinner.show();
         this.isSaving = true;
         this.firstCreateAddress = null;
         this.insufficientProductQuantity = null;
         if (this.generalCatalog.id !== undefined) {
             this.subscribeToSaveResponse(this.generalCatalogService.addBasket(this.generalCatalog));
         }
+        this.spinner.hide();
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IGeneralCatalog>>) {

@@ -1,4 +1,7 @@
 <form name="addPersonalForm" (ngSubmit)="confirmAddPersonal(generalCatalog.id)">
+	<ngx-spinner bdColor="rgba(51,51,51,0.4)" size="medium" color="#fff" type="ball-scale-multiple"> 
+		<p style="font-size: 20px; color: white">Loading...</p>
+    </ngx-spinner>
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="psCatalogApp.generalCatalog.home.addPersonal">Confirm add operation to Personal Catalog</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"

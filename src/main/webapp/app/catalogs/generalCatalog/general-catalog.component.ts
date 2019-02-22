@@ -3,6 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import { IGeneralCatalog } from 'app/shared/catalogs/general-catalog.model';
 import { Principal } from 'app/core';
@@ -40,7 +41,8 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private dataUtils: JhiDataUtils,
         private router: Router,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private spinner: NgxSpinnerService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -85,8 +87,10 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
 
     loadPage(page: number) {
         if (page !== this.previousPage) {
+            this.spinner.show();
             this.previousPage = page;
             this.transition();
+            this.spinner.hide();
         }
     }
 
@@ -103,6 +107,7 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
     }
 
     clear() {
+        this.spinner.show();
         this.page = 0;
         this.currentSearch = '';
         this.router.navigate([
@@ -113,10 +118,13 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
             }
         ]);
         this.loadAll();
+        this.spinner.hide();
     }
 
     search(query) {
+        this.spinner.show();
         if (!query) {
+            this.spinner.hide();
             return this.clear();
         }
         this.page = 0;
@@ -130,14 +138,17 @@ export class GeneralCatalogComponent implements OnInit, OnDestroy {
             }
         ]);
         this.loadAll();
+        this.spinner.hide();
     }
 
     ngOnInit() {
+        this.spinner.show();
         this.loadAll();
         this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInGeneralCatalog();
+        this.spinner.hide();
     }
 
     ngOnDestroy() {

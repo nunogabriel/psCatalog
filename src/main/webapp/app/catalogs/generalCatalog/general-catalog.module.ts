@@ -1,4 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { RouterModule } from '@angular/router';
 
 import { PsCatalogSharedModule } from 'app/shared';
@@ -15,7 +16,7 @@ import {
 const ENTITY_STATES = [...generalCatalogRoute, ...generalCatalogPopupRoute];
 
 @NgModule({
-    imports: [PsCatalogSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [NgxSpinnerModule, PsCatalogSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         GeneralCatalogComponent,
         GeneralCatalogDetailComponent,
